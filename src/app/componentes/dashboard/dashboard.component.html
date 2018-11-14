@@ -1,0 +1,78 @@
+ 
+      <!-- END:  .app-heading -->
+
+      <!-- begin .app-container -->
+      <div class="app-container">
+
+        <!-- begin .app-side -->
+        <app-aside></app-aside>
+        <!-- END: .app-side -->
+        <!-- begin .app-main -->
+        <div class="app-main">
+
+          <!-- begin .main-heading -->
+          <header class="main-heading shadow-2dp">
+            <!-- begin dashhead -->
+            <div class="dashhead bg-white">
+              <div class="dashhead-titles">
+                <h6 class="dashhead-subtitle">
+                  ACADEP
+                </h6>
+                <h3 class="dashhead-title">Inicio</h3>
+              </div>
+
+              <div class="dashhead-toolbar">
+                <div class="dashhead-toolbar-item">
+                  <a href="index.html">App</a>
+                  / Inicio
+                </div>
+              </div>
+            </div>
+            <!-- END: dashhead -->
+          </header>
+          <!-- END: .main-heading -->
+
+          
+          <!-- begin .main-content -->
+          <div class="main-content bg-clouds">
+            
+            <!-- begin .container-fluid -->
+            <div class="container-fluid p-t-15">
+              <!-- BEGIN: alert -->
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <h4>Welcome to rare Bootstrap 3 Based Admin Toolkit</h4>
+                    <p>I hope you like it.</p>
+                  </div>
+                </div>
+              </div>
+              <!-- END: alert -->
+
+             
+            <router-outlet></router-outlet>
+
+
+            </div>
+            <!-- END: .container-fluid -->
+
+          </div>
+          <!-- END: .main-content -->
+          <router-outlet></router-outlet>
+
+          <!-- begin .main-footer -->
+          <footer class="main-footer bg-white p-a-5">
+        
+          </footer>
+          <!-- END: .main-footer -->
+
+        </div>
+        <!-- END: .app-main -->
+      </div>
+      <!-- END: .app-container -->
+
+
+   

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from './servicios/auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'acadep-sp';
+  public isLogin: boolean;
+
+  constructor(public authService: AuthService) { }
+
+  ngOnInit() {
+    this.authService.getAuth().subscribe( auth => {
+      if (auth) {
+        this.isLogin = true;
+        // this.fotoUsuario = auth.photoURL;
+      } else {
+        this.isLogin = false;
+      }
+    });
+  }
+
 }
