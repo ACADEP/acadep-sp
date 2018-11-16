@@ -1,0 +1,129 @@
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        ACADEP
+      </h6>
+      <h3 class="dashhead-title">Calendario</h3>
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a  (click)="alertShow()">App</a>
+        / Calendario
+      </div>
+    </div>
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+  
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+
+
+
+    
+<div class="row">
+  <div class="col-sm-3">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <header>
+            <h3>Crear Evento</h3>
+          </header>
+          <div class="box-body">
+            <button id="newEventBtn" type="button" class="btn btn-outline btn-primary" data-toggle="modal" data-target="#eventModal">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="box">
+          <header>
+            <h3>Arrastre Eventos</h3>
+          </header>
+          <div class="box-body">
+            <p>Arrastre un evento para insertarlo en el calendario.</p>
+            <div id='external-events'>
+              <div class='fc-event bg-turquoise'>Mi evento 1</div>
+              <div class='fc-event bg-peter-river'>Mi evento 2</div>
+              <div class='fc-event bg-amethyst'>Mi evento 3</div>
+              <div class='fc-event bg-sun-flower'>Mi evento 4</div>
+              <div class='fc-event bg-pomegranate'>Mi evento 5</div>
+            </div>
+            <div class="checkbox">
+              <label class="text-wisteria switch fa-lg" for='drop-remove'>
+                <input class="hidden" type='checkbox' id='drop-remove' />
+                <i class="fa"></i>
+                Remover despues de insertar
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <div class="box">
+      <div class="box-body">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEGIN: modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="eventModalLabel">Crear nuevo evento</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="title">Nombre de evento</label>
+            <input type="text" class="form-control" id="title" placeholder="Nombre de evento" required>
+          </div>
+
+          <div class="checkbox">
+            <label class="switch">
+              <input class="hidden" type="checkbox" id="allDay">
+              <i class="fa fa-lg text-wisteria"></i>
+              Todo el día
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="start">Empieza</label>
+            <input class="form-control" id="start" data-plugin=flatpickr data-enable-time=true required>
+          </div>
+          <div class="form-group">
+            <label for="end">Termina</label>
+            <input class="form-control" id="end" data-plugin=flatpickr data-enable-time=true>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="deleteEventBtn">Eliminar Evento</button>
+        <button type="button" class="btn btn-success" id="updateEventBtn" data-dismiss="modal">Actualizar Evento</button>
+        <button type="button" class="btn btn-primary" id="createEventBtn" data-dismiss="modal">Crear Evento</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END: modal -->
+
+</div>
+<!-- END: .container-fluid -->
+
+</div>

@@ -17,12 +17,52 @@ import {environment} from '../environments/environment';
 
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
+import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { CalendarComponent } from './componentes/calendar/calendar.component';
+import { InicioComponent } from './componentes/inicio/inicio.component';
+import { CreateProyectComponent } from './componentes/proyectos/create-proyect/create-proyect.component';
 
 
-
-
-
-
+const customNotifierOptions: NotifierOptions = {
+  position: {
+		horizontal: {
+			position: 'right',
+			distance: 12
+		},
+		vertical: {
+			position: 'top',
+			distance: 200,
+			gap: 10
+		}
+	},
+  theme: 'material',
+  behaviour: {
+    autoHide: 5000,
+    onClick: 'hide',
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+      preset: 'fade',
+      speed: 300,
+      easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    },
+    overlap: 150
+  }
+};
 
 @NgModule({
   declarations: [
@@ -31,7 +71,10 @@ import { RegisterUserComponent } from './componentes/register-user/register-user
     DashboardComponent,
     AsideComponent,
     TopbarComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    CalendarComponent,
+    InicioComponent,
+    CreateProyectComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +82,8 @@ import { RegisterUserComponent } from './componentes/register-user/register-user
     FormsModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    AngularFireModule.initializeApp(environment.firebase)    
+    AngularFireModule.initializeApp(environment.firebase),
+    NotifierModule.withConfig(customNotifierOptions)
 
   ],
   providers: [AuthService],

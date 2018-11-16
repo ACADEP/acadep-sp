@@ -1,51 +1,85 @@
-<div class="app-login">
-    <div class="text-center box shadow-5 animated fadeInLeft b-r-4 p-a-20">
-      <h4>Registra un nuevo Usuario</h4>
-      <form class="text-left" role="form" action="" (submit)="onSubmitAddUser()">
-        <div class="form-group has-feedback">
-          <input class="form-control" placeholder="Nombre de usuario" type="text" [(ngModel)]="name" name="namme">
-          <span class="form-control-feedback">
-            <i class="fa fa-fw fa-user"></i>
-          </span>
-        </div>
-        <div class="form-group has-feedback">
-          <input class="form-control" placeholder="Correo electrónico" type="email" [(ngModel)]="email" name="email">
-          <span class="form-control-feedback">
-            <i class="fa fa-fw fa-envelope"></i>
-          </span>
-        </div>
-        <div class="form-group has-feedback">
-            <select class="form-control" name="role" id="" [(ngModel)]="role">
-              <option value="">Seleccione una opción</option>
-              <option value="empleado">Empleado</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          </div>
-        <div class="form-group has-feedback">
-          <input class="form-control" placeholder="Contraseña" type="password" [(ngModel)]="password" name="password">
-          <span class="form-control-feedback">
-            <i class="fa fa-fw fa-key"></i>
-          </span>
-        </div>
-        <div class="form-group has-feedback">
-          <input class="form-control" placeholder="Confirmar contraseña" type="password" [(ngModel)]="password_confirmation" name="password_confirmation">
-          <span class="form-control-feedback">
-            <i class="fa fa-fw fa-key"></i>
-          </span>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input class="hidden" type="checkbox" name="check" value="">
-            <i class="fa fa-lg text-primary"></i>
-            Acepto los
-            <a href="javascript:;" data-toggle="modal" data-target="#loginModal">terminos y condiciones</a>
-          </label>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block m-b-15">Registrar</button>
-        <!-- <p class="text-right">
-          <a href="app-login.html">I already have a membership</a>
-        </p> -->
-      </form>
-    </div>
+<header class="main-heading shadow-2dp">
+    <!-- begin dashhead -->
+    <div class="dashhead bg-white">
+      <div class="dashhead-titles">
+        <h6 class="dashhead-subtitle">
+          ACADEP
+        </h6>
+        <h3 class="dashhead-title">Registrar usuario</h3>
+      </div>
 
+      <div class="dashhead-toolbar">
+        <div class="dashhead-toolbar-item">
+          <a  (click)="alertShow()">App</a>
+          / Registrar usuario
+        </div>
+      </div>
+    </div>
+    <!-- END: dashhead -->
+  </header>
+  <!-- END: .main-heading -->
+
+  
+  <!-- begin .main-content -->
+  <div class="main-content bg-clouds">
+    
+    <!-- begin .container-fluid -->
+    <div class="container-fluid p-t-15">
+
+<div class="app-login">
+  <div class="text-center box shadow-5 animated fadeInLeft b-r-4 p-a-20">
+    <h4>Registra un nuevo Usuario</h4>
+    <form class="text-left" role="form" action="" (submit)="onSubmitAddUser()">
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Nombre de usuario" type="text" [(ngModel)]="name" name="namme">
+        <span class="form-control-feedback">
+          <i class="fa fa-fw fa-user"></i>
+        </span>
+      </div>
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Correo electrónico" type="email" [(ngModel)]="email" name="email">
+        <span class="form-control-feedback">
+          <i class="fa fa-fw fa-envelope"></i>
+        </span>
+      </div>
+      <div class="form-group has-feedback">
+          <select class="form-control" name="role" [(ngModel)]="role">
+            <option value="">Seleccione una opción</option>
+            <option value="empleado">Empleado</option>
+            <option value="administrador">Administrador</option>
+          </select>
+        </div>
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Contraseña" type="password" [(ngModel)]="password" name="password">
+        <span class="form-control-feedback">
+          <i class="fa fa-fw fa-key"></i>
+        </span>
+      </div>
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Confirmar contraseña" type="password" [(ngModel)]="password_confirmation" name="password_confirmation">
+        <span class="form-control-feedback">
+          <i class="fa fa-fw fa-key"></i>
+        </span>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="hidden" type="checkbox" name="check" value="">
+          <i class="fa fa-lg text-primary"></i>
+          Acepto los
+          <a href="javascript:;" data-toggle="modal" data-target="#loginModal">terminos y condiciones</a>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block m-b-15">Registrar</button>
+      <!-- <p class="text-right">
+        <a href="app-login.html">I already have a membership</a>
+      </p> -->
+    </form>
   </div>
+
+
+
+ </div>
+            <!-- END: .container-fluid -->
+
+          </div>
+          </div>
