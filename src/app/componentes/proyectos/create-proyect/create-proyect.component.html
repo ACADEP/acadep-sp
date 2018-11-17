@@ -24,249 +24,158 @@
 
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
-      <div class="row">
-          <div class="col-md-6">
-            <!-- BEGIN: clave.js -->
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="box">
-                  <header>
-                    <h3>Cleave.js</h3>
-                    <div class="box-tools">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- BEGIN: clave.js -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Lista de proyectos</h3>
+                <!-- <div class="box-tools">
                       <a href="https://nosir.github.io/cleave.js/" target="_blank">
                         <em>https://nosir.github.io/cleave.js/</em>
                       </a>
-                    </div>
-                  </header>
-                  <div class="box-body">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cp1">
-                        <i class="fa fa-fw fa-phone"></i>
-                      </span>
-                      <input type="text" class="cleave-phone form-control" placeholder="Enter US phone number" aria-describedby="cp1">
-                    </div>
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cd1">
-                        <i class="fa fa-fw fa-calendar"></i>
-                      </span>
-                      <input type="text" class="cleave-date1 form-control" placeholder="2016/08/20" aria-describedby="cd1">
-                    </div>
+                    </div> -->
+              </header>
+              <div class="box-body">
+                <div class="panel panel-default">
 
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cd2">
-                        <i class="fa fa-fw fa-calendar"></i>
-                      </span>
-                      <input type="text" class="cleave-date2 form-control" placeholder="08/20" aria-describedby="cd2">
-                    </div>
-
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cn1">
-                        123
-                      </span>
-                      <input type="text" class="text-right cleave-num form-control" placeholder="Enter Numeral" aria-describedby="cn1">
-                    </div>
-
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cean">
-                        EAN-2
-                      </span>
-                      <input type="text" class="cleave-ean form-control" placeholder="1 123456 123456" aria-describedby="cean">
-                    </div>
-
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="ciban">
-                        German IBAN
-                      </span>
-                      <input type="text" class="cleave-iban form-control" placeholder="DE44 5001 0517 5407 3249 31" aria-describedby="ciban">
-                    </div>
-
-                    <hr class="dashed">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="cpr1">
-                        $24,08
-                      </span>
-                      <input type="text" class="text-right cleave-cpr1 form-control" placeholder="Enter Numeral" aria-describedby="cpr1">
-                    </div>
-
-                  </div>
+                  <ul class="list-group">
+                    <a class="list-group-item" *ngFor="let project of projectListArray">{{project.name}}</a>
+                  </ul>
                 </div>
+
               </div>
             </div>
-            <!-- END: clave.js -->
-
-            <!-- BEGIN: autosize -->
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="box bg-white">
-                  <div class="box-heading">
-                    <div class="box-title">
-                      <h3>Autosize</h3>
-                    </div>
-                    <div class="box-tools">
-                      <a href="http://www.jacklmoore.com/autosize/" target="_blank">
-                        <em>http://www.jacklmoore.com/autosize/</em>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="box-body">
-                    <form class="form-horizontal">
-                      <div class="form-group">
-                        <label for="textarea1" class="col-sm-4 control-label">Autosize Text Area</label>
-                        <div class="col-sm-8">
-                          <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
-                        </div>
-                      </div>
-                    </form>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- END: autosize -->
           </div>
+        </div>
+        <!-- END: clave.js -->
 
-          <div class="col-md-6">
-            <!-- BEGIN: flatpickr -->
-            <div class="row">
 
-              <div class="col-xs-12">
-                  <div class="box">
-                      <header class="bg-belize-hole text-white">
-                        <h4>Crear nuevo proyecto</h4>
-                        <!-- begin box-tools -->
-                        <!-- <div class="box-tools">
+      </div>
+
+      <div class="col-md-6">
+        <!-- BEGIN: flatpickr -->
+        <div class="row">
+
+          <div class="col-xs-12">
+            <div class="box">
+              <header class="bg-belize-hole text-white">
+                <h4>Crear nuevo proyecto</h4>
+                <!-- begin box-tools -->
+                <!-- <div class="box-tools">
                           <a class="fa fa-fw fa-minus" href="#" data-box="collapse"></a>
                           <a class="fa fa-fw fa-square-o" href="#" data-fullscreen="box"></a>
                           <a class="fa fa-fw fa-refresh" href="#" data-box="refresh"></a>
                           <a class="fa fa-fw fa-times" href="#" data-box="close"></a>
                         </div> -->
-                        <!-- END: box-tools -->
-                      </header>
-                      <div class="box-body collapse in">
+                <!-- END: box-tools -->
+              </header>
+              <div class="box-body collapse in">
 
-                        <div class="form-group">
-                          <label for="itext">Nombre <span class="required">*</span></label>
-                          <div class="icon-before-input">
-                            <input type="text" class="form-control" id="itext" placeholder="Escriba un nombre para el proyecto ...">
-                            <div class="icon">
-                              <i class="fa fa-fw fa-pencil"></i>
-                            </div>
-                          </div>
-                        </div>
+                <form (submit)="addProject()">
+                  <div class="form-group">
+                    <label for="itext">Nombre <span class="required">*</span></label>
+                    <div class="icon-before-input">
+                      <input type="text" class="form-control" name="name" [(ngModel)]="name" placeholder="Escriba un nombre para el proyecto ...">
+                      <div class="icon">
+                        <i class="fa fa-fw fa-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
 
-                        <hr class="b-s-dashed">
-                        
-                        <!-- <div class="form-group">
+                  <hr class="b-s-dashed">
+
+                  <!-- <div class="form-group">
                             <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
                             <div class="col-sm-8">
                               <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
                             </div>
                           </div> -->
-                          <div class="form-group">
-                              <label for="itext">Descripción </label>
-                              <div class="">
-                                  <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..." data-plugin="autosize"></textarea>
-                                  <!-- <div class="icon">
+                  <div class="form-group">
+                    <label for="itext">Descripción </label>
+                    <div class="">
+                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
+                        name="description" [(ngModel)]="description" data-plugin="autosize"></textarea>
+                      <!-- <div class="icon">
                                   <i class="fa fa-fw fa-pencil"></i>
                                 </div> -->
-                              </div>
-                            </div>
-                          
-                          <hr class="b-s-dashed">
+                    </div>
+                  </div>
 
-                          <div class="form-group">
-                              <label for="itext">Ubicación </label>
-                              <div class="icon-before-input">
-                                  <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba la ubicación del proyecto ..." data-plugin="autosize"></textarea>
-                                  <div class="icon">
-                                  <i class="fa fa-2x fa-map-marker"></i>
-                                </div>
-                              </div>
-                            </div>
-                          
-                          <hr class="b-s-dashed">
+                  <hr class="b-s-dashed">
 
-                          <label for="">inicio</label>
-                          <div class="input-group">
-                              <span class="input-group-addon" id="cd1">
-                                <i class="fa fa-fw fa-calendar"></i>
-                              </span>
-                              <input type="text" class="cleave-date1 form-control" placeholder="2016/08/20" aria-describedby="cd1">
-                            </div>
-
-                            <hr class="b-s-dashed">
-
-                            <label for="">Final</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" id="cd1">
-                                  <i class="fa fa-fw fa-calendar"></i>
-                                </span>
-                                <input type="text" class="cleave-date1 form-control" placeholder="2016/08/20" aria-describedby="cd1">
-                              </div>
-  
-                              <hr class="b-s-dashed">
-
-                        <div class="form-group">
-                          <label for="itext3">Text with button</label>
-                          <div class="icon-before-input">
-                            <input type="text" class="form-control input-sm p-l-80" id="itext3" placeholder="Type ...">
-                            <div class="icon">
-                              <button class="btn btn-success btn-sm" (click)="printame()" type="button" name="button">button</button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <hr class="b-s-dashed">
-
-                        <div class="form-group">
-                          <label for="iemail">E-mail</label>
-                          <div class="icon-before-input">
-                            <input type="email" class="form-control" id="iemail" placeholder="Type ...">
-                            <div class="icon">
-                              <i class="fa fa-fw fa-envelope"></i>
-                            </div>
-                          </div>
-                        </div>
-
-                        <hr class="b-s-dashed">
-
-                        <div class="form-group">
-                          <label for="itel">Disabled</label>
-                          <div class="icon-before-input">
-                            <input type="text" class="form-control input-lg" id="itel" disabled value="disabled">
-                            <div class="icon">
-                              <i class="fa fa-fw fa-warning fa-lg"></i>
-                            </div>
-                          </div>
-                        </div>
-
-                        <hr class="b-s-dashed">
-
-                        <div class="form-group">
-                          <label for="iphone">Read Only</label>
-                          <div class="icon-before-input">
-                            <textarea class="form-control" rows="3" id="iphone" readonly>
-                              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            </textarea>
-                            <div class="icon">
-                              <i class="fa fa-fw fa-book fa-2x"></i>
-                            </div>
-                          </div>
-                        </div>
-
+                  <div class="form-group">
+                    <label for="itext">Ubicación </label>
+                    <div class="icon-before-input">
+                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba la ubicación del proyecto ..."
+                        data-plugin="autosize"></textarea>
+                      <div class="icon">
+                        <i class="fa fa-2x fa-map-marker"></i>
                       </div>
                     </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <label for="">inicio</label>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="cd1">
+                      <i class="fa fa-fw fa-calendar"></i>
+                    </span>
+                    <input type="text" class="cleave-date1 form-control" placeholder="2016/08/20" aria-describedby="cd1">
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <label for="">Final</label>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="cd1">
+                      <i class="fa fa-fw fa-calendar"></i>
+                    </span>
+                    <input type="text" class="cleave-date1 form-control" placeholder="2016/08/20" aria-describedby="cd1">
+                  </div>
+
+                  <hr class="b-s-dashed">
+                  <div class="form-group">
+                    <label >Administradores</label>
+                    <div class="col-sm-10">
+                      <select class="form-control" multiple>
+                        <option  *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+                        
+                      </select>
+                    </div>
+                  </div>
+
+                  <br><br>
+                  <br><br>
+                  <hr class="b-s-dashed">
+
+                  <label class="">Empleados</label>
+                  <div class="form-group">
+                    <div class="col-sm-10">
+                      <select class="form-control" multiple>
+                        <option  *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-12 text-center" style="margin-top:30px">
+                    <button type="submit" class="btn btn-success">Crear Proyecto</button>
+                  </div>
+
+                </form>
+
               </div>
             </div>
-            <!-- END: flatpickr -->
-
           </div>
         </div>
+        <!-- END: flatpickr -->
+
+      </div>
+    </div>
   </div>
   <!-- END: .container-fluid -->
 
