@@ -31,10 +31,15 @@ projectList : AngularFireList<any>;
      
     }
 
-    addProject(name:string, description:string){
+    addProject(name:string, description:string, ubication:string, inicio:string, final:string, administrador:string, empleado:string){
       this.projectList.push({
         name: name,
-        description: description
+        description: description,
+        ubication: ubication,
+        inicio: inicio,
+        final:final,
+        administrador:administrador,
+        empleado : empleado
       })
     }
 

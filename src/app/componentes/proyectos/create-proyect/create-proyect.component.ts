@@ -18,6 +18,11 @@ export class CreateProyectComponent implements OnInit {
 
   public name: string = '';
   public description: string = '';
+  public ubication: string = '';
+  public inicio: string = '';
+  public final: string = '';
+  public administrador: string = '';
+  public empleado: string = '';
   constructor(public projectsService: ProjectsService, notifierService: NotifierService) {
     this.notifier = notifierService;
 
@@ -54,7 +59,7 @@ export class CreateProyectComponent implements OnInit {
     //   this.notifier.notify( 'error', 'Escriba un nombre para el proyecto' )
 
     // } else {
-      this.projectsService.addProject(this.name, this.description);
+      this.projectsService.addProject(this.name, this.description, this.ubication, this.inicio, this.final, this.administrador, this.empleado);
       this.notifier.notify( 'success', 'Proyecto Guardado!' )
     // }
   
