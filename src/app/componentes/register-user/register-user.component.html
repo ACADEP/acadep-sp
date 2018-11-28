@@ -46,7 +46,7 @@
 
             
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
-                      <i class="icon-action fa fa-edit" style="color:#6fb478" data-toggle="modal" [attr.data-target]="'#modal'+ i"></i>
+                      <i class="icon-action fa fa-edit" style="color:#6fb478"  (click)="editUser(user)"></i>
                       <i class="icon-action fa fa-times" style="color:#d64040"></i>
                       <h6 class="title">{{user.name}} </h6>
              
@@ -167,11 +167,14 @@
 
 </div>
 <!-- END: .main-content -->
-<div class="modal fade" id="{{'modal' + i}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" *ngFor="let user of users; let i = index">
+
+
+<!-- modal -->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{user.name}}</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -181,7 +184,7 @@
               <div class="form-group">
                 <label for="itext">Nombre <span class="required">*</span></label>
                 <div class="icon-before-input">
-                  <input type="text" class="form-control" value="{{user.name}}"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
+                  <input type="text" class="form-control" [(ngModel)]="nameEdit"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
                   <div class="icon">
                     <i class="fa fa-fw fa-pencil"></i>
                   </div>
@@ -199,7 +202,7 @@
                       <div class="form-group">
                         <label for="itext">E-mail <span class="required">*</span></label>
                         <div class="icon-before-input">
-                          <input type="text" class="form-control" value="{{user.email}}"  name="email" placeholder="Escriba un nombre para el proyecto ...">
+                          <input type="text" class="form-control" value=""  name="email" placeholder="Escriba un nombre para el proyecto ...">
                           <div class="icon">
                             <i class="fa fa-fw fa-pencil"></i>
                           </div>
@@ -211,7 +214,7 @@
               <div class="form-group">
                 <label for="itext">Rol de empleado <span class="required">*</span></label>
                 <select class="form-control" name="role" >
-                    <option *ngFor='let element of roles' [selected]="element == user.rol" [value]="element">{{element | titlecase}}</option>
+                    <!-- <option *ngFor='let element of roles' [selected]="element == user.rol" [value]="element">{{element | titlecase}}</option> -->
                 </select>
 
                    

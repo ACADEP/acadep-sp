@@ -3,6 +3,8 @@ import { AuthService } from "../../servicios/auth.service";
 import { UsersService } from "../../services/users.service";
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
+import { User } from "../../models/user";
+// import { ModalService } from "../../services/modal.service";
 // import { AngularFirestore } from  'firebase/firestore';
 
 // import { Observable } from "rxjs";
@@ -15,6 +17,7 @@ import { NotifierService } from 'angular-notifier';
 
 // }
 
+declare var $: any;
 
 
 @Component({
@@ -34,24 +37,31 @@ public roles = [
 public userExists : boolean;
 
 private readonly notifier: NotifierService;
+
+public emailEdit : string;
+public passwordEdit : string;
+public nameEdit : string;
+public roleEdit : string;
+
+
 public email : string;
 public password : string;
 public name : string;
 public role : string;
 public uid : string;
-  constructor( public authService:AuthService, public router: Router, notifierService: NotifierService, public userService : UsersService
-    ) {
+  constructor( public authService:AuthService, public router: Router, notifierService: NotifierService, public userService : UsersService,
+   ) {
+
     this.notifier = notifierService;
     this.role = "";
+    this.userService.getUsers().subscribe(users =>{
+      this.users = users;
+    })
    }
 
   ngOnInit() {
     
-    this.userService.getUsers().subscribe(users =>{
-      console.log(users)
-
-      this.users = users;
-    })
+   
 
   }
 
@@ -82,8 +92,17 @@ public uid : string;
     });
 
 
-
-
   }
+
+  editUser(user)
+  {
+   this.nameEdit = user.name;
+    $('#modalEdit').modal('show');
+  }
+
+  // onUpdateuser()
+  // {
+  //   console.log(this.userEdit)
+  // }
 
 }
