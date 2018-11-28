@@ -180,7 +180,7 @@
         </button>
       </div>
       <div class="modal-body">
-          <form (submit)="onSubmitAddUser()">
+          <form (submit)="onUpdateuser($event)">
               <div class="form-group">
                 <label for="itext">Nombre <span class="required">*</span></label>
                 <div class="icon-before-input">
@@ -202,7 +202,7 @@
                       <div class="form-group">
                         <label for="itext">E-mail <span class="required">*</span></label>
                         <div class="icon-before-input">
-                          <input type="text" class="form-control" value=""  name="email" placeholder="Escriba un nombre para el proyecto ...">
+                          <input type="text" class="form-control" [(ngModel)]="emailEdit" name="email" placeholder="Escriba un nombre para el proyecto ...">
                           <div class="icon">
                             <i class="fa fa-fw fa-pencil"></i>
                           </div>
@@ -213,19 +213,17 @@
 
               <div class="form-group">
                 <label for="itext">Rol de empleado <span class="required">*</span></label>
-                <select class="form-control" name="role" >
-                    <!-- <option *ngFor='let element of roles' [selected]="element == user.rol" [value]="element">{{element | titlecase}}</option> -->
+                <select class="form-control" [(ngModel)]="roleEdit" name="role" >
+                  <option *ngFor='let element of roles' [selected]="element == roleEdit" [value]="element">{{element | titlecase}}</option>
                 </select>
-
-                   
-
+                <!-- <p></ `p> -->
 
               </div>
 
               <!-- <hr class="b-s-dashed"> -->
 
               <div class="col-md-12 text-center" style="margin-top:30px">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-success">Guardar cambios</button>
               </div>
 

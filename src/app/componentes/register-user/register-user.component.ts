@@ -42,6 +42,7 @@ public emailEdit : string;
 public passwordEdit : string;
 public nameEdit : string;
 public roleEdit : string;
+public idEdit : string;
 
 
 public email : string;
@@ -97,12 +98,22 @@ public uid : string;
   editUser(user)
   {
    this.nameEdit = user.name;
+   this.emailEdit = user.email;
+   this.roleEdit = user.rol;
+   this.idEdit = user.id;
+  console.log(user)
     $('#modalEdit').modal('show');
   }
 
-  // onUpdateuser()
-  // {
-  //   console.log(this.userEdit)
-  // }
+  onUpdateuser(e)
+  {
+    e.preventDefault();
+    this.userService.saveUser(this.nameEdit, this.emailEdit, this.roleEdit, this.idEdit);
+    $('#modalEdit').modal('hide');
+    this.notifier.notify( 'success', 'Usuario Actualizado!' );
+
+
+
+  }
 
 }
