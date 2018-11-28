@@ -1,85 +1,236 @@
-<header class="main-heading shadow-2dp">
-    <!-- begin dashhead -->
-    <div class="dashhead bg-white">
-      <div class="dashhead-titles">
-        <h6 class="dashhead-subtitle">
-          ACADEP
-        </h6>
-        <h3 class="dashhead-title">Registrar usuario</h3>
-      </div>
 
-      <div class="dashhead-toolbar">
-        <div class="dashhead-toolbar-item">
-          <a  (click)="alertShow()">App</a>
-          / Registrar usuario
-        </div>
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        App / Usuarios
+      </h6>
+      <h3 class="dashhead-title">Crear Proyecto</h3>
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Proyectos / Crear Empleado
       </div>
     </div>
-    <!-- END: dashhead -->
-  </header>
-  <!-- END: .main-heading -->
-
-  
-  <!-- begin .main-content -->
-  <div class="main-content bg-clouds">
-    
-    <!-- begin .container-fluid -->
-    <div class="container-fluid p-t-15">
-
-<div class="app-login">
-  <div class="text-center box shadow-5 animated fadeInLeft b-r-4 p-a-20">
-    <h4>Registra un nuevo Usuario</h4>
-    <form class="text-left" role="form" action="" (submit)="onSubmitAddUser()">
-      <div class="form-group has-feedback">
-        <input class="form-control" placeholder="Nombre de usuario" type="text" [(ngModel)]="name" name="namme">
-        <span class="form-control-feedback">
-          <i class="fa fa-fw fa-user"></i>
-        </span>
-      </div>
-      <div class="form-group has-feedback">
-        <input class="form-control" placeholder="Correo electrónico" type="email" [(ngModel)]="email" name="email">
-        <span class="form-control-feedback">
-          <i class="fa fa-fw fa-envelope"></i>
-        </span>
-      </div>
-      <div class="form-group has-feedback">
-          <select class="form-control" name="role" [(ngModel)]="role">
-            <option value="">Seleccione una opción</option>
-            <option value="empleado">Empleado</option>
-            <option value="administrador">Administrador</option>
-          </select>
-        </div>
-      <div class="form-group has-feedback">
-        <input class="form-control" placeholder="Contraseña" type="password" [(ngModel)]="password" name="password">
-        <span class="form-control-feedback">
-          <i class="fa fa-fw fa-key"></i>
-        </span>
-      </div>
-      <div class="form-group has-feedback">
-        <input class="form-control" placeholder="Confirmar contraseña" type="password" [(ngModel)]="password_confirmation" name="password_confirmation">
-        <span class="form-control-feedback">
-          <i class="fa fa-fw fa-key"></i>
-        </span>
-      </div>
-      <div class="checkbox">
-        <label>
-          <input class="hidden" type="checkbox" name="check" value="">
-          <i class="fa fa-lg text-primary"></i>
-          Acepto los
-          <a href="javascript:;" data-toggle="modal" data-target="#loginModal">terminos y condiciones</a>
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block m-b-15">Registrar</button>
-      <!-- <p class="text-right">
-        <a href="app-login.html">I already have a membership</a>
-      </p> -->
-    </form>
   </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
 
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
 
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- BEGIN: clave.js -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Lista de usuarios</h3>
+                <!-- <div class="box-tools">
+                      <a href="https://nosir.github.io/cleave.js/" target="_blank">
+                        <em>https://nosir.github.io/cleave.js/</em>
+                      </a>
+                    </div> -->
+              </header>
+              <div class="list-group filter-wrap">
+                <article class="list-group-item" *ngFor="let user of users; let i = index">
+                    
+                  <header class="filter-header">
 
- </div>
-            <!-- END: .container-fluid -->
-
+            
+                    <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+                      <i class="icon-action fa fa-edit" style="color:#6fb478" data-toggle="modal" [attr.data-target]="'#modal'+ i"></i>
+                      <i class="icon-action fa fa-times" style="color:#d64040"></i>
+                      <h6 class="title">{{user.name}} </h6>
+             
+                  </header>
+                  <div class="filter-content collapse" id="{{'collapse' + i}}">
+                   <b>Email:</b>  {{user.email}} <br>
+                   <b>Rol:</b>  {{user.rol}}
+                  </div>
+                </article>
+              </div>
+            </div>
           </div>
+        </div>
+        <!-- END: clave.js -->
+
+
+      </div>
+
+      <div class="col-md-6">
+        <!-- BEGIN: flatpickr -->
+        <div class="row">
+
+          <div class="col-xs-12">
+            <div class="box">
+              <header class="bg-belize-hole text-white">
+                <h4>Crear nuevo usuario</h4>
+                <!-- begin box-tools -->
+                <!-- <div class="box-tools">
+                          <a class="fa fa-fw fa-minus" href="#" data-box="collapse"></a>
+                          <a class="fa fa-fw fa-square-o" href="#" data-fullscreen="box"></a>
+                          <a class="fa fa-fw fa-refresh" href="#" data-box="refresh"></a>
+                          <a class="fa fa-fw fa-times" href="#" data-box="close"></a>
+                        </div> -->
+                <!-- END: box-tools -->
+              </header>
+              <div class="box-body collapse in">
+
+                <form (submit)="onSubmitAddUser()">
+                  <div class="form-group">
+                    <label for="itext">Nombre <span class="required">*</span></label>
+                    <div class="icon-before-input">
+                      <input type="text" class="form-control" [(ngModel)]="name" name="namme" placeholder="Escriba un nombre para el proyecto ...">
+                      <div class="icon">
+                        <i class="fa fa-fw fa-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <!-- <div class="form-group">
+                            <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
+                            <div class="col-sm-8">
+                              <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
+                            </div>
+                          </div> -->
+                          <div class="form-group">
+                            <label for="itext">E-mail <span class="required">*</span></label>
+                            <div class="icon-before-input">
+                              <input type="text" class="form-control" [(ngModel)]="email" name="email" placeholder="Escriba un nombre para el proyecto ...">
+                              <div class="icon">
+                                <i class="fa fa-fw fa-pencil"></i>
+                              </div>
+                            </div>
+                          </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label for="itext">Rol de empleado </label>
+                    <select class="form-control" name="role" [(ngModel)]="role">
+                      <option value="">Seleccione una opción</option>
+                      <option value="empleado">Empleado</option>
+                      <option value="administrador">Administrador</option>
+                    </select>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label for="itext">Password <span class="required">*</span></label>
+                    <div class="icon-before-input">
+                      <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Escriba una contraseña">
+                      <div class="icon">
+                        <i class="fa fa-fw fa-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label for="itext">Confirmar contraseña <span class="required">*</span></label>
+                    <div class="icon-before-input">
+                      <input type="password" class="form-control" name="password_confirmation" placeholder="Confirme la contraseña">
+                      <div class="icon">
+                        <i class="fa fa-fw fa-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 text-center" style="margin-top:30px">
+                    <button type="submit" class="btn btn-success">Crear Usuario</button>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
           </div>
+        </div>
+        <!-- END: flatpickr -->
+
+      </div>
+    </div>
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>
+<!-- END: .main-content -->
+<div class="modal fade" id="{{'modal' + i}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" *ngFor="let user of users; let i = index">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{user.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form (submit)="onSubmitAddUser()">
+              <div class="form-group">
+                <label for="itext">Nombre <span class="required">*</span></label>
+                <div class="icon-before-input">
+                  <input type="text" class="form-control" value="{{user.name}}"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
+                  <div class="icon">
+                    <i class="fa fa-fw fa-pencil"></i>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="b-s-dashed">
+
+              <!-- <div class="form-group">
+                        <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
+                        <div class="col-sm-8">
+                          <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
+                        </div>
+                      </div> -->
+                      <div class="form-group">
+                        <label for="itext">E-mail <span class="required">*</span></label>
+                        <div class="icon-before-input">
+                          <input type="text" class="form-control" value="{{user.email}}"  name="email" placeholder="Escriba un nombre para el proyecto ...">
+                          <div class="icon">
+                            <i class="fa fa-fw fa-pencil"></i>
+                          </div>
+                        </div>
+                      </div>
+
+              <hr class="b-s-dashed">
+
+              <div class="form-group">
+                <label for="itext">Rol de empleado <span class="required">*</span></label>
+                <select class="form-control" name="role" >
+                    <option *ngFor='let element of roles' [selected]="element == user.rol" [value]="element">{{element | titlecase}}</option>
+                </select>
+
+                   
+
+
+              </div>
+
+              <!-- <hr class="b-s-dashed"> -->
+
+              <div class="col-md-12 text-center" style="margin-top:30px">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Guardar cambios</button>
+              </div>
+
+            </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>

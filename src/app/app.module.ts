@@ -10,7 +10,7 @@ import { TopbarComponent } from './componentes/topbar/topbar.component';
 
 import { FormsModule }   from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import {environment} from '../environments/environment';
@@ -83,6 +83,7 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     NotifierModule.withConfig(customNotifierOptions)
 
   ],
