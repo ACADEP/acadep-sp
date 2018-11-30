@@ -1,0 +1,231 @@
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        App / Actividades
+      </h6>
+      <h3 class="dashhead-title">Actividades</h3>
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Actividades
+      </div>
+    </div>
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- BEGIN: clave.js -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Lista de actividades</h3>
+                <!-- <div class="box-tools">
+                          <a href="https://nosir.github.io/cleave.js/" target="_blank">
+                            <em>https://nosir.github.io/cleave.js/</em>
+                          </a>
+                        </div> -->
+              </header>
+              <div class="list-group filter-wrap">
+
+                <article class="list-group-item" *ngFor="let activity of activitiesListArray; let i = index">
+
+                  <header class="filter-header">
+
+
+
+                    <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+                    <i class="icon-action fa fa-edit" style="color:#6fb478"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
+                    <h6 class="title">{{activity.name}} </h6>
+
+                  </header>
+                  <div class="filter-content collapse" id="{{'collapse' + i}}">
+                    <b>Inicio:</b> {{activity.start}} <br>
+                    <b>Final:</b> {{activity.end}}
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: clave.js -->
+
+
+      </div>
+
+      <div class="col-md-6">
+        <!-- BEGIN: flatpickr -->
+        <div class="row">
+
+          <div class="col-xs-12">
+            <div class="box">
+              <header class="bg-green-sea text-white">
+                <h4>Crear nueva actividad</h4>
+                <!-- begin box-tools -->
+                <!-- <div class="box-tools">
+                              <a class="fa fa-fw fa-minus" href="#" data-box="collapse"></a>
+                              <a class="fa fa-fw fa-square-o" href="#" data-fullscreen="box"></a>
+                              <a class="fa fa-fw fa-refresh" href="#" data-box="refresh"></a>
+                              <a class="fa fa-fw fa-times" href="#" data-box="close"></a>
+                            </div> -->
+                <!-- END: box-tools -->
+              </header>
+              <div class="box-body collapse in">
+
+                <form (submit)="addEvent()">
+                  <div class="form-group">
+                    <label for="itext">Nombre de la Actividad <span class="required">*</span></label>
+                    <div class="icon-before-input">
+                      <input type="text" class="form-control" name="name" [(ngModel)]="eventName" placeholder="Escriba un nombre para el evento ...">
+                      <div class="icon">
+                        <i class="fa fa-fw fa-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <label class="">Tipo de Actividad <span class="required">*</span></label>
+                  <div class="form-group">
+                    <div class="col-sm-10">
+                      <select class="form-control" name="usuario">
+                        <option selected value="">Seleccione una opción</option>
+                        <option *ngFor="let activity of activityTypes" value="activity">{{activity}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+
+                  <hr class="b-s-dashed">
+
+
+
+                  <!-- <div class="form-group">
+                              <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
+                              <div class="col-sm-8">
+                                <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
+                              </div>
+                            </div> -->
+                  <div class="form-group">
+                    <label for="itext">Descripción </label>
+                    <div class="">
+                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
+                        name="description" [(ngModel)]="description" data-plugin="autosize"></textarea>
+                      <!-- <div class="icon">
+                                    <i class="fa fa-fw fa-pencil"></i>
+                                  </div> -->
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="row text-center">
+                    <div class="col-md-12 ">
+                        <div class="checkbox">
+                            <label class="switch" >
+                              <input class="hidden" name="hour" type="checkbox" [(ngModel)]="time">
+                              <i class="fa fa-lg text-wisteria"></i>&nbsp;
+                              <b>Horas</b> 
+                            </label>
+                          </div>
+                    </div>
+
+                    <span *ngIf="time == false; else withtime">
+                    <div class="col-md-6">
+                      <label for="">Inicio <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+
+                        <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
+                        <input  type="date" name="start" [(ngModel)]="eventStart">
+
+                      </div>
+                    </div>
+                    <div class="col-md-6 ">
+                      <label for="">Final <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+
+                        <!-- <ngb-datepicker #final (select)="onDateFinalSelect($event)"></ngb-datepicker> -->
+                        <input type="date" name="end" [(ngModel)]="eventEnd">
+
+                      </div>
+                    </div>
+                  </span>
+
+                  <ng-template #withtime>
+                          <div class="col-md-6">
+                            <label for="">Inicio <span class="required">*</span></label>
+                            <div class="input-group col-centered">
+      
+                              <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
+                              <input  type="datetime-local" name="start" [(ngModel)]="eventStart">
+      
+                            </div>
+                          </div>
+                          <div class="col-md-6 ">
+                            <label for="">Final <span class="required">*</span></label>
+                            <div class="input-group col-centered">
+      
+                              <!-- <ngb-datepicker #final (select)="onDateFinalSelect($event)"></ngb-datepicker> -->
+                              <input type="datetime-local" name="end" [(ngModel)]="eventEnd">
+      
+                            </div>
+                          </div>
+
+                  </ng-template>
+
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
+
+                  <form (submit)="pushTool()">
+                  <div class="form-group">
+                      <label for="atext3">Insumos necesarios</label>
+                      <div class="icon-after-input">
+                        <input type="text" class="form-control input-sm p-r-80" id="atext3" name="tool" placeholder="escriba..." [(ngModel)]="tool">
+                        <div class="icon">
+                          <button class="btn btn-info btn-sm btn-rect" type="submit" ><i class="fa fa-plus fa-lg"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                    <ul class="list-group list-group-flush">
+                 
+                        <li class="list-group-item" *ngFor="let tool of tools; let i = index">{{tool}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteTool(i)"></i>&nbsp;</li>
+                      </ul>
+
+                  <div class="col-md-12 text-center" style="margin-top:30px">
+                    <button type="submit" class="btn btn-success">Crear Evento</button>
+                    
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: flatpickr -->
+
+      </div>
+    </div>
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>
+<!-- END: .main-content -->

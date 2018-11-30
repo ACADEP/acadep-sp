@@ -3,7 +3,7 @@ import { AuthService } from "../../servicios/auth.service";
 import { UsersService } from "../../services/users.service";
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
-import { User } from "../../models/user";
+// import { User } from "../../models/user";
 // import { ModalService } from "../../services/modal.service";
 // import { AngularFirestore } from  'firebase/firestore';
 

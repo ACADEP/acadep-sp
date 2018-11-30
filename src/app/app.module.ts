@@ -21,6 +21,10 @@ import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { CalendarComponent } from './componentes/calendar/calendar.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { CreateProyectComponent } from './componentes/proyectos/create-proyect/create-proyect.component';
+import { EventsComponent } from './componentes/events/events.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { ActivitiesComponent } from './componentes/activities/activities.component';
+
 
 
 const customNotifierOptions: NotifierOptions = {
@@ -74,7 +78,9 @@ const customNotifierOptions: NotifierOptions = {
     RegisterUserComponent,
     CalendarComponent,
     InicioComponent,
-    CreateProyectComponent
+    CreateProyectComponent,
+    EventsComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +90,8 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    NotifierModule.withConfig(customNotifierOptions)
+    NotifierModule.withConfig(customNotifierOptions),
+    NgbModule,
 
   ],
   providers: [AuthService],
