@@ -50,4 +50,22 @@ projectList : AngularFireList<any>;
     removeproject($key){
       this.projectList.remove($key)
     }
+
+    getProyect($key){
+
+      return new Promise((resolve, reject) => {
+        this.firebase.database.ref('projects/' + $key).once('value')
+        .then(res => resolve(res.val()),
+          err => reject(err));
+      });
+
+      }
+
+      // this.firebase.database.ref('projects/' + $key).once('value').then((result) => {
+      //   var proyect = result.val();
+      //   console.log(proyect);
+      // }).catch((err) => {
+      //   console.log(err);
+      // });
+    }
 }
