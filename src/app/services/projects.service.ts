@@ -67,5 +67,5 @@ projectList : AngularFireList<any>;
       // }).catch((err) => {
       //   console.log(err);
       // });
-    }
+    
 }
