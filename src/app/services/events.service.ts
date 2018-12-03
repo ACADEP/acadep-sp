@@ -18,7 +18,7 @@ export class EventsService {
    
   }
 
-  addEvent(name:string, uid: string, start: string, end: string){
+  addEvent(name:string, uid: string, start: string, end: string, activity:string){
     this.eventsList.push({
      
     }).then((res : any) => {
@@ -29,6 +29,7 @@ export class EventsService {
       uid: uid,
       start: start,
       end: end,
+      activity_id : activity, 
       active : true
       })
 

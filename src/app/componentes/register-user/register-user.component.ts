@@ -112,8 +112,6 @@ public uid : string;
     $('#modalEdit').modal('hide');
     this.notifier.notify( 'success', 'Usuario Actualizado!' );
 
-
-
   }
 
 }

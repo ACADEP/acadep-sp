@@ -31,20 +31,26 @@ projectList : AngularFireList<any>;
      
     }
 
-    addProject(name:string, description:string, ubication:string, inicio:string, final:string, administrador:string, empleado:string){
+    addProject(name:string, description:string, ubication:string, inicio:string, final:string, administrador: string){
       this.projectList.push({
         name: name,
         description: description,
         ubication: ubication,
         inicio: inicio,
         final:final,
-        administrador:administrador,
-        empleado : empleado
+        administrator:administrador,
       })
     }
 
-    updateproject($key:string){
+    updateproject($key:string, name:string, description:string, ubication:string, inicio:string, final:string){
 
+      this.firebase.database.ref('projects/'+ $key).set({
+        name: name,
+        description: description,
+        ubication: ubication,
+        inicio: inicio,
+        final:final
+      })
     }
 
     removeproject($key){
@@ -52,13 +58,11 @@ projectList : AngularFireList<any>;
     }
 
     getProyect($key){
-
       return new Promise((resolve, reject) => {
         this.firebase.database.ref('projects/' + $key).once('value')
         .then(res => resolve(res.val()),
           err => reject(err));
       });
-
       }
 
       // this.firebase.database.ref('projects/' + $key).once('value').then((result) => {

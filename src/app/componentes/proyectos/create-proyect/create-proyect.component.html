@@ -11,7 +11,7 @@
     <div class="dashhead-toolbar">
       <div class="dashhead-toolbar-item">
         <a>App</a>
-        / Proyectos 
+        / Proyectos
       </div>
     </div>
   </div>
@@ -25,12 +25,13 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
               <header>
+
                 <h3>Lista de proyectos</h3>
                 <!-- <div class="box-tools">
                       <a href="https://nosir.github.io/cleave.js/" target="_blank">
@@ -38,7 +39,35 @@
                       </a>
                     </div> -->
               </header>
-              <div class="box-body">
+
+              <div class="list-group filter-wrap">
+                <article class="list-group-item" *ngFor="let project of projectListArray; let i = index">
+
+                  <header class="filter-header">
+
+
+
+                    <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+                    <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040"></i>
+                    <h6 class="title"><i class="fa fa-star-o"></i> {{project.name | titlecase}}</h6>
+
+                  </header>
+                  <div class="filter-content collapse" id="{{'collapse' + i}}">
+                    <div class="row">
+                      <div class="col-md-6">
+                          <b>Descripción:</b> {{project.description}} <br>
+                          <b>Ubicación:</b> {{project.ubication}} <br>
+                          <b>Administrador:</b> {{project.administrator}} <br>
+                          <b>Inicio:</b> {{project.inicio}} <br>
+                          <b>Final:</b> {{project.final}} <br>
+                      </div>
+                      <!-- <div class="col-md-6">hola2</div> -->
+                    </div>
+                  </div>
+                </article>
+              </div>
+              <!-- <div class="box-body">
                 <div class="panel panel-default">
 
                   <ul class="list-group">
@@ -46,7 +75,7 @@
                   </ul>
                 </div>
 
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -55,7 +84,7 @@
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <!-- BEGIN: flatpickr -->
         <div class="row">
 
@@ -78,7 +107,7 @@
                   <div class="form-group">
                     <label for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" name="name" [(ngModel)]="name" placeholder="Escriba un nombre para el proyecto ...">
+                      <input type="text" class="form-control" name="name" [(ngModel)]="name" placeholder="Escriba un nombre para el proyecto ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -97,7 +126,7 @@
                     <label for="itext">Descripción </label>
                     <div class="">
                       <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
-                        name="description" [(ngModel)]="description" data-plugin="autosize"></textarea>
+                        name="description" [(ngModel)]="description" data-plugin="autosize" required></textarea>
                       <!-- <div class="icon">
                                   <i class="fa fa-fw fa-pencil"></i>
                                 </div> -->
@@ -119,48 +148,59 @@
 
                   <hr class="b-s-dashed">
 
-                  <label for="">inicio</label>
-                  <div class="input-group">
-                    <span class="input-group-addon" id="cd1">
-                      <i class="fa fa-fw fa-calendar"></i>
+                  <div class="row text-center">
+
+                    <span>
+                      <div class="col-md-6">
+                        <label for="">Inicio <span class="required">*</span></label>
+                        <div class="input-group col-centered">
+
+                          <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
+                          <input type="date" name="start" [(ngModel)]="inicio" required>
+
+                        </div>
+                      </div>
+                      <div class="col-md-6 ">
+                        <label for="">Final <span class="required">*</span></label>
+                        <div class="input-group col-centered">
+
+                          <input type="date" name="end" [(ngModel)]="final" required>
+
+                        </div>
+                      </div>
                     </span>
-                    <input type="text" class="cleave-date1 form-control" name="inicio" placeholder="2016/08/20" aria-describedby="cd1" [(ngModel)]="inicio">
+
+
+
                   </div>
 
 
                   <hr class="b-s-dashed">
 
-                  <label for="">Final</label>
-                  <div class="input-group">
-                    <span class="input-group-addon" id="cd1">
-                      <i class="fa fa-fw fa-calendar"></i>
-                    </span>
-                    <input type="text" class="cleave-date1 form-control" name="final" placeholder="2016/08/20" aria-describedby="cd1" [(ngModel)]="final">
-                  </div>
 
-
-                  <hr class="b-s-dashed">
                   <div class="form-group">
-                    <label >Administrador</label>
+                      <label class="col-sm-12 control-label">Administrador {{administrador}}<span class="required">*</span> </label>
+                      <div class="col-sm-12">
+                        <select class="form-control size-full" name="admin"   [(ngModel)]="administrador">
+                            <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+
+                  <!-- <div class="form-group">
+                    <label>Administrador</label>
                     <div class="col-sm-10">
-                      <select class="form-control"  name="administrador" [(ngModel)]="administrador" >
-                        <option  *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
-                        
+                      <select class="form-control" name="administrador" [(ngModel)]="administrador">
+                        <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+
                       </select>
                     </div>
-                  </div>
+                  </div> -->
 
-  <br>
+                  <br>
                   <hr class="b-s-dashed">
 
-                  <label class="">Empleado</label>
-                  <div class="form-group">
-                    <div class="col-sm-10">
-                      <select class="form-control" name="empleado" [(ngModel)]="empleado" >
-                        <option  *ngFor="let user of userListArray"  value="{{user.name}}">{{user.name}}</option>
-                      </select>
-                    </div>
-                  </div>
 
 
 
@@ -183,3 +223,93 @@
 
 </div>
 <!-- END: .main-content -->
+
+<!-- modal -->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="onUpdateProject($event)">
+          <div class="form-group">
+            <label for="itext">Nombre <span class="required">*</span></label>
+            <div class="icon-before-input">
+              <input type="text" class="form-control" [(ngModel)]="editName" name="namme" placeholder="Escriba un nombre para el proyecto ...">
+              <div class="icon">
+                <i class="fa fa-fw fa-pencil"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="itext">Descripción </label>
+            <div class="">
+              <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
+                name="description" [(ngModel)]="editDescription" data-plugin="autosize"></textarea>
+              <!-- <div class="icon">
+                                <i class="fa fa-fw fa-pencil"></i>
+                              </div> -->
+            </div>
+          </div>
+
+          <hr class="b-s-dashed">
+
+          <div class="form-group">
+            <label for="itext">Ubicación </label>
+            <div class="icon-before-input">
+              <textarea class="form-control" rows="3" id="textarea1" name="ubication" placeholder="Escriba la ubicación del proyecto ..."
+                data-plugin="autosize" [(ngModel)]="editUbication"></textarea>
+              <div class="icon">
+                <i class="fa fa-2x fa-map-marker"></i>
+              </div>
+            </div>
+          </div>
+
+          <hr class="b-s-dashed">
+
+          <div class="row text-center">
+
+            <span>
+              <div class="col-md-6">
+                <label for="">Inicio <span class="required">*</span></label>
+                <div class="input-group col-centered">
+
+                  <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
+                  <input type="date" name="start" [(ngModel)]="editInicio">
+
+                </div>
+              </div>
+              <div class="col-md-6 ">
+                <label for="">Final <span class="required">*</span></label>
+                <div class="input-group col-centered">
+
+                  <input type="date" name="end" [(ngModel)]="editFinal">
+
+                </div>
+              </div>
+            </span>
+          </div>
+<br>
+
+
+          <!-- <hr class="b-s-dashed"> -->
+
+          <div class="col-md-12 text-center" style="margin-top:30px">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>

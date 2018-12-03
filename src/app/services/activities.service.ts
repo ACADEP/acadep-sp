@@ -18,6 +18,14 @@ export class ActivitiesService {
    
   }
 
+  getActivity($key){
+    return new Promise((resolve, reject) => {
+      this.firebase.database.ref('Activities/' + $key).once('value')
+      .then(res => resolve(res.val()),
+        err => reject(err));
+    });
+    }
+
   addActivity(name:string, project_id: any, description:Text, type: string, start: Date, end: Date, tools:any){
     
     return new Promise ((resolve, reject) =>{

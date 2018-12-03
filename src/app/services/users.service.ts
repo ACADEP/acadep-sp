@@ -22,6 +22,14 @@ export class UsersService {
    
   }
 
+  // getProyect($key){
+  //   return new Promise((resolve, reject) => {
+  //     this.firebase.database.ref('users/' + $key).once('value')
+  //     .then(res => resolve(res.val()),
+  //       err => reject(err));
+  //   });
+  //   }
+
   getUsers() {
 
     this.usersCollection = this.db.collection('users');
@@ -45,7 +53,7 @@ export class UsersService {
     }).then(function (docRef) {
       return docRef;
     }).catch(function (error) {
-      console.log(id);
+      console.log(error);
 
     })
   }

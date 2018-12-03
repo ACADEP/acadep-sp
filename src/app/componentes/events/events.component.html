@@ -25,7 +25,7 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
@@ -54,7 +54,10 @@
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                    <b>Inicio:</b>  {{event.start}} <br>
-                   <b>Final:</b>  {{event.end}}
+                   <b>Final:</b>  {{event.end}} <br>
+                   <b>Actividad:</b>  {{event.activity_name  }} <br>
+                   <b>Usuario que lo realizará:</b>  {{event.uid}}
+
                   </div>
                 </article>
               </div>
@@ -66,7 +69,7 @@
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <!-- BEGIN: flatpickr -->
         <div class="row">
 
@@ -127,7 +130,8 @@
                   <div class="form-group">
                     <div class="col-sm-10">
                       <select class="form-control" name="usuario" [(ngModel)]="user_uid">
-                        <option *ngFor="let user of userListArray" value="{{user.$key}}">{{user.name}}</option>
+                          <option value="">Seleccione una opción </option>
+                        <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
                       </select>
                     </div>
                   </div>
@@ -146,8 +150,9 @@
                             <div class="form-group">
                                 <label>Actividad a la que pertenece <span class="required">*</span></label>
                                 <div class="col-sm-10">
-                                  <select class="form-control" name="administrador" >
-                                    <!-- <option *ngFor="let user of userListArray" value="{{user.$key}}">{{user.name}}</option> -->
+                                  <select class="form-control" name="administrador" [(ngModel)]="activity_id">
+                                    <option value="">Seleccione una opción </option>
+                                      <option *ngFor="let activity of activitiesListArray" value="{{activity.$key}}">{{activity.name}}</option>
             
                                   </select>
                                 </div>

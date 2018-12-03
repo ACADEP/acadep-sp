@@ -53,11 +53,24 @@
 
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
-                    <b>Nombre:</b> {{activity.name}} <br>
-                    <b>proyecto:</b> {{activity.project_name}} <br>
-                    <b>Descripción:</b> {{activity.description}} <br>
-                    <b>Inicio:</b> {{activity.start}} <br>
-                    <b>Final:</b> {{activity.end}}
+                      <div class="row">
+                          <div class="col-md-6">
+                              <b>Nombre:</b> {{activity.name}} <br>
+                              <b>proyecto:</b> {{activity.project_name}} <br>
+                              <b>Descripción:</b> {{activity.description}} <br>
+                              <b>Inicio:</b> {{activity.start}} <br>
+                              <b>Final:</b> {{activity.end}}
+                          </div>
+                          <div class="col-md-6">
+                              <b>Insumos necesarios:</b><br>
+                            <ul>
+                              <li *ngFor="let tool of objectValues(activity.tools)" >{{tool}}</li>
+                              
+                            </ul>
+
+                          </div>
+                        </div>
+                    
                   </div>
                 </article>
               </div>
