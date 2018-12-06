@@ -41,7 +41,7 @@
               </header>
 
               <div class="list-group filter-wrap">
-                <article class="list-group-item" *ngFor="let project of projectListArray; let i = index">
+                <article class="list-group-item" *ngFor="let project of projects; let i = index">
 
                   <header class="filter-header">
 
@@ -107,7 +107,7 @@
                   <div class="form-group">
                     <label for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" name="name" [(ngModel)]="name" placeholder="Escriba un nombre para el proyecto ..." required>
+                      <input type="text" class="form-control" name="name" [(ngModel)]="projectDoc.name"  placeholder="Escriba un nombre para el proyecto ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -126,7 +126,7 @@
                     <label for="itext">Descripción </label>
                     <div class="">
                       <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
-                        name="description" [(ngModel)]="description" data-plugin="autosize" required></textarea>
+                        name="description" [(ngModel)]="projectDoc.description" data-plugin="autosize" required></textarea>
                       <!-- <div class="icon">
                                   <i class="fa fa-fw fa-pencil"></i>
                                 </div> -->
@@ -138,8 +138,8 @@
                   <div class="form-group">
                     <label for="itext">Ubicación </label>
                     <div class="icon-before-input">
-                      <textarea class="form-control" rows="3" id="textarea1" name="ubication" placeholder="Escriba la ubicación del proyecto ..."
-                        data-plugin="autosize" [(ngModel)]="ubication" ></textarea>
+                      <textarea class="form-control" rows="3" id="textarea1" name="ubication" [(ngModel)]="projectDoc.ubication" placeholder="Escriba la ubicación del proyecto ..."
+                        data-plugin="autosize"  ></textarea>
                       <div class="icon">
                         <i class="fa fa-2x fa-map-marker"></i>
                       </div>
@@ -151,20 +151,20 @@
                   <div class="row text-center">
 
                     <span>
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <label for="">Inicio <span class="required">*</span></label>
                         <div class="input-group col-centered">
 
                           <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                          <input type="date" name="start" [(ngModel)]="inicio" required>
+                          <input type="datetime-local" name="start" [(ngModel)]="projectDoc.start" required>
 
                         </div>
                       </div>
-                      <div class="col-md-6 ">
+                      <div class="col-md-12 ">
                         <label for="">Final <span class="required">*</span></label>
                         <div class="input-group col-centered">
 
-                          <input type="date" name="end" [(ngModel)]="final" required>
+                          <input type="datetime-local" name="end" [(ngModel)]="projectDoc.end" required>
 
                         </div>
                       </div>
@@ -179,9 +179,9 @@
 
 
                   <div class="form-group">
-                      <label class="col-sm-12 control-label">Administrador {{administrador}}<span class="required">*</span> </label>
+                      <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
                       <div class="col-sm-12">
-                        <select class="form-control size-full" name="admin"   [(ngModel)]="administrador">
+                        <select class="form-control size-full" name="admin"  >
                             <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
                         </select>
                       </div>
@@ -240,7 +240,7 @@
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
-              <input type="text" class="form-control" [(ngModel)]="editName" name="namme" placeholder="Escriba un nombre para el proyecto ...">
+              <input type="text" class="form-control"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
               <div class="icon">
                 <i class="fa fa-fw fa-pencil"></i>
               </div>
@@ -251,7 +251,7 @@
             <label for="itext">Descripción </label>
             <div class="">
               <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
-                name="description" [(ngModel)]="editDescription" data-plugin="autosize"></textarea>
+                name="description" data-plugin="autosize"></textarea>
               <!-- <div class="icon">
                                 <i class="fa fa-fw fa-pencil"></i>
                               </div> -->
@@ -264,7 +264,7 @@
             <label for="itext">Ubicación </label>
             <div class="icon-before-input">
               <textarea class="form-control" rows="3" id="textarea1" name="ubication" placeholder="Escriba la ubicación del proyecto ..."
-                data-plugin="autosize" [(ngModel)]="editUbication"></textarea>
+                data-plugin="autosize" ></textarea>
               <div class="icon">
                 <i class="fa fa-2x fa-map-marker"></i>
               </div>
@@ -281,7 +281,7 @@
                 <div class="input-group col-centered">
 
                   <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                  <input type="date" name="start" [(ngModel)]="editInicio">
+                  <input type="date" name="start" >
 
                 </div>
               </div>
@@ -289,7 +289,7 @@
                 <label for="">Final <span class="required">*</span></label>
                 <div class="input-group col-centered">
 
-                  <input type="date" name="end" [(ngModel)]="editFinal">
+                  <input type="date" name="end" >
 
                 </div>
               </div>

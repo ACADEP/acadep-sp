@@ -23,7 +23,7 @@ export class EventsService {
      
     }).then((res : any) => {
       this.firebase.database.ref('Eventos/' + res.key).set({
-        idevent: res.key,
+      idevent: res.key,
       name: name,
       actividad: 'Supervision',
       uid: uid,

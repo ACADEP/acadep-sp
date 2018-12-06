@@ -54,33 +54,33 @@ export class ActivitiesComponent implements OnInit {
     // this.type = "";
 
     //proyectos
-    this.projectsService.getProjects().snapshotChanges()
-      .subscribe(item => {
-        this.projectsListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x['$key'] = element.key;
-          this.projectsListArray.push(x);
-        });
-      })
+    // this.projectsService.getProjects().snapshotChanges()
+    //   .subscribe(item => {
+    //     this.projectsListArray = [];
+    //     item.forEach(element => {
+    //       let x = element.payload.toJSON();
+    //       x['$key'] = element.key;
+    //       this.projectsListArray.push(x);
+    //     });
+    //   })
 
     //actividades
-    this.activitiesService.getActivities().snapshotChanges()
-      .subscribe(item => {
-        this.activitiesListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
+    // this.activitiesService.getActivities().snapshotChanges()
+    //   .subscribe(item => {
+    //     this.activitiesListArray = [];
+    //     item.forEach(element => {
+    //       let x = element.payload.toJSON();
 
-          if (x['active'] == true) {
-            x['$key'] = element.key;
-            this.projectsService.getProyect(x['project_id']).then(function (res: any) {
-              x['project_name'] = res.name;
-            })
-            this.activitiesListArray.push(x);
-          }
+    //       if (x['active'] == true) {
+    //         x['$key'] = element.key;
+    //         this.projectsService.getProyect(x['project_id']).then(function (res: any) {
+    //           x['project_name'] = res.name;
+    //         })
+    //         this.activitiesListArray.push(x);
+    //       }
           
-        });
-      })
+    //     });
+    //   })
 
   }
 
@@ -115,13 +115,13 @@ export class ActivitiesComponent implements OnInit {
     this.activitiesService.deleteActivity(item.$key);
   }
 
-  getProyect(item) {
+  // getProyect(item) {
 
-    this.projectsService.getProyect(item.project_id).then((result: any) => {
-      return result.name;
-    }).catch((err) => {
-      console.log(err)
-    });
-  }
+  //   this.projectsService.getProyect(item.project_id).then((result: any) => {
+  //     return result.name;
+  //   }).catch((err) => {
+  //     console.log(err)
+  //   });
+  // }
 
 }

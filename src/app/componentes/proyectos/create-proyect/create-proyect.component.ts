@@ -7,6 +7,7 @@ import { ProjectsService } from "../../../services/projects.service";
 
 
 import { NotifierService } from 'angular-notifier';
+import { project } from 'src/app/models/project';
 
 
 declare var $:any;
@@ -17,97 +18,30 @@ declare var $:any;
   styleUrls: ['./create-proyect.component.css']
 })
 export class CreateProyectComponent implements OnInit {
-  projectListArray: any[];
-  userListArray: any[];
-
+  
   private readonly notifier: NotifierService;
+ 
+  projects: project[];
+  projectDoc = {} as project;
 
-  public name: string = '';
-  public description: string = '';
-  public ubication: string = '';
-  public inicio: string = '';
-  public final: string = '';
-  public administrador: string;
-  // public empleado: string = '';
-
-  public key:string;
-  public editName: string;
-  public editDescription: string;
-  public editUbication: string;
-  public editInicio: string;
-  public editFinal: string;
-  public editAdministrador: string;
-  // public empleado: string;
+  
   constructor(public projectsService: ProjectsService, notifierService: NotifierService) {
     this.notifier = notifierService;
-
+    // this.projectDoc.name = "";
   }
 
   ngOnInit() {
-    this.projectsService.getProjects().snapshotChanges()
-      .subscribe(item => {
-        this.projectListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x['$key'] = element.key;
-          this.projectListArray.push(x);
-        });
-      })
 
-    this.projectsService.getUsers().snapshotChanges()
-      .subscribe(item => {
-        this.userListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x['$key'] = element.key;
-          this.userListArray.push(x);
-        });
-      })
-
-
-    
-   
-
+    this.projectsService.getProjects().subscribe(items =>{
+      this.projects = items;
+      console.log(this.projects)
+    })
   }
+
+addProject()
+{
+  console.log(this.projectDoc);
+  // this.projectsService.saveProject(this.project)
+}
   
-
-
-
-  addProject() {
-
-    if (this.name != "" && this.description != "" && this.ubication != "" && this.inicio != "" && this.final !="" && this.administrador != "" ) {
-      this.projectsService.addProject(this.name, this.description, this.ubication, this.inicio, this.final, this.administrador);
-    } else {
-      this.notifier.notify('error', 'Faltan datos!')
-
-    }
-    // if (this.name == undefined || this.description == undefined) {
-    //   this.notifier.notify( 'error', 'Escriba un nombre para el proyecto' )
-
-    // } else {
-    // }
-
-
-  }
-
-  editProject(project) {
-    this.key = project.$key;
-     this.editName = project.name;
-     this.editDescription = project.description;
-     this.editInicio = project.inicio;
-     this.editFinal = project.final;
-     this.editUbication = project.ubication;
-    console.log(project)
-    $('#modalEdit').modal('show');
-  }
-
-  onUpdateProject(e)
-  {
-    e.preventDefault();
-    this.projectsService.updateproject(this.key, this.editName, this.editDescription, this.editUbication, this.editInicio, this.editFinal);
-    $('#modalEdit').modal('hide');
-    this.notifier.notify( 'success', 'Usuario Actualizado!' );
-
-  }
-
 }

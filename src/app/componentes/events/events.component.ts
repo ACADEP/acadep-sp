@@ -40,22 +40,22 @@ export class EventsComponent implements OnInit {
   ngOnInit() {
 
     //actividades
-    this.activitiesService.getActivities().snapshotChanges()
-      .subscribe(item => {
-        this.activitiesListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
+    // this.activitiesService.getActivities().snapshotChanges()
+    //   .subscribe(item => {
+    //     this.activitiesListArray = [];
+    //     item.forEach(element => {
+    //       let x = element.payload.toJSON();
 
-          if (x['active'] == true) {
-            x['$key'] = element.key;
-            this.projectsService.getProyect(x['project_id']).then(function (res: any) {
-              x['project_name'] = res.name;
-            })
-            this.activitiesListArray.push(x);
-          }
+    //       if (x['active'] == true) {
+    //         x['$key'] = element.key;
+    //         this.projectsService.getProyect(x['project_id']).then(function (res: any) {
+    //           x['project_name'] = res.name;
+    //         })
+    //         this.activitiesListArray.push(x);
+    //       }
 
-        });
-      })
+    //     });
+    //   })
 
     //eventos
     this.eventsService.getEvents().snapshotChanges()
@@ -63,30 +63,26 @@ export class EventsComponent implements OnInit {
         this.eventListArray = [];
         item.forEach(element => {
           let x = element.payload.toJSON();
-
           if (x['active'] == true) {
-
             x['$key'] = element.key;
-
             this.activitiesService.getActivity(x['activity_id']).then(function (res: any) {
               x['activity_name'] = res.name;
             })
-
             this.eventListArray.push(x);
           }
         });
       })
 
     //usuarios
-    this.projectsService.getUsers().snapshotChanges()
-      .subscribe(item => {
-        this.userListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          x['$key'] = element.key;
-          this.userListArray.push(x);
-        });
-      })
+    // this.projectsService.getUsers().snapshotChanges()
+    //   .subscribe(item => {
+    //     this.userListArray = [];
+    //     item.forEach(element => {
+    //       let x = element.payload.toJSON();
+    //       x['$key'] = element.key;
+    //       this.userListArray.push(x);
+    //     });
+    //   })
 
     // console.log(this.userListArray);
 
@@ -107,13 +103,16 @@ export class EventsComponent implements OnInit {
 
   addEvent() {
    
-    this.eventName.trim();
+    // this.eventName.trim();
   
-    if (name != "" && this.user_uid != "" && this.eventStart != "" && this.eventEnd != "" && this.activity_id != "") {
-      this.eventsService.addEvent(this.eventEnd, this.user_uid, this.eventStart, this.eventEnd, this.activity_id);
+    if (this.eventName != "" && this.user_uid != "" && this.eventStart != "" && this.eventEnd != "" && this.activity_id != "") {
+
+
+      this.eventsService.addEvent(this.eventName, this.user_uid, this.eventStart, this.eventEnd, this.activity_id);
       this.notifier.notify('success', 'Evento Agregado!');
       this.emptyForm();
     } else {
+      console.log()
       this.notifier.notify('error', 'Faltan datos!');
     }
   }
