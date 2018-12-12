@@ -3,7 +3,8 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {  project } from "../models/project";
+import { project } from "../models/project";
+import { resolve, reject } from 'q';
 
 
 
@@ -19,46 +20,65 @@ export class ProjectsService {
   // userList: AngularFireList<any>;
   // public algo: any;
 
-// projectList : AngularFireList<any>;
-  constructor(    
+  // projectList : AngularFireList<any>;
+  constructor(
     private db: AngularFirestore
-    ) { }
+  ) { }
 
 
-    getProjects() {
+  getProjects() {
 
-      this.projectsCollection = this.db.collection('projects');
-      this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data() as project;
-          data.id = a.payload.doc.id;
-          return data;
-        });
-      }));
-  
-      return this.projects; 
-    }
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
+    this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as project;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
 
-    saveProject( project: project) {
-      this.db.collection('users').doc(project.id).set({
-        id: project.id,
+    return this.projects;
+  }
+
+  saveProject(project: project) {
+
+    return new Promise((resolve, reject) => {
+      this.db.collection('projects').add({
+    
         name: project.name,
+        description: project.description,
+        ubication: project.ubication,
         start: project.start,
         end: project.end,
-      }).then(function (docRef) {
-        return docRef;
-      }).catch(function (error) {
-        console.log(error);
-  
-      })
-    }
+        administrators: project.administrators,
+        deleted : false,
+      }).then((res: any) => resolve(res), err => reject(err));
+    })
+
+
+  }
+
+
+
+  deleteProject(id:string){
+    return new Promise((resolve, reject) => {
+      this.db.collection('projects').doc(id).update({
+        deleted : new Date(),
+      }).then((res: any) => resolve(res), err => reject(err));
+    })
+  }
+
+    // saveproject()
+    // {
+
+    // }
 
     // getProjects()
     // {
     //   this.projectList = this.firebase.list('projects');
     //   return this.projectList;
     //   // return this.firebase.database.ref().child('projects');
-     
+
     // }
 
     // getUsers()
@@ -66,7 +86,7 @@ export class ProjectsService {
     //   this.userList = this.firebase.list('users');
     //   return this.userList;
     //   // return this.firebase.database.ref().child('projects');
-     
+
     // }
 
     // addProject(name:string, description:string, ubication:string, inicio:string, final:string, administrador: string){

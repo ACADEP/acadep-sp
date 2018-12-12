@@ -1,63 +1,95 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { activity } from "../models/activity";
+import { project } from '../models/project';
+import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivitiesService {
 
-  activitiesList: AngularFireList<any>;
+  activitiesCollection: AngularFirestoreCollection<activity>;
+  activities: Observable<activity[]>;
+  activityDoc: activity;
 
-  constructor(public firebase : AngularFireDatabase) { }
 
-  getActivities()
-  {
-    this.activitiesList = this.firebase.list('Activities');
-    return this.activitiesList;
-    // return this.firebase.database.ref().child('projects');
-   
+  constructor(private db: AngularFirestore) {
+
   }
 
-  getActivity($key){
-    return new Promise((resolve, reject) => {
-      this.firebase.database.ref('Activities/' + $key).once('value')
-      .then(res => resolve(res.val()),
-        err => reject(err));
-    });
-    }
+  getActivities() {
 
-  addActivity(name:string, project_id: any, description:Text, type: string, start: Date, end: Date, tools:any){
-    
-    return new Promise ((resolve, reject) =>{
-      this.activitiesList.push({
-     
-      }).then((obj : any) => {
-        this.firebase.database.ref('Activities/' + obj.key).set({
-          id: obj.key,
-        name: name,
-        type: type,
-        project_id: project_id,
-        description: description,
-        start: start,
-        end: end,
-        active : true,
-        tools : tools
-        })
-      }).then((res: any) => resolve(res), err => reject(err));
-    })
-    
-    // console.log(name, description, type, start, end, tools);
+    this.activitiesCollection = this.db.collection('activities', ref => ref.where('deleted', '==', false));
+    this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as activity;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+
+    return this.activities;
+
   }
 
-  deleteActivity(key:string)
-  {
-
+  getActivity(id: string) {
     return new Promise((resolve, reject) => {
-      this.activitiesList.update(key, {active : false})
-        .then(res => resolve(key),
+      this.db.collection('activities').doc(id).ref.get()
+        .then(res => resolve(res.data()),
           err => reject(err));
     });
+  }
+
+  addActivity(activity: activity) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('activities').add({
+
+        name: activity.name,
+        description: activity.description,
+        type: activity.type,
+        project_id : activity.project_id,
+        start: activity.start,
+        end: activity.end,
+        tools : activity.tools,
+        deleted : false,
+      }).then((res: any) => resolve(res), err => reject(err));
+    })
 
   }
+
+
+
+  updateActivity(activity: activity)
+  {
+    return new Promise ((resolve, reject) => {
+      this.db.collection('activities').doc(activity.id).update({
+        name: activity.name,
+        description: activity.description,
+        type: activity.type,
+        project_id : activity.project_id,
+        start: activity.start,
+        end: activity.end,
+        tools : activity.tools,
+      }).then((res:any) => resolve(res), err => reject(err));
+    })
+
+
+    
+  }
+
+  // deleteActivity(key:string)
+  // {
+
+  //   return new Promise((resolve, reject) => {
+  //     this.activitiesList.update(key, {active : false})
+  //       .then(res => resolve(key),
+  //         err => reject(err));
+  //   });
+
+  // }
 
 }

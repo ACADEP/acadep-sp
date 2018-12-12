@@ -49,7 +49,7 @@
 
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
-                    <i class="icon-action fa fa-times" style="color:#d64040"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
                     <h6 class="title"><i class="fa fa-star-o"></i> {{project.name | titlecase}}</h6>
 
                   </header>
@@ -58,11 +58,18 @@
                       <div class="col-md-6">
                           <b>Descripción:</b> {{project.description}} <br>
                           <b>Ubicación:</b> {{project.ubication}} <br>
-                          <b>Administrador:</b> {{project.administrator}} <br>
-                          <b>Inicio:</b> {{project.inicio}} <br>
-                          <b>Final:</b> {{project.final}} <br>
+                          <!-- <b>Administrador:</b> {{project.administrators}} <br> -->
+                          <b>Inicio:</b> {{project.start}} <br>
+                          <b>Final:</b> {{project.end}} <br>
                       </div>
-                      <!-- <div class="col-md-6">hola2</div> -->
+                      <div class="col-md-6">
+                        <b>Administradores:</b><br>
+                      <ul>
+                        <li *ngFor="let admin of objectValues(project.administrators)" >{{admin.name}}</li>
+                        
+                      </ul>
+
+                    </div>
                     </div>
                   </div>
                 </article>
@@ -156,7 +163,7 @@
                         <div class="input-group col-centered">
 
                           <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                          <input type="datetime-local" name="start" [(ngModel)]="projectDoc.start" required>
+                          <input type="date" name="start" [(ngModel)]="projectDoc.start" required>
 
                         </div>
                       </div>
@@ -164,7 +171,7 @@
                         <label for="">Final <span class="required">*</span></label>
                         <div class="input-group col-centered">
 
-                          <input type="datetime-local" name="end" [(ngModel)]="projectDoc.end" required>
+                          <input type="date" name="end" [(ngModel)]="projectDoc.end" required>
 
                         </div>
                       </div>
@@ -177,12 +184,11 @@
 
                   <hr class="b-s-dashed">
 
-
                   <div class="form-group">
                       <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
                       <div class="col-sm-12">
-                        <select class="form-control size-full" name="admin"  >
-                            <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+                        <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="projectDoc.administrators" >
+                            <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
                         </select>
                       </div>
                     </div>

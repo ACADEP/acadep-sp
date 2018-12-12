@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from "../../services/activities.service";
 import { ProjectsService } from "../../services/projects.service";
-import { utimes } from 'fs';
+import { activity } from '../../models/activity';
+import { project } from '../../models/project';
 import { isNgTemplate } from '@angular/compiler';
 
 declare var $: any;
@@ -14,10 +15,27 @@ declare var $: any;
 })
 export class ActivitiesComponent implements OnInit {
   private readonly notifier: NotifierService;
-  activitiesListArray: any[];
-  projectsListArray: any[];
 
-  activityTypes = [
+  activities: activity[];
+  // activity: activity[];
+  activityDoc = {} as activity;
+
+  activityEdit = {} as activity;
+
+
+
+  projects: project[];
+
+  tool: string;
+  toolEdit: string;
+
+
+
+
+  // activitiesListArray: any[];
+  // projectsListArray: any[];
+
+  types = [
 
     'auditoria',
     'servicio',
@@ -27,93 +45,89 @@ export class ActivitiesComponent implements OnInit {
 
 
 
-  public time: Boolean;
-  public tool: string;
 
-  //activity
-
-  public name: string;
-  public type: string;
-  public project_id: string;
-  public description: Text;
-  public start: Date;
-  public end: Date;
-  public tools = [];
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService) {
     this.notifier = notifierService;
-    this.time = false;
-    this.type = "";
+    this.activityDoc.type = "";
 
 
   }
 
   ngOnInit() {
-
-    // this.type = "";
+    //actividades
+    this.activitiesService.getActivities().subscribe(items => {
+      this.activities = items;
+      console.log(this.activities)
+    })
 
     //proyectos
-    // this.projectsService.getProjects().snapshotChanges()
-    //   .subscribe(item => {
-    //     this.projectsListArray = [];
-    //     item.forEach(element => {
-    //       let x = element.payload.toJSON();
-    //       x['$key'] = element.key;
-    //       this.projectsListArray.push(x);
-    //     });
-    //   })
-
-    //actividades
-    // this.activitiesService.getActivities().snapshotChanges()
-    //   .subscribe(item => {
-    //     this.activitiesListArray = [];
-    //     item.forEach(element => {
-    //       let x = element.payload.toJSON();
-
-    //       if (x['active'] == true) {
-    //         x['$key'] = element.key;
-    //         this.projectsService.getProyect(x['project_id']).then(function (res: any) {
-    //           x['project_name'] = res.name;
-    //         })
-    //         this.activitiesListArray.push(x);
-    //       }
-          
-    //     });
-    //   })
+    this.projectsService.getProjects().subscribe(items => {
+      this.projects = items;
+      this.activityDoc.tools = [];
+    })
 
   }
 
   addActivity() {
-    this.activitiesService.addActivity(this.name, this.project_id, this.description, this.type, this.start, this.end, this.tools).then(() => {
-      this.notifier.notify('success', 'Actividad Registrada!');
-    }).catch(() => {
-      this.notifier.notify('error', 'No se pudo Registrar Actividad!');
+
+    this.activitiesService.addActivity(this.activityDoc).then((result) => {
+      this.notifier.notify('success', 'Actividad creada!');
+
+    }).catch((err) => {
+      this.notifier.notify('error', 'Algo salío mal!');
+
     });
-    // console.log(this.name, this.type, this.description, this.project_id, this.start, this.end, this.tools)
+    console.log(this.activityDoc)
+
   }
 
-  objectValues(obj) {
-    return Object.values(obj);
+  editActivity(activity)
+  {
+    this.activityEdit = activity;
+   console.log(this.activityEdit.type);
+   
+    $('#modalEdit').modal('show');
   }
 
 
   pushTool() {
-    // alert(value);
 
-    this.tools.push(this.tool);
+    // console.log(this.tool);
+    this.activityDoc.tools.push(this.tool);
     this.tool = '';
   }
 
-  deleteTool(item) {
-    const index = this.tools.indexOf(item);
-    this.tools.splice(index, 1);
+  pushToolEdit() {
+    
+    this.activityEdit.tools.push(this.toolEdit);
+    console.log(this.activityEdit.tools);
+    this.toolEdit = '';
   }
 
-  onDeleteActivity(item) {
-    // console.log(item)
-    this.activitiesService.deleteActivity(item.$key);
+  deleteTool(item) {
+    this.activityDoc.tools.splice(item, 1);
   }
+
+  deleteToolEdit(item) 
+  {
+    this.activityEdit.tools.splice(item, 1);
+  }
+
+  updateActivity()
+  {
+    this.activitiesService.updateActivity(this.activityEdit).then((result) => {
+      this.notifier.notify('success', 'Actividad actualizada!');
+    }).catch((err) => {
+      this.notifier.notify('error', 'Algo salío mal!');
+    });
+  }
+
+  // onDeleteActivity(item) {
+  //   // console.log(item)
+  //   this.activitiesService.deleteActivity(item.$key);
+  // }
 
   // getProyect(item) {
 
