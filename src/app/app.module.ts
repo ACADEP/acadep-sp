@@ -80,7 +80,7 @@ const customNotifierOptions: NotifierOptions = {
     InicioComponent,
     CreateProyectComponent,
     EventsComponent,
-    ActivitiesComponent
+    ActivitiesComponent,
   ],
   imports: [
     BrowserModule,

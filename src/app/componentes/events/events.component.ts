@@ -3,8 +3,12 @@ import { ProjectsService } from "../../services/projects.service";
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from "../../services/activities.service";
+import { Event } from "../../models/event";
+import { activity } from "../../models/activity";
+import { UsersService } from "../../services/users.service";
+import { User } from "../../models/user";
 
-
+declare var $: any;
 
 @Component({
   selector: 'app-events',
@@ -15,120 +19,132 @@ export class EventsComponent implements OnInit {
 
   private readonly notifier: NotifierService;
 
-  userListArray: any[];
-  eventListArray: any[];
-  activitiesListArray: any[];
+  eventsCollection: Event[];
+  usersCollection: User[];
+  activitiesCollection: activity[];
+  eventDoc = {} as Event;
+  eventDocEdit = {} as Event;
+  toolEdit: string;
+  tool: string;
 
 
-  public eventName: string;
-  public eventStart: string;
-  public eventEnd: string;
-  public user_uid: string;
-  public activity_id: string;
 
 
-  constructor(public projectsService: ProjectsService, public eventsService: EventsService,
+  constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService) {
     this.notifier = notifierService;
-    this.activity_id = "";
-    this.user_uid = "";
     this.emptyForm();
+    // this.user_uid = "";
+    // this.emptyForm();
 
 
   }
 
   ngOnInit() {
 
-    //actividades
-    // this.activitiesService.getActivities().snapshotChanges()
-    //   .subscribe(item => {
-    //     this.activitiesListArray = [];
-    //     item.forEach(element => {
-    //       let x = element.payload.toJSON();
 
-    //       if (x['active'] == true) {
-    //         x['$key'] = element.key;
-    //         this.projectsService.getProyect(x['project_id']).then(function (res: any) {
-    //           x['project_name'] = res.name;
-    //         })
-    //         this.activitiesListArray.push(x);
-    //       }
+    this.eventsService.getEvents().subscribe(events => {
+      this.eventsCollection = events;
+      // console.log(this.eventsCollection);
+    })
 
-    //     });
-    //   })
+    // usuarios
+    this.users.getUsers().subscribe(users => {
+      this.usersCollection = users;
+      console.log(this.usersCollection)
+    })
 
-    //eventos
-    this.eventsService.getEvents().snapshotChanges()
-      .subscribe(item => {
-        this.eventListArray = [];
-        item.forEach(element => {
-          let x = element.payload.toJSON();
-          if (x['active'] == true) {
-            x['$key'] = element.key;
-            this.activitiesService.getActivity(x['activity_id']).then(function (res: any) {
-              x['activity_name'] = res.name;
-            })
-            this.eventListArray.push(x);
-          }
-        });
-      })
+    this.activitiesService.getActivities().subscribe(items => {
+      this.activitiesCollection = items;
+    })
 
-    //usuarios
-    // this.projectsService.getUsers().snapshotChanges()
-    //   .subscribe(item => {
-    //     this.userListArray = [];
-    //     item.forEach(element => {
-    //       let x = element.payload.toJSON();
-    //       x['$key'] = element.key;
-    //       this.userListArray.push(x);
-    //     });
-    //   })
-
-    // console.log(this.userListArray);
 
   }
 
-  emptyForm()
-  {
-    this.eventName = "";
-    this.eventStart = "";
-    this.eventEnd = "";
-    this.user_uid = "";
-    this.activity_id = "";
+  emptyForm() {
+    this.eventDoc.name = '';
+    this.eventDoc.user_id = '';
+    this.eventDoc.activity_id = '';
+    this.eventDoc.description = '';
+    this.eventDoc.start = '';
+    this.eventDoc.end = '';
+    this.eventDoc.activity_id = '';
+    this.eventDoc.user_id = '';
+    this.eventDoc.tools = [];
   }
 
-  onDateSelect($event) {
-    console.log($event);
-  }
+
 
   addEvent() {
-   
-    // this.eventName.trim();
-  
-    if (this.eventName != "" && this.user_uid != "" && this.eventStart != "" && this.eventEnd != "" && this.activity_id != "") {
 
+    if (this.eventDoc.name != '' && this.eventDoc.user_id != '' && this.eventDoc.activity_id != '' &&
+      this.eventDoc.description != '' && this.eventDoc.start != '' && this.eventDoc.end != '' && this.eventDoc.activity_id != '' &&
+      this.eventDoc.user_id != '') {
 
-      this.eventsService.addEvent(this.eventName, this.user_uid, this.eventStart, this.eventEnd, this.activity_id);
-      this.notifier.notify('success', 'Evento Agregado!');
-      this.emptyForm();
+      this.eventsService.addEvent(this.eventDoc).then(res => {
+        this.notifier.notify('success', 'Evento creado');
+        console.log(res);
+        this.emptyForm();
+      }).catch(err => {
+        this.notifier.notify('error', 'Algo salio mal...');
+        console.log(err);
+
+      })
+
     } else {
-      console.log()
-      this.notifier.notify('error', 'Faltan datos!');
+      this.notifier.notify('error', 'Verifique que los campos no estén vacíos');
     }
+
+  }
+
+  updateEvent() {
+    this.eventsService.updateEvent(this.eventDocEdit).then(res => {
+      this.notifier.notify('success', 'Evento actualizdo');
+      $('#modalEdit').modal('hide');
+    }).catch(err => {
+      this.notifier.notify('error', 'Algo salio mal...');
+      console.log(err);
+    })
+  }
+
+  editEvent(event) {
+    this.eventDocEdit = event;
+    $('#modalEdit').modal('show');
+
   }
 
   deleteEvent(event) {
 
 
-    this.eventsService.deleteEvent(event.$key).then(() => {
-      this.notifier.notify('success', 'Evento eliminado!');
+    // this.eventsService.deleteEvent(event.$key).then(() => {
+    //   this.notifier.notify('success', 'Evento eliminado!');
 
-    }).catch((err) => {
-      this.notifier.notify('error', 'No se pudo eliminar!');
+    // }).catch((err) => {
+    //   this.notifier.notify('error', 'No se pudo eliminar!');
 
-      console.log(err)
-    });
+    //   console.log(err)
+    // });
 
+  }
+
+  pushTool() {
+
+    // console.log(this.tool);
+    this.eventDoc.tools.push(this.tool);
+    this.tool = '';
+  }
+  deleteTool(item) {
+    this.eventDoc.tools.splice(item, 1);
+  }
+
+  pushToolEdit() {
+
+    this.eventDocEdit.tools.push(this.toolEdit);
+    console.log(this.eventDocEdit.tools);
+    this.toolEdit = '';
+  }
+  deleteToolEdit(item) {
+    this.eventDocEdit.tools.splice(item, 1);
   }
 
 }

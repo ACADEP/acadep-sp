@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+// import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { activity } from "../models/activity";
-import { project } from '../models/project';
-import { reject } from 'q';
+// import { project } from '../models/project';
+// import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ActivitiesService {
 
 
   constructor(private db: AngularFirestore) {
-
+ 
   }
 
   getActivities() {
