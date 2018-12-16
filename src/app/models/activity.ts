@@ -6,7 +6,7 @@ export interface activity {
     tools : string[];
     project_id : string;
     users: string[];
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
     deleted : any
   }

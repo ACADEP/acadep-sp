@@ -32,7 +32,7 @@ export class CreateProyectComponent implements OnInit {
   projects: project[];
   users: User[];
   projectDoc = {} as project;
-  // admin: admin;
+    query: string;
 
   
   constructor(public projectsService: ProjectsService, notifierService: NotifierService,
@@ -55,6 +55,8 @@ export class CreateProyectComponent implements OnInit {
 
 
   }
+
+  
 
 addProject()
 {
@@ -85,6 +87,14 @@ objectValues(obj) {
       this.notifier.notify( 'error', 'Opps! algo salío mal' );
 
     });
+  }
+
+  searchByName()
+  {
+    this.projectsService.searchProjects(this.query).subscribe(items =>{
+      this.projects = items;
+       console.log(this.projects)
+    })
   }
 
 

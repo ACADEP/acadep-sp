@@ -47,6 +47,7 @@
 
 
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+                    <i class="icon-action fa fa-plus" style="color:#566dd6" (click)="copyActivity(activity)"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editActivity(activity)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteActivity(activity)"></i>
                     <h6 class="title">{{activity.name}} </h6>
@@ -56,6 +57,7 @@
                     <div class="row">
                       <div class="col-md-6">
                         <b>Nombre:</b> {{activity.name}} <br>
+                        <b>Tipo:</b> {{activity.type}} <br>
                         <b>proyecto:</b> {{activity.project_id}} <br>
                         <b>Descripción:</b> {{activity.description}} <br>
                         <b>Inicio:</b> {{activity.start}} <br>
@@ -119,7 +121,7 @@
                     <div class="col-sm-10">
                       <select class="form-control" name="activityType" [(ngModel)]="activityDoc.type">
                         <option value="">Seleccione una opción</option>
-                        <option *ngFor="let item of types" value="{{item}}">{{item}}</option>
+                        <option *ngFor="let item of types" [ngValue]="item">{{item}}</option>
                       </select>
                     </div>
                   </div>
@@ -131,9 +133,9 @@
                   <label class="">Proyecto al que pertenece <span class="required">*</span></label>
                   <div class="form-group">
                     <div class="col-sm-10">
-                      <select class="form-control" name="activityType" [(ngModel)]="activityDoc.project_id">
+                      <select class="form-control" name="projectid" [(ngModel)]="activityDoc.project_id">
                         <option value="">Seleccione una opción</option>
-                        <option *ngFor="let project of projects" value="{{project.id}}">{{project.name}}</option>
+                        <option *ngFor="let project of projects" [selected]="project.id == activityDoc.project_id" value="{{project.id}}">{{project.name}}</option>
                       </select>
                     </div>
                   </div>

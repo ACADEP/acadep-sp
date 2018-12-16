@@ -26,7 +26,7 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
@@ -48,7 +48,8 @@
                     
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                       <i class="icon-action fa fa-edit" style="color:#6fb478"  (click)="editUser(user)"></i>
-                      <i class="icon-action fa fa-times" style="color:#d64040"></i>
+                      <i class="icon-action fa fa-times" style="color:#d64040"  ></i>
+                      <i class="icon-action fa fa-eye" style="color:#6840d6" (click)="showAssigns(user)"></i>
                       <h6 class="title">{{user.name}} </h6>
              
                   </header>
@@ -66,7 +67,7 @@
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <!-- BEGIN: flatpickr -->
         <div class="row">
 

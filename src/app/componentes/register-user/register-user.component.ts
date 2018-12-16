@@ -29,6 +29,8 @@ export class RegisterUserComponent implements OnInit {
 
 users = [];
 
+userProjects : [];
+
 public roles = [
   'administrador',
   'empleado'
@@ -50,6 +52,10 @@ public password : string;
 public name : string;
 public role : string;
 public uid : string;
+
+
+
+public projects : any;
   constructor( public authService:AuthService, public router: Router, notifierService: NotifierService, public userService : UsersService,
    ) {
 
@@ -113,5 +119,13 @@ public uid : string;
     this.notifier.notify( 'success', 'Usuario Actualizado!' );
 
   }
+
+  showAssigns(user)
+  {
+
+    this.userService.getUserProjects(user.id).subscribe(items =>{
+      this.projects = items;
+    })
+    console.log(this.projects);  }
 
 }

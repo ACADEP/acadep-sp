@@ -19,15 +19,24 @@ export class ActivitiesComponent implements OnInit {
   activities: activity[];
   // activity: activity[];
   activityDoc = {} as activity;
+  activityCloneDoc = {} as activity;
 
   activityEdit = {} as activity;
 
 
-
+  
   projects: project[];
 
-  tool: string;
-  toolEdit: string;
+  public tool: string;
+  public toolEdit: string;
+  public name: string;
+  public type: string;
+  public description: string;
+  public tools : string[];
+  public project_id : string;
+  public users: string[];
+  public start: string;
+  public end: string;
 
 
 
@@ -50,8 +59,7 @@ export class ActivitiesComponent implements OnInit {
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService) {
     this.notifier = notifierService;
-    this.activityDoc.type = "";
-
+    this.emptyForm() 
 
   }
 
@@ -74,6 +82,7 @@ export class ActivitiesComponent implements OnInit {
 
     this.activitiesService.addActivity(this.activityDoc).then((result) => {
       this.notifier.notify('success', 'Actividad creada!');
+      this.emptyForm();
 
     }).catch((err) => {
       this.notifier.notify('error', 'Algo salío mal!');
@@ -91,6 +100,29 @@ export class ActivitiesComponent implements OnInit {
     $('#modalEdit').modal('show');
   }
 
+  copyActivity(activity)
+  {
+    this.name = activity.name;
+    this.type= activity.type;
+    this.description= activity.description;
+    this.tools = activity.tools;
+    this.project_id = activity.project_id;
+    this.users= activity.users;
+    this.start= activity.start;
+    this.end= activity.end;
+
+    this.activityDoc.name = this.name;
+    this.activityDoc.type = this.type;
+    this.activityDoc.description = this.description;
+    this.activityDoc.tools = this.tools;
+    this.activityDoc.project_id = this.project_id;
+    this.activityDoc.users = this.users;
+    this.activityDoc.start = this.start;
+    this.activityDoc.end = this.end;
+
+   }
+
+  
 
   pushTool() {
 
@@ -123,6 +155,20 @@ export class ActivitiesComponent implements OnInit {
       this.notifier.notify('error', 'Algo salío mal!');
     });
   }
+
+  emptyForm() 
+  {
+    this.activityDoc.name = '';
+    this.activityDoc.type = '';
+    this.activityDoc.description = '';
+    this.activityDoc.tools = [];
+    this.activityDoc.project_id = '';
+    this.activityDoc.users = [];
+    this.activityDoc.start = '';
+    this.activityDoc.end = '';
+  }
+
+
 
   // onDeleteActivity(item) {
   //   // console.log(item)

@@ -13,7 +13,9 @@ import { User } from "../models/user";
 
 export class UsersService {
   usersCollection: AngularFirestoreCollection<any>;
+  projectssCollection: AngularFirestoreCollection<any>;
   users: Observable<User[]>;
+  projects: Observable<any[]>;
   userDoc;
 
   public delete: any;
@@ -42,6 +44,21 @@ export class UsersService {
     }));
 
     return this.users;
+  }
+
+
+  getUserProjects(user_id) {
+
+    this.projectssCollection = this.db.collection('projects',  ref => ref.where('administrators.'+user_id, '==', true) );
+    this.projects = this.projectssCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+
+    return this.projects;
   }
 
   saveUser( name: string, email: string, rol: string, id?: string,) {

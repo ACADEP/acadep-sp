@@ -29,6 +29,21 @@ export class ProjectsService {
   getProjects() {
 
     this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
+
+    this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as project;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+
+    return this.projects;
+  }
+
+  searchProjects(name:string)
+  {
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
