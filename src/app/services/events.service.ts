@@ -41,7 +41,11 @@ export class EventsService {
         end: event.end,
         tools: event.tools,
         deleted: false,
-      }).then((res: any) => resolve(res), err => reject(err));
+      }).then((res: any) =>{
+        this.db.collection('events').doc(res.id).update({
+          idevent : res.id
+        });
+        resolve(res)}, err => reject(err));
     })
 
   }

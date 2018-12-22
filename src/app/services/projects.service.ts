@@ -115,16 +115,18 @@ export class ProjectsService {
     //   })
     // }
 
-    // updateproject($key:string, name:string, description:string, ubication:string, inicio:string, final:string){
-
-    //   this.firebase.database.ref('projects/'+ $key).set({
-    //     name: name,
-    //     description: description,
-    //     ubication: ubication,
-    //     inicio: inicio,
-    //     final:final
-    //   })
-    // }
+    updateProject(project: project ) {
+      return new Promise ((resolve, reject) => {
+        this.db.collection('projects').doc(project.id).update({
+          name: project.name,
+          description: project.description,
+          ubication: project.ubication,
+          start: project.start,
+          end: project.end,
+          administrators: project.administrators,
+        }).then((res:any) => resolve(res), err => reject(err));
+      })
+    }
 
     // removeproject($key){
     //   this.projectList.remove($key)

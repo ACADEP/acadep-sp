@@ -92,11 +92,12 @@
               </header>
               <div class="box-body collapse in">
 
-                <form (submit)="addEvent()">
+                <form #formEvent="ngForm" (submit)="addEvent(formEvent)">
                   <div class="form-group">
-                    <label for="itext">Nombre <span class="required">*</span></label>
+                    <label id="labelname" for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" name="name" [(ngModel)]="eventDoc.name" placeholder="Escriba un nombre para el evento ...">
+                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="eventDoc.name" 
+                      placeholder="Escriba un nombre para el evento ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -113,24 +114,25 @@
                     </div>
                   </div>
                   <hr class="b-s-dashed">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label for="">Inicio <span class="required">*</span></label>
-                      <div class="input-group">
-                        <input type="datetime-local" name="start" [(ngModel)]="eventDoc.start">
+                  <div class="row text-center">
+                    <div class="col-md-12">
+                      <label id="labelstart" for="">Inicio <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <input type="datetime-local" id="start" name="start" [(ngModel)]="eventDoc.start" required>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <label for="">Final <span class="required">*</span></label>
-                      <div class="input-group">
-                        <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end">
+                    
+                    <div class="col-md-12">
+                      <label  id="labelend" for="">Final <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <input type="datetime-local" id="end" name="end" [(ngModel)]="eventDoc.end" required>
                       </div>
                     </div>
                   </div>
                   <hr class="b-s-dashed">
                   <div class="form-group">
-                    <label class="">Usuario que realizara evento <span class="required">*</span></label>
-                    <select class="form-control" [(ngModel)]="eventDoc.user_id" name="user">
+                    <label id="labeluser" class="">Usuario que realizara evento <span class="required">*</span></label>
+                    <select class="form-control" id="user" [(ngModel)]="eventDoc.user_id" name="user" required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id" [value]="user.id">{{user.name
                         | titlecase}}</option>
@@ -138,8 +140,8 @@
                   </div>
                   <hr class="b-s-dashed">
                   <div class="form-group">
-                    <label>Actividad a la que pertenece <span class="required">*</span></label>
-                    <select class="form-control" [(ngModel)]="eventDoc.activity_id" name="activity">
+                    <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
+                    <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity" required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
                         [value]="activity.id">{{activity.name | titlecase}}</option>

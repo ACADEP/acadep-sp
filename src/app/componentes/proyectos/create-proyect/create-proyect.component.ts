@@ -10,6 +10,7 @@ import { UsersService } from "../../../services/users.service";
 import { NotifierService } from 'angular-notifier';
 import { project } from 'src/app/models/project';
 import { User } from 'src/app/models/user';
+import { TitleCasePipe } from '@angular/common';
 
 
 declare var $:any;
@@ -32,6 +33,7 @@ export class CreateProyectComponent implements OnInit {
   projects: project[];
   users: User[];
   projectDoc = {} as project;
+  editProjectDoc = {} as project;
     query: string;
 
   
@@ -56,8 +58,6 @@ export class CreateProyectComponent implements OnInit {
 
   }
 
-  
-
 addProject()
 {
   this.projectsService.saveProject(this.projectDoc).then((result) => {
@@ -75,18 +75,37 @@ addProject()
   });
 }
 
+editProject(project)
+{
+
+  this.editProjectDoc = project;
+  $('#modalEdit').modal('show');
+}
+
+updateProject()
+{
+  this.projectsService.updateProject(this.editProjectDoc).then(() => {
+    $('#modalEdit').modal('hide');
+    this.notifier.notify( 'success', 'Actualizado correctamente!' );
+
+  }).catch(() => {
+    this.notifier.notify( 'error', 'Opps! algo salío mal' );
+
+  });
+}
+
 objectValues(obj) {
     return Object.values(obj);
   }
 
   onDeleteProject(project){
-    this.projectsService.deleteProject(project.id).then((result) => {
-      this.notifier.notify( 'success', 'Proyecto eliminado!' );
-
-    }).catch((err) => {
-      this.notifier.notify( 'error', 'Opps! algo salío mal' );
-
-    });
+    if(confirm("Está seguro que desea eliminar "+project.name)) {
+      this.projectsService.deleteProject(project.id).then((result) => {
+        this.notifier.notify( 'success', 'Proyecto eliminado!' );
+      }).catch((err) => {
+        this.notifier.notify( 'error', 'Opps! algo salío mal' );
+      });
+    }
   }
 
   searchByName()
