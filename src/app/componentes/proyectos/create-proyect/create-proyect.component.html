@@ -68,9 +68,16 @@
 
 
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
-                    <i class="icon-action fa fa-edit" style="color:#6fb478" ></i>
-                    <i class="icon-action fa fa-times" style="color:#d64040" onclick="return confirm('Estás seguro?');" (click)="onDeleteProject(project)"></i>
-                    <h6 class="title"><i class="fa fa-star-o"></i> {{project.name | titlecase}}</h6>
+
+                    <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
+                     
+                    <h6 class="title"> <label class="switch pull-right">
+                      <input class="hidden" type="checkbox">
+                      <i class="fa fa-lg"></i>
+          
+                    </label> {{project.name | titlecase}}</h6>
+
 
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
@@ -81,11 +88,21 @@
                           <!-- <b>Administrador:</b> {{project.administrators}} <br> -->
                           <b>Inicio:</b> {{project.start}} <br>
                           <b>Final:</b> {{project.end}} <br>
+
+                          <div class="checkbox">
+                            <label class="switch">
+                              <input class="hidden" type="checkbox">
+                              <i class="fa fa-2x"></i>
+                              activado
+                            </label>
+                          </div>
                       </div>
                       <div class="col-md-6">
                         <b>Administradores:</b><br>
                       <ul>
-                        <li *ngFor="let admin of objectValues(project.administrators)" >{{admin }}</li>
+
+                        <li *ngFor="let admin of objectValues(project.administrators)" >{{admin}}</li>
+
                         
                       </ul>
 
@@ -266,25 +283,35 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+
+        <form (submit)="updateProject()">
+
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
-              <input type="text" class="form-control"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
+              <input type="text" class="form-control" name="name" [(ngModel)]="editProjectDoc.name"  placeholder="Escriba un nombre para el proyecto ..." required>
               <div class="icon">
                 <i class="fa fa-fw fa-pencil"></i>
               </div>
             </div>
           </div>
 
+          <hr class="b-s-dashed">
+
+          <!-- <div class="form-group">
+                    <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
+                    <div class="col-sm-8">
+                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
+                    </div>
+                  </div> -->
           <div class="form-group">
             <label for="itext">Descripción </label>
             <div class="">
               <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
-                name="description" data-plugin="autosize"></textarea>
+                name="description" [(ngModel)]="editProjectDoc.description" data-plugin="autosize" required></textarea>
               <!-- <div class="icon">
-                                <i class="fa fa-fw fa-pencil"></i>
-                              </div> -->
+                          <i class="fa fa-fw fa-pencil"></i>
+                        </div> -->
             </div>
           </div>
 
@@ -293,8 +320,8 @@
           <div class="form-group">
             <label for="itext">Ubicación </label>
             <div class="icon-before-input">
-              <textarea class="form-control" rows="3" id="textarea1" name="ubication" placeholder="Escriba la ubicación del proyecto ..."
-                data-plugin="autosize" ></textarea>
+              <textarea class="form-control" rows="3" id="textarea1" name="ubication" [(ngModel)]="editProjectDoc.ubication" placeholder="Escriba la ubicación del proyecto ..."
+                data-plugin="autosize"  ></textarea>
               <div class="icon">
                 <i class="fa fa-2x fa-map-marker"></i>
               </div>
@@ -311,7 +338,7 @@
                 <div class="input-group col-centered">
 
                   <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                  <input type="datetime-local" name="start" >
+                  <input type="datetime-local" name="start" [(ngModel)]="editProjectDoc.start" >
 
                 </div>
               </div>
@@ -319,20 +346,44 @@
                 <label for="">Final <span class="required">*</span></label>
                 <div class="input-group col-centered">
 
-                  <input type="datetime-local" name="end" >
+                  <input type="datetime-local" name="end" [(ngModel)]="editProjectDoc.end">
 
                 </div>
               </div>
             </span>
           </div>
-<br>
 
 
-          <!-- <hr class="b-s-dashed"> -->
+          <hr class="b-s-dashed">
+
+          <div class="form-group">
+              <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
+              <div class="col-sm-12">
+                <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="editProjectDoc.administrators" >
+                    <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
+                </select>
+              </div>
+            </div>
+
+
+          <!-- <div class="form-group">
+            <label>Administrador</label>
+            <div class="col-sm-10">
+              <select class="form-control" name="administrador" [(ngModel)]="administrador">
+                <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
+
+              </select>
+            </div>
+          </div> -->
+
+          <br>
+          <hr class="b-s-dashed">
+
+
+
 
           <div class="col-md-12 text-center" style="margin-top:30px">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-success">Guardar cambios</button>
+            <button type="submit" class="btn btn-success">Actualizar Proyecto</button>
           </div>
 
         </form>

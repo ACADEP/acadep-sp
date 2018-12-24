@@ -49,6 +49,8 @@ export class EventsService {
         })
         resolve(res)
       } , err => reject(err));
+
+
     })
 
   }

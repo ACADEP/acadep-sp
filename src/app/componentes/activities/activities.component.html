@@ -107,11 +107,12 @@
               </header>
               <div class="box-body collapse in">
 
-                <form (submit)="addActivity()">
+                <form #formActivity="ngForm" (submit)="addActivity(formActivity)">
                   <div class="form-group">
-                    <label for="itext">Nombre de la Actividad <span class="required">*</span></label>
+                    <label id="labelname" for="itext">Nombre de la Actividad <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" name="name" [(ngModel)]="activityDoc.name" placeholder="Escriba un nombre para el evento ...">
+                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="activityDoc.name" 
+                      placeholder="Escriba un nombre para el evento ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -120,10 +121,10 @@
 
                   <hr class="b-s-dashed">
 
-                  <label class="">Tipo de Actividad <span class="required">*</span></label>
+                  <label id="labeltype" class="">Tipo de Actividad <span class="required">*</span></label>
                   <div class="form-group">
                     <div class="col-sm-10">
-                      <select class="form-control" name="activityType" [(ngModel)]="activityDoc.type">
+                      <select class="form-control" id="type" name="type" [(ngModel)]="activityDoc.type" required>
                         <option value="">Seleccione una opción</option>
                         <option *ngFor="let item of types" [ngValue]="item">{{item}}</option>
                       </select>
@@ -134,10 +135,10 @@
                   <hr class="b-s-dashed">
 
 
-                  <label class="">Proyecto al que pertenece <span class="required">*</span></label>
+                  <label id="labelproject" class="">Proyecto al que pertenece <span class="required">*</span></label>
                   <div class="form-group">
                     <div class="col-sm-10">
-                      <select class="form-control" name="projectid" [(ngModel)]="activityDoc.project_id">
+                      <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id" required>
                         <option value="">Seleccione una opción</option>
                         <option *ngFor="let project of projects" [selected]="project.id == activityDoc.project_id" value="{{project.id}}">{{project.name}}</option>
                       </select>
@@ -166,26 +167,25 @@
                   <hr class="b-s-dashed">
 
                   <div class="row text-center">
+
                     <div class="col-md-12">
                       <label for="">Inicio <span class="required">*</span></label>
+
                       <div class="input-group col-centered">
-
-                        <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                        <input type="datetime-local" name="start" [(ngModel)]="activityDoc.start">
-
+                      <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
+                        <input type="datetime-local" id="start" name="start" [(ngModel)]="activityDoc.start" required>
                       </div>
                     </div>
+
                     <div class="col-md-12 ">
                       <label for="">Final <span class="required">*</span></label>
                       <div class="input-group col-centered">
 
                         <input type="datetime-local" name="end" [(ngModel)]="activityDoc.end">
 
+
                       </div>
                     </div>
-
-
-
                   </div>
 
                   <hr class="b-s-dashed">

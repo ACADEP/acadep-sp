@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectsService } from "../../services/projects.service";
+import { NgForm } from '@angular/forms/src/directives/ng_form';
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from "../../services/activities.service";
@@ -61,7 +61,7 @@ export class EventsComponent implements OnInit {
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      console.log(this.usersCollection)
+      // console.log(this.usersCollection)
     })
 
     this.activitiesService.getActivities().subscribe(items => {
@@ -90,24 +90,70 @@ export class EventsComponent implements OnInit {
 
 
 
-  addEvent() {
+  addEvent(form: NgForm) {
 
-    if (this.eventDoc.name != '' && this.eventDoc.user_id != '' && this.eventDoc.activity_id != '' &&
-      this.eventDoc.description != '' && this.eventDoc.start != '' && this.eventDoc.end != '' && this.eventDoc.activity_id != '' &&
-      this.eventDoc.user_id != '') {
+
+
+    if (form.valid) {
 
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
-        console.log(res);
+        // console.log(res);
+        this.removeErrors();
         this.emptyForm();
       }).catch(err => {
         this.notifier.notify('error', 'Algo salio mal...');
-        console.log(err);
 
       })
 
     } else {
-      this.notifier.notify('error', 'Verifique que los campos no estén vacíos');
+      this.notifier.notify('error', 'Completa los campos obligatorios');
+      
+      if (form.controls.name.invalid) {
+        $('#name').addClass('error')
+        $('#labelname').addClass('errortxt')
+
+      } else {
+        $('#name').removeClass('error')
+        $('#labelname').removeClass('errortxt')
+      }
+      
+      if (form.controls.start.invalid) {
+        $('#start').addClass('error')
+        $('#labelstart').addClass('errortxt')
+
+      } else {
+        $('#start').removeClass('error')
+        $('#labelstart').removeClass('errortxt')
+      }
+      
+      if (form.controls.end.invalid) {
+        $('#end').addClass('error')
+        $('#labelend').addClass('errortxt')
+
+      } else {
+        $('#end').removeClass('error')
+        $('#labelend').removeClass('errortxt')
+      }
+      
+      if (form.controls.user.invalid) {
+        $('#user').addClass('error')
+        $('#labeluser').addClass('errortxt')
+
+      } else {
+        $('#user').removeClass('error')
+        $('#labeluser').removeClass('errortxt')
+      }
+      
+      if (form.controls.activity.invalid) {
+        $('#activity').addClass('error')
+        $('#labelactivity').addClass('errortxt')
+
+      } else {
+        $('#activity').removeClass('error')
+        $('#labelactivity').removeClass('errortxt')
+      }
+
     }
 
   }
@@ -160,6 +206,14 @@ export class EventsComponent implements OnInit {
   }
   deleteToolEdit(item) {
     this.eventDocEdit.tools.splice(item, 1);
+  }
+
+  removeErrors()
+  {
+    $('input').removeClass('error');
+    $('label').removeClass('errortxt');
+    $('select').removeClass('error');
+
   }
 
 }

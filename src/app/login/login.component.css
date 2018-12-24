@@ -3,3 +3,8 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+
+  .error{
+    color:rgb(161, 43, 43);
+    border: 1px solid #f00 ;
+  }

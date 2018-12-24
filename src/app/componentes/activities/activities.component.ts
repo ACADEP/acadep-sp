@@ -4,8 +4,13 @@ import { ActivitiesService } from "../../services/activities.service";
 import { ProjectsService } from "../../services/projects.service";
 import { activity } from '../../models/activity';
 import { project } from '../../models/project';
+
 import { isNgTemplate } from '@angular/compiler';
 import { UsersService } from "../../services/users.service";
+
+import { NgForm } from '@angular/forms/src/directives/ng_form';
+
+// import { isNgTemplate } from '@angular/compiler';
 
 declare var $: any;
 
@@ -25,7 +30,7 @@ export class ActivitiesComponent implements OnInit {
   activityEdit = {} as activity;
 
 
-  
+
   projects: project[];
 
   public tool: string;
@@ -33,8 +38,8 @@ export class ActivitiesComponent implements OnInit {
   public name: string;
   public type: string;
   public description: string;
-  public tools : string[];
-  public project_id : string;
+  public tools: string[];
+  public project_id: string;
   public users: string[];
   public start: string;
   public end: string;
@@ -62,7 +67,7 @@ export class ActivitiesComponent implements OnInit {
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService, public userservice : UsersService) {
     this.notifier = notifierService;
-    this.emptyForm() 
+    this.emptyForm()
 
   }
 
@@ -86,44 +91,100 @@ export class ActivitiesComponent implements OnInit {
 
   }
 
+
   openActivities()
   {
     alert("en proceso")
   }
 
 
-  addActivity() {
 
-    this.activitiesService.addActivity(this.activityDoc).then((result) => {
-      this.notifier.notify('success', 'Actividad creada!');
-      this.emptyForm();
+  addActivity(form: NgForm) {
 
-    }).catch((err) => {
-      this.notifier.notify('error', 'Algo salío mal!');
 
-    });
-    console.log(this.activityDoc)
+    if (form.valid) {
+
+      this.activitiesService.addActivity(this.activityDoc).then((result) => {
+        this.removeErrors();
+        this.notifier.notify('success', 'Actividad creada!');
+        this.emptyForm();
+
+      }).catch((err) => {
+        this.notifier.notify('error', 'Algo salío mal!');
+
+      });
+    } else {
+
+      if (form.controls.name.invalid) {
+        $('#name').addClass('error')
+        $('#labelname').addClass('errortxt')
+
+      } else {
+        $('#name').removeClass('error')
+        $('#labelname').removeClass('errortxt')
+      }
+
+      if (form.controls.type.invalid) {
+        $('#type').addClass('error')
+        $('#labeltype').addClass('errortxt')
+
+      } else {
+        $('#type').removeClass('error')
+        $('#labeltype').removeClass('errortxt')
+      }
+
+      if (form.controls.project.invalid) {
+        $('#project').addClass('error')
+        $('#labelproject').addClass('errortxt')
+
+      } else {
+        $('#project').removeClass('error')
+        $('#labelproject').removeClass('errortxt')
+      }
+
+      if (form.controls.start.invalid) {
+        $('#start').addClass('error')
+        $('#labelstart').addClass('errortxt')
+
+      } else {
+        $('#start').removeClass('error')
+        $('#labelstart').removeClass('errortxt')
+      }
+
+      if (form.controls.end.invalid) {
+        $('#end').addClass('error')
+        $('#labelend').addClass('errortxt')
+
+      } else {
+        $('#end').removeClass('error')
+        $('#labelend').removeClass('errortxt')
+      }
+
+
+      this.notifier.notify('error', 'Verifica que los campos no esten vacíos');
+
+    }
+
+
 
   }
 
-  editActivity(activity)
-  {
+  editActivity(activity) {
     this.activityEdit = activity;
-   console.log(this.activityEdit.type);
-   
+    console.log(this.activityEdit.type);
+
     $('#modalEdit').modal('show');
   }
 
-  copyActivity(activity)
-  {
+  copyActivity(activity) {
     this.name = activity.name;
-    this.type= activity.type;
-    this.description= activity.description;
+    this.type = activity.type;
+    this.description = activity.description;
     this.tools = activity.tools;
     this.project_id = activity.project_id;
-    this.users= activity.users;
-    this.start= activity.start;
-    this.end= activity.end;
+    this.users = activity.users;
+    this.start = activity.start;
+    this.end = activity.end;
 
     this.activityDoc.name = this.name;
     this.activityDoc.type = this.type;
@@ -134,9 +195,9 @@ export class ActivitiesComponent implements OnInit {
     this.activityDoc.start = this.start;
     this.activityDoc.end = this.end;
 
-   }
+  }
 
-  
+
 
   pushTool() {
 
@@ -146,7 +207,7 @@ export class ActivitiesComponent implements OnInit {
   }
 
   pushToolEdit() {
-    
+
     this.activityEdit.tools.push(this.toolEdit);
     console.log(this.activityEdit.tools);
     this.toolEdit = '';
@@ -156,13 +217,11 @@ export class ActivitiesComponent implements OnInit {
     this.activityDoc.tools.splice(item, 1);
   }
 
-  deleteToolEdit(item) 
-  {
+  deleteToolEdit(item) {
     this.activityEdit.tools.splice(item, 1);
   }
 
-  updateActivity()
-  {
+  updateActivity() {
     this.activitiesService.updateActivity(this.activityEdit).then((result) => {
       $('#modalEdit').modal('hide');
       this.notifier.notify('success', 'Actividad actualizada!');
@@ -171,8 +230,7 @@ export class ActivitiesComponent implements OnInit {
     });
   }
 
-  emptyForm() 
-  {
+  emptyForm() {
     this.activityDoc.name = '';
     this.activityDoc.type = '';
     this.activityDoc.description = '';
@@ -198,5 +256,12 @@ export class ActivitiesComponent implements OnInit {
   //     console.log(err)
   //   });
   // }
+
+  removeErrors()
+  {
+    $('input').removeClass('error');
+    $('label').removeClass('errortxt');
+    $('select').removeClass('error');
+  }
 
 }

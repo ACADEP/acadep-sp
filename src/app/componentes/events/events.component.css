@@ -1,35 +1,45 @@
-.required{
-    color:red;
-    display: inline;
+.required {
+  color: red;
+  display: inline;
 }
+
 .card {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .icon-action {
-    margin-top: 5px;
-    margin-left: 10px;
-    float: right;
-    font-size: 150%;
-    cursor: pointer;
+  margin-top: 5px;
+  margin-left: 10px;
+  float: right;
+  font-size: 150%;
+  cursor: pointer;
 }
 
 .list-group-item .title {
-    margin-top: 5px;
-    margin-bottom: 12px;
-    font-weight: 600;
-    font-size: 120%;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 120%;
 }
 
-.col-centered{
-    margin: 0 auto;
-    float: none;
+.col-centered {
+  margin: 0 auto;
+  float: none;
 }
 
-.deleteEvent{
- cursor: pointer;
+.deleteEvent {
+  cursor: pointer;
 }
 
-.list-group-item:hover{
-    background:#f5f5f5;
-    }
+.list-group-item:hover {
+  background: #f5f5f5;
+}
+
+.error {
+  color: rgb(161, 43, 43);
+  border: 1px solid #f00;
+}
+
+.errortxt {
+  color: rgb(161, 43, 43);
+}
