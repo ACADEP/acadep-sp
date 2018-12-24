@@ -37,8 +37,13 @@ export class UsersService {
     this.usersCollection = this.db.collection('users');
     this.users = this.usersCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
+
+        
+
         const data = a.payload.doc.data() as User;
         data.id = a.payload.doc.id;
+
+        console.log(data.name);
         return data;
       });
     }));
@@ -52,6 +57,8 @@ export class UsersService {
     this.projectssCollection = this.db.collection('projects',  ref => ref.where('administrators.'+user_id, '==', true) );
     this.projects = this.projectssCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
+
+        console.log(a);
         const data = a.payload.doc.data() as User;
         data.id = a.payload.doc.id;
         return data;

@@ -6,6 +6,7 @@
         App / Eventos
       </h6>
       <h3 class="dashhead-title">Eventos</h3>
+      
     </div>
 
     <div class="dashhead-toolbar">
@@ -32,11 +33,10 @@
             <div class="box">
               <header>
                 <h3>Lista de eventos</h3>
-                <!-- <div class="box-tools">
-                        <a href="https://nosir.github.io/cleave.js/" target="_blank">
-                          <em>https://nosir.github.io/cleave.js/</em>
-                        </a>
-                      </div> -->
+                <div class="box-tools">
+                  <i style="color:rgb(129, 120, 120)" class="fa fa-plus-circle fa-2x deleteEvent" (click)="openActivities()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i>
+                 </div> 
               </header>
               <div class="list-group filter-wrap">
 
@@ -56,6 +56,7 @@
                       <div class="row">
                           <div class="col-md-6">
                     <b>Descripción:</b> {{event.description}} <br>
+                    <b>Tipo de actividad:</b> {{event.actividad}} <br>
                     <b>Inicio:</b> {{event.start}} <br>
                     <b>Final:</b> {{event.end}} <br>
                     <b>Actividad:</b> {{event.activity_id }} <br>
@@ -112,17 +113,29 @@
                         name="description" [(ngModel)]="eventDoc.description" data-plugin="autosize"></textarea>
                     </div>
                   </div>
+                  
+
                   <hr class="b-s-dashed">
-                  <div class="row">
-                    <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tipo de actividad <span class="required">*</span></label>
+                    <select class="form-control" [(ngModel)]="eventDoc.type" name="type">
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let item of types' [ngValue]="item" >{{item}}</option>
+                    </select>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="row text-center">
+                    <div class="col-md-12">
                       <label for="">Inicio <span class="required">*</span></label>
-                      <div class="input-group">
+                      <div class="input-group col-centered">
                         <input type="datetime-local" name="start" [(ngModel)]="eventDoc.start">
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <label for="">Final <span class="required">*</span></label>
-                      <div class="input-group">
+                      <div class="input-group col-centered">
                         <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end">
                       </div>
                     </div>
@@ -142,7 +155,7 @@
                     <select class="form-control" [(ngModel)]="eventDoc.activity_id" name="activity">
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
-                        [value]="activity.id">{{activity.name | titlecase}}</option>
+                        [value]="activity.name">{{activity.name | titlecase}}</option>
                     </select>
                   </div>
                   <hr class="b-s-dashed">

@@ -55,6 +55,7 @@ export class ActivitiesService {
         start: activity.start,
         end: activity.end,
         tools : activity.tools,
+        users : activity.users,
         deleted : false,
       }).then((res: any) => resolve(res), err => reject(err));
     })
