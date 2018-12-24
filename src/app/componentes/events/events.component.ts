@@ -19,6 +19,16 @@ export class EventsComponent implements OnInit {
 
   private readonly notifier: NotifierService;
 
+
+  types = [
+
+    'auditoria',
+    'servicio',
+    'supervision',
+    'revision'
+
+  ];
+
   eventsCollection: Event[];
   usersCollection: User[];
   activitiesCollection: activity[];
@@ -71,6 +81,11 @@ export class EventsComponent implements OnInit {
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
+  }
+
+  openActivities()
+  {
+    alert("en proceso")
   }
 
 

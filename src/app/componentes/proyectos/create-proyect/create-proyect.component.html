@@ -33,35 +33,42 @@
               <header>
 
                 <h3>Lista de proyectos</h3>
-                 
+                <div class="box-tools">
+                  <i style="color:rgb(129, 120, 120)" class="fa fa-plus-circle fa-2x deleteEvent" (click)="openActivities()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i>
+                 </div> 
               </header>
 
               <div class="list-group filter-wrap">
                 <div class="row">
                   <div class="col-md-4">
 
-                      <form (submit)="searchByName()"> 
-                      <div class="form-group" style="padding:5px">
+                    <form  >
+                       <div class="form-group" style="padding:5px">
                           <label for="itext">Buscar Proyecto</label>
                           <div class="icon-after-input">
                             <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar..."
-                              [(ngModel)]="tool">
+                              [(ngModel)]="searchterm" (keydown)="search($event)" (keyup)="search($event)">
                             <div class="icon">
                               <button class="btn btn-info btn-sm btn-rect" type="button"><i class="fa fa-search fa-lg"></i></button>
                             </div>
                           </div>
                         </div>
                       </form>
+
+                         
+                      
                        
                   </div>
                 </div>
-                <article class="list-group-item" *ngFor="let project of projects; let i = index">
+                <article class="list-group-item" *ngFor="let project of clubs; let i = index">
 
                   <header class="filter-header">
 
 
 
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
                      
@@ -70,6 +77,7 @@
                       <i class="fa fa-lg"></i>
           
                     </label> {{project.name | titlecase}}</h6>
+
 
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
@@ -92,7 +100,9 @@
                       <div class="col-md-6">
                         <b>Administradores:</b><br>
                       <ul>
+
                         <li *ngFor="let admin of objectValues(project.administrators)" >{{admin}}</li>
+
                         
                       </ul>
 
@@ -100,6 +110,10 @@
                     </div>
                   </div>
                 </article>
+
+                <div *ngIf="clubs?.length < 1">
+                  <p class="text-center">Ningún resultado para "{{searchterm}}"</p>
+                </div>
               </div>
               <!-- <div class="box-body">
                 <div class="panel panel-default">
@@ -215,7 +229,7 @@
                       <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
                       <div class="col-sm-12">
                         <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="projectDoc.administrators" >
-                            <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
+                            <option *ngFor="let user of users" value="{{user.name}}">{{user.name}}</option>
                         </select>
                       </div>
                     </div>
@@ -269,7 +283,9 @@
         </button>
       </div>
       <div class="modal-body">
+
         <form (submit)="updateProject()">
+
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">

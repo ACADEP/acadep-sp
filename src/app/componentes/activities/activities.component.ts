@@ -4,6 +4,10 @@ import { ActivitiesService } from "../../services/activities.service";
 import { ProjectsService } from "../../services/projects.service";
 import { activity } from '../../models/activity';
 import { project } from '../../models/project';
+
+import { isNgTemplate } from '@angular/compiler';
+import { UsersService } from "../../services/users.service";
+
 import { NgForm } from '@angular/forms/src/directives/ng_form';
 
 // import { isNgTemplate } from '@angular/compiler';
@@ -40,6 +44,8 @@ export class ActivitiesComponent implements OnInit {
   public start: string;
   public end: string;
 
+  persons;
+
 
 
 
@@ -59,7 +65,7 @@ export class ActivitiesComponent implements OnInit {
 
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
-    public projectsService: ProjectsService) {
+    public projectsService: ProjectsService, public userservice : UsersService) {
     this.notifier = notifierService;
     this.emptyForm()
 
@@ -78,9 +84,23 @@ export class ActivitiesComponent implements OnInit {
       this.activityDoc.tools = [];
     })
 
+    this.userservice.getUsers().subscribe(items =>{
+      this.persons = items;
+      // console.log(this.users)
+    })
+
   }
 
+
+  openActivities()
+  {
+    alert("en proceso")
+  }
+
+
+
   addActivity(form: NgForm) {
+
 
     if (form.valid) {
 
@@ -203,6 +223,7 @@ export class ActivitiesComponent implements OnInit {
 
   updateActivity() {
     this.activitiesService.updateActivity(this.activityEdit).then((result) => {
+      $('#modalEdit').modal('hide');
       this.notifier.notify('success', 'Actividad actualizada!');
     }).catch((err) => {
       this.notifier.notify('error', 'Algo salío mal!');

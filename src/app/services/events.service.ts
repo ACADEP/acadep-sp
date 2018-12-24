@@ -35,17 +35,22 @@ export class EventsService {
         active: true,
         activity_id: event.activity_id,
         user_id: event.user_id,
+        actividad : event.type,
         name: event.name,
         description: event.description,
         start: event.start,
         end: event.end,
         tools: event.tools,
         deleted: false,
-      }).then((res: any) =>{
+      }).then((res: any) =>
+      {
         this.db.collection('events').doc(res.id).update({
-          idevent : res.id
-        });
-        resolve(res)}, err => reject(err));
+          idevent: res.id
+        })
+        resolve(res)
+      } , err => reject(err));
+
+
     })
 
   }

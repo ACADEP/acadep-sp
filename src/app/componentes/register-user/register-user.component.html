@@ -33,11 +33,10 @@
             <div class="box">
               <header>
                 <h3>Lista de usuarios</h3>
-                <!-- <div class="box-tools">
-                      <a href="https://nosir.github.io/cleave.js/" target="_blank">
-                        <em>https://nosir.github.io/cleave.js/</em>
-                      </a>
-                    </div> -->
+                <div class="box-tools">
+                  <i style="color:rgb(129, 120, 120)" class="fa fa-plus-circle fa-2x deleteEvent" (click)="openActivities()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i>
+                 </div> 
               </header>
               <div class="list-group filter-wrap">
                 <article class="list-group-item" *ngFor="let user of users; let i = index">
@@ -47,7 +46,7 @@
             
                     
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
-                      <i class="icon-action fa fa-edit" style="color:#6fb478"  (click)="editUser(user)"></i>
+                      <i class="icon-action fa fa-edit" style="color:#6fb478"   (click)="editUser(user)"></i>
                       <i class="icon-action fa fa-times" style="color:#d64040"  ></i>
                       <i class="icon-action fa fa-eye" style="color:#6840d6" (click)="showAssigns(user)"></i>
                       <h6 class="title">{{user.name}} </h6>

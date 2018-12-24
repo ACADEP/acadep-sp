@@ -54,7 +54,6 @@ public role : string;
 public uid : string;
 
 
-
 public projects : any;
   constructor( public authService:AuthService, public router: Router, notifierService: NotifierService, public userService : UsersService,
    ) {
@@ -86,7 +85,7 @@ public projects : any;
       this.uid = res.user.uid;
       // this.name = 'holi';
       // this.authService.saveUser(this.uid, this.name, this.email, this.role)
-      this.userService.saveUser(this.uid, this.name, this.email, this.role);
+      this.userService.saveUser( this.name, this.email, this.role, this.uid);
       this.notifier.notify( 'success', 'Usuario Guardado!' );
       this.email = '';
       this.uid = '';
@@ -109,6 +108,11 @@ public projects : any;
    this.idEdit = user.id;
   console.log(user)
     $('#modalEdit').modal('show');
+  }
+
+  openActivities()
+  {
+    alert("en proceso")
   }
 
   onUpdateuser(e)

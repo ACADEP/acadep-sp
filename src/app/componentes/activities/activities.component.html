@@ -25,18 +25,17 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
               <header>
                 <h3>Lista de actividades</h3>
-                <!-- <div class="box-tools">
-                          <a href="https://nosir.github.io/cleave.js/" target="_blank">
-                            <em>https://nosir.github.io/cleave.js/</em>
-                          </a>
-                        </div> -->
+                 <div class="box-tools">
+                         <i style="color:rgb(129, 120, 120)" class="fa fa-plus-circle fa-2x deleteEvent" (click)="openActivities()"></i>
+                         <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i>
+                        </div> 
               </header>
               <div class="list-group filter-wrap">
 
@@ -69,6 +68,11 @@
                           <li *ngFor="let item of activity.tools">{{item}}</li>
 
                         </ul>
+                        <b>Usuarios:</b><br>
+                        <ul>
+                          <li *ngFor="let person of activity.users">{{person}}</li>
+
+                        </ul>
 
                       </div>
                     </div>
@@ -84,7 +88,7 @@
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <!-- BEGIN: flatpickr -->
         <div class="row">
 
@@ -163,23 +167,41 @@
                   <hr class="b-s-dashed">
 
                   <div class="row text-center">
-                    <div class="col-md-6">
-                      <label id="labelstart" for="">Inicio <span class="required">*</span></label>
+
+                    <div class="col-md-12">
+                      <label for="">Inicio <span class="required">*</span></label>
+
                       <div class="input-group col-centered">
                       <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
                         <input type="datetime-local" id="start" name="start" [(ngModel)]="activityDoc.start" required>
                       </div>
                     </div>
-                    <div class="col-md-6 ">
-                      <label id="labelend" for="">Final <span class="required">*</span></label>
+
+                    <div class="col-md-12 ">
+                      <label for="">Final <span class="required">*</span></label>
                       <div class="input-group col-centered">
-                        <!-- <ngb-datepicker #final (select)="onDateFinalSelect($event)"></ngb-datepicker> -->
-                        <input type="datetime-local" id="end" name="end" [(ngModel)]="activityDoc.end" required>
+
+                        <input type="datetime-local" name="end" [(ngModel)]="activityDoc.end">
+
+
                       </div>
                     </div>
                   </div>
 
                   <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
+                    <div class="col-sm-12"> 
+                      <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityDoc.users" >
+                          <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <hr class="b-s-dashed">
+
 
                   <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
 
@@ -203,7 +225,7 @@
                   </ul>
 
                   <div class="col-md-12 text-center" style="margin-top:30px">
-                    <button type="submit" class="btn btn-success">Crear Evento</button>
+                    <button type="submit" class="btn btn-success">Crear Actividad</button>
 
                   </div>
 
@@ -315,6 +337,18 @@
 
           <hr class="b-s-dashed">
 
+          <div class="form-group">
+            <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
+            <div class="col-sm-12"> 
+              <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityEdit.users" >
+                  <option *ngFor="let user of persons"  value="{{user.name}}">{{user.name}}</option>
+              </select>
+            </div>
+          </div>
+
+
+          <hr class="b-s-dashed">
+
           <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
 
           <form (submit)="pushToolEdit()">
@@ -337,7 +371,7 @@
           </ul>
 
           <div class="col-md-12 text-center" style="margin-top:30px">
-            <button type="submit" class="btn btn-success">Crear Evento</button>
+            <button type="submit" class="btn btn-success">Actualizar Evento</button>
 
           </div>
 

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from "../../../services/projects.service";
 import { UsersService } from "../../../services/users.service";
+import {  AngularFirestore } from '@angular/fire/firestore';
+import { Observable, combineLatest } from "rxjs";
+import { Subject } from "rxjs/";
 // import { snapshotChanges } from '@angular/fire/database';
 // import { TagInputModule } from 'ng-tags-input';
 // import * as $ from 'jquery/dist/jquery.min.js';
@@ -29,6 +32,17 @@ export class CreateProyectComponent implements OnInit {
   
   private readonly notifier: NotifierService;
  
+  searchterm: string;
+ 
+  startAt = new Subject();
+  endAt = new Subject();
+ 
+  clubs;
+  allclubs;
+ 
+  startobs = this.startAt.asObservable();
+  endobs = this.endAt.asObservable();
+
 
   projects: project[];
   users: User[];
@@ -38,18 +52,27 @@ export class CreateProyectComponent implements OnInit {
 
   
   constructor(public projectsService: ProjectsService, notifierService: NotifierService,
-   public userservice : UsersService) {
+   public userservice : UsersService, private afs : AngularFirestore) {
     this.notifier = notifierService;
     // this.projectDoc.name = "";
   }
 
   ngOnInit() {
 
-    this.projectsService.getProjects().subscribe(items =>{
-      this.projects = items;
-      // console.log(this.projects)
+    this.projectsService.getProjects().subscribe((clubs) => {
+      this.allclubs = clubs;
+      this.clubs = clubs;
+       
     })
 
+     
+     combineLatest(this.startobs, this.endobs).subscribe((value) => {
+      this.firequery(value[0], value[1]).subscribe((clubs) => {
+        this.clubs = clubs;
+      })
+    })
+
+   
     this.userservice.getUsers().subscribe(items =>{
       this.users = items;
       // console.log(this.users)
@@ -75,6 +98,12 @@ addProject()
   });
 }
 
+
+openActivities()
+{
+  alert("en proceso")
+
+}
 editProject(project)
 {
 
@@ -92,30 +121,44 @@ updateProject()
     this.notifier.notify( 'error', 'Opps! algo salío mal' );
 
   });
-}
+
 
 objectValues(obj) {
     return Object.values(obj);
   }
 
   onDeleteProject(project){
-    if(confirm("Está seguro que desea eliminar "+project.name)) {
+
+     if(confirm("Está seguro que desea eliminar "+project.name)) {
+       
       this.projectsService.deleteProject(project.id).then((result) => {
         this.notifier.notify( 'success', 'Proyecto eliminado!' );
       }).catch((err) => {
         this.notifier.notify( 'error', 'Opps! algo salío mal' );
-      });
+      });  
+     
+     }
+
+  search($event) {
+    let q = $event.target.value;
+    if (q !=  "") {
+      this.startAt.next(q);
+      this.endAt.next(q + "\uf8ff");
+    }
+    else {
+      this.clubs = this.allclubs;
+   
+
     }
   }
 
-  searchByName()
-  {
-    this.projectsService.searchProjects(this.query).subscribe(items =>{
-      this.projects = items;
-       console.log(this.projects)
-    })
+
+  firequery(start, end) {
+    return this.afs.collection('projects', ref => ref.orderBy('name').startAt(start).endAt(end)).valueChanges();
   }
 
-
+  getallclubs() {
+    return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
+  }
   
 }

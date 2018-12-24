@@ -98,7 +98,7 @@ const customNotifierOptions: NotifierOptions = {
         messagingSenderId: "958208857248"
       }
     ),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     NotifierModule.withConfig(customNotifierOptions),
     NgbModule,
 

@@ -4,6 +4,7 @@ export interface Event {
     description : string,
     start : string;
     end : string;
+    type : string;
     user_id : string;
     activity_id : string;
     tools : string [];
