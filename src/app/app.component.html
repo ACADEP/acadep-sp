@@ -1,16 +1,27 @@
-<div *ngIf="!isLogin; else dashboard"> 
-  <app-login></app-login>
+<div [ngSwitch]="isLogin"> 
+
+
+  <div *ngSwitchCase="true">
+    <app-topbar></app-topbar>
+    </div>
+    
+    <div *ngSwitchCase="false">
+      <app-login></app-login>
+    </div>
+
+
+
 </div>
 
-<ng-template #dashboard>
-<app-topbar></app-topbar>
-</ng-template>
+
+
+
 
 <notifier-container></notifier-container>
 
 
 <!-- <router-outlet></router-outlet> -->
 
-
+<!-- *ngIf="!isLogin; then login else dashboard" -->
 
 

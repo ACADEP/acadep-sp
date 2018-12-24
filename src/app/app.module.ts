@@ -10,7 +10,7 @@ import { TopbarComponent } from './componentes/topbar/topbar.component';
 
 import { FormsModule }   from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import {environment} from '../environments/environment';
@@ -21,6 +21,10 @@ import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { CalendarComponent } from './componentes/calendar/calendar.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { CreateProyectComponent } from './componentes/proyectos/create-proyect/create-proyect.component';
+import { EventsComponent } from './componentes/events/events.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { ActivitiesComponent } from './componentes/activities/activities.component';
+
 
 
 const customNotifierOptions: NotifierOptions = {
@@ -74,7 +78,9 @@ const customNotifierOptions: NotifierOptions = {
     RegisterUserComponent,
     CalendarComponent,
     InicioComponent,
-    CreateProyectComponent
+    CreateProyectComponent,
+    EventsComponent,
+    ActivitiesComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,8 +88,19 @@ const customNotifierOptions: NotifierOptions = {
     FormsModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    NotifierModule.withConfig(customNotifierOptions)
+    AngularFireModule.initializeApp(
+       {
+        apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
+        authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
+        databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
+        projectId: "seguimiento-de-proyectos-4fa3c",
+        storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
+        messagingSenderId: "958208857248"
+      }
+    ),
+    AngularFirestoreModule,
+    NotifierModule.withConfig(customNotifierOptions),
+    NgbModule,
 
   ],
   providers: [AuthService],
