@@ -1,17 +1,12 @@
 
 import { tool } from "./tool";
-// import { Time } from "@angular/common";
-interface datetime{
-    date: string;
-    time: string;
-}
 
 export interface Event {
     id? : string;
     name : string;
     description : string,
-    start : datetime;
-    end : datetime;
+    start : string;
+    end : string;
     type : string;
     user_id : string;
     activity_id : string;

@@ -43,24 +43,6 @@ export class EventsService {
         tools: event.tools,
         personal: event.personal,
         deleted: false,
-
-        observations : {
-          before :{
-            photos:{},
-            texts: {},
-            active:true
-          },
-          during :{
-            photos:{},
-            texts: {},
-            active:true
-          },
-          after :{
-            photos:{},
-            texts: {},
-            active:true
-          }
-        }
       }).then((res: any) =>
       {
         this.db.collection('events').doc(res.id).update({
