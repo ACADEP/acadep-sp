@@ -98,6 +98,22 @@ addProject()
   });
 }
 
+toogleProjects()
+  {
+
+    if ($('#btncolapse').hasClass('fa-plus-circle')) {
+      $('#btncolapse').removeClass('fa-plus-circle');
+      $('#btncolapse').addClass('fa-minus-circle');
+    } else {
+      $('#btncolapse').removeClass('fa-minus-circle');
+      $('#btncolapse').addClass('fa-plus-circle');
+
+    }
+
+    $('.fa-chevron-down').trigger('click');
+    
+  }
+
 
 openActivities()
 {
@@ -121,6 +137,7 @@ updateProject()
     this.notifier.notify( 'error', 'Opps! algo salío mal' );
 
   });
+}
 
 
 objectValues(obj) {
@@ -138,6 +155,7 @@ objectValues(obj) {
       });  
      
      }
+    }
 
   search($event) {
     let q = $event.target.value;

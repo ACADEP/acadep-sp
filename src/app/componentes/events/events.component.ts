@@ -7,8 +7,11 @@ import { Event } from "../../models/event";
 import { activity } from "../../models/activity";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../models/user";
+import { tool } from "../../models/tool";
 
 declare var $: any;
+
+
 
 @Component({
   selector: 'app-events',
@@ -35,7 +38,7 @@ export class EventsComponent implements OnInit {
   eventDoc = {} as Event;
   eventDocEdit = {} as Event;
   toolEdit: string;
-  tool: string;
+  tool = {} as tool;
 
 
 
@@ -44,8 +47,6 @@ export class EventsComponent implements OnInit {
     notifierService: NotifierService, public activitiesService: ActivitiesService) {
     this.notifier = notifierService;
     this.emptyForm();
-    // this.user_uid = "";
-    // this.emptyForm();
 
 
   }
@@ -81,21 +82,30 @@ export class EventsComponent implements OnInit {
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
+
+    this.tool.name ='';
+    this.tool.quantity = 0;
   }
 
-  openActivities()
+  toogleEvents()
   {
-    alert("en proceso")
-  }
 
+    if ($('#btncolapse').hasClass('fa-plus-circle')) {
+      $('#btncolapse').removeClass('fa-plus-circle');
+      $('#btncolapse').addClass('fa-minus-circle');
+    } else {
+      $('#btncolapse').removeClass('fa-minus-circle');
+      $('#btncolapse').addClass('fa-plus-circle');
+
+    }
+
+    $('.fa-chevron-down').trigger('click');
+    
+  }
 
 
   addEvent(form: NgForm) {
-
-
-
     if (form.valid) {
-
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
         // console.log(res);
@@ -103,59 +113,46 @@ export class EventsComponent implements OnInit {
         this.emptyForm();
       }).catch(err => {
         this.notifier.notify('error', 'Algo salio mal...');
-
       })
-
     } else {
       this.notifier.notify('error', 'Completa los campos obligatorios');
       
       if (form.controls.name.invalid) {
         $('#name').addClass('error')
         $('#labelname').addClass('errortxt')
-
       } else {
         $('#name').removeClass('error')
         $('#labelname').removeClass('errortxt')
       }
-      
       if (form.controls.start.invalid) {
         $('#start').addClass('error')
         $('#labelstart').addClass('errortxt')
-
       } else {
         $('#start').removeClass('error')
         $('#labelstart').removeClass('errortxt')
       }
-      
       if (form.controls.end.invalid) {
         $('#end').addClass('error')
         $('#labelend').addClass('errortxt')
-
       } else {
         $('#end').removeClass('error')
         $('#labelend').removeClass('errortxt')
       }
-      
       if (form.controls.user.invalid) {
         $('#user').addClass('error')
         $('#labeluser').addClass('errortxt')
-
       } else {
         $('#user').removeClass('error')
         $('#labeluser').removeClass('errortxt')
       }
-      
       if (form.controls.activity.invalid) {
         $('#activity').addClass('error')
         $('#labelactivity').addClass('errortxt')
-
       } else {
         $('#activity').removeClass('error')
         $('#labelactivity').removeClass('errortxt')
       }
-
     }
-
   }
 
   updateEvent() {
@@ -190,20 +187,20 @@ export class EventsComponent implements OnInit {
 
   pushTool() {
 
-    // console.log(this.tool);
+    console.log(this.tool);
     this.eventDoc.tools.push(this.tool);
-    this.tool = '';
+
   }
   deleteTool(item) {
     this.eventDoc.tools.splice(item, 1);
   }
 
-  pushToolEdit() {
+  // pushToolEdit() {
 
-    this.eventDocEdit.tools.push(this.toolEdit);
-    console.log(this.eventDocEdit.tools);
-    this.toolEdit = '';
-  }
+  //   this.eventDocEdit.tools.push(this.toolEdit);
+  //   console.log(this.eventDocEdit.tools);
+  //   this.toolEdit = '';
+  // }
   deleteToolEdit(item) {
     this.eventDocEdit.tools.splice(item, 1);
   }

@@ -34,12 +34,11 @@
               <header>
                 <h3>Lista de usuarios</h3>
                 <div class="box-tools">
-                  <i style="color:rgb(129, 120, 120)" class="fa fa-plus-circle fa-2x deleteEvent" (click)="openActivities()"></i>
-                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i>
-                 </div> 
+                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent" (click)="toogleUsers()"></i>
+                </div>
               </header>
               <div class="list-group filter-wrap">
-                <article class="list-group-item" *ngFor="let user of users; let i = index">
+                <article class="list-group-item" *ngFor="let user of usersCollection; let i = index">
                     
                   <header class="filter-header">
 
@@ -54,7 +53,12 @@
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                    <b>Email:</b>  {{user.email}} <br>
-                   <b>Rol:</b>  {{user.rol}}
+                   
+                   <div *ngIf="user.role.administrator; then admin else employee"></div>
+
+                   <ng-template #admin><b>Rol:</b>  Administrador</ng-template>
+                   <ng-template #employee><b>Rol:</b>  Empleado</ng-template>
+
                   </div>
                 </article>
               </div>
@@ -85,11 +89,12 @@
               </header>
               <div class="box-body collapse in">
 
-                <form (submit)="onSubmitAddUser()">
+                <form #formEvent="ngForm" (submit)="onSubmitAddUser(formEvent)">
                   <div class="form-group">
-                    <label for="itext">Nombre <span class="required">*</span></label>
+                    <label id="labelname" for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" [(ngModel)]="name" name="namme" placeholder="Escriba un nombre para el proyecto ...">
+                      <input id="name" type="text" class="form-control" [(ngModel)]="userDoc.name" name="docname" 
+                      placeholder="Escriba un nombre para el proyecto ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -105,9 +110,10 @@
                             </div>
                           </div> -->
                           <div class="form-group">
-                            <label for="itext">E-mail <span class="required">*</span></label>
+                            <label id="labelemail" for="itext">E-mail <span class="required">*</span></label>
                             <div class="icon-before-input">
-                              <input type="text" class="form-control" [(ngModel)]="email" name="email" placeholder="Escriba un nombre para el proyecto ...">
+                              <input id="email" type="text" class="form-control" [(ngModel)]="userDoc.email" name="email" 
+                              placeholder="Escriba un nombre para el proyecto ..." required>
                               <div class="icon">
                                 <i class="fa fa-fw fa-pencil"></i>
                               </div>
@@ -117,20 +123,24 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Rol de empleado </label>
-                    <select class="form-control" name="role" [(ngModel)]="role">
+                    <label id="labelrole" for="itext">Rol de empleado <span class="required">*</span></label>
+                    <select id="role" class="form-control" [(ngModel)]="selectRol" name="role" [(ngModel)]="this.role" required>
                       <option value="">Seleccione una opción</option>
-                      <option value="empleado">Empleado</option>
-                      <option value="administrador">Administrador</option>
+                      <option value="employee">Empleado</option>
+                      <option value="administrator">Administrador</option>
                     </select>
                   </div>
 
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Password <span class="required">*</span></label>
+                    <label id="labelpass" for="itext">Password <span class="required">*</span></label>
+                      <p *ngIf="pass.invalid && pass.touched">
+                          <small class="errortxt"><b> la contraseña debe tener al menos 6 caracteres</b></small>
+                      </p> 
+                        
                     <div class="icon-before-input">
-                      <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Escriba una contraseña">
+                      <input id="pass" type="password" class="form-control" #pass="ngModel" [(ngModel)]="password" minlength="6" name="pass" placeholder="Escriba una contraseña" required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -141,9 +151,10 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Confirmar contraseña <span class="required">*</span></label>
+                    <label id="labelconfirm" for="itext">Confirmar contraseña <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="password" class="form-control" name="password_confirmation" placeholder="Confirme la contraseña">
+                      <input id="confirm" type="password" class="form-control" [(ngModel)]="password_confirmation" name="confirm" 
+                      placeholder="Confirme la contraseña" required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>

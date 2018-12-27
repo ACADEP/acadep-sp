@@ -264,4 +264,20 @@ export class ActivitiesComponent implements OnInit {
     $('select').removeClass('error');
   }
 
+  toogleActivities()
+  {
+
+    if ($('#btncolapse').hasClass('fa-plus-circle')) {
+      $('#btncolapse').removeClass('fa-plus-circle');
+      $('#btncolapse').addClass('fa-minus-circle');
+    } else {
+      $('#btncolapse').removeClass('fa-minus-circle');
+      $('#btncolapse').addClass('fa-plus-circle');
+
+    }
+
+    $('.fa-chevron-down').trigger('click');
+    
+  }
+
 }

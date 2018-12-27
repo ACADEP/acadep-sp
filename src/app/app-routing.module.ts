@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'projects', component:  CreateProyectComponent },
   { path: 'calendar', component:  CalendarComponent },
   { path: 'aside', component:  AsideComponent },
-  // { path: '**', pathMatch: 'full', redirectTo: 'home'}
+  { path: '**', pathMatch: 'full', redirectTo: ''}
 
 ];
 

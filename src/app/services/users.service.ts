@@ -43,7 +43,7 @@ export class UsersService {
         const data = a.payload.doc.data() as User;
         data.id = a.payload.doc.id;
 
-        console.log(data.name);
+        // console.log(data.name);
         return data;
       });
     }));
@@ -68,18 +68,22 @@ export class UsersService {
     return this.projects;
   }
 
-  saveUser( name: string, email: string, rol: string, id?: string,) {
-    this.db.collection('users').doc(id).set({
-      id: id,
-      name: name,
-      email: email,
-      rol: rol,
+  saveUser( user : User, role : boolean) {
+
+    this.db.collection('users').doc(user.id).set({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: {
+        administrator :role
+      },
     }).then(function (docRef) {
       return docRef;
     }).catch(function (error) {
       console.log(error);
 
     })
+
   }
 
 

@@ -1,3 +1,6 @@
+
+import { tool } from "./tool";
+
 export interface Event {
     id? : string;
     name : string;
@@ -7,6 +10,6 @@ export interface Event {
     type : string;
     user_id : string;
     activity_id : string;
-    tools : string [];
+    tools : tool [];
     active : boolean;
 }

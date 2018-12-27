@@ -35,7 +35,7 @@ export class EventsService {
         active: true,
         activity_id: event.activity_id,
         user_id: event.user_id,
-        actividad : event.type,
+        type : event.type,
         name: event.name,
         description: event.description,
         start: event.start,
@@ -45,7 +45,7 @@ export class EventsService {
       }).then((res: any) =>
       {
         this.db.collection('events').doc(res.id).update({
-          idevent: res.id
+          id: res.id
         })
         resolve(res)
       } , err => reject(err));

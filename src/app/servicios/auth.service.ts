@@ -15,7 +15,7 @@ import { from } from 'rxjs';
 })
 export class AuthService {
 
-  userList: AngularFireList<any>;
+  // userList: AngularFireList<any>;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -23,10 +23,10 @@ export class AuthService {
   ) { }
 
 
-  getusers() {
+  // getusers() {
 
-    return this.userList = this.firebase.list('Users')
-  }
+  //   return this.userList = this.firebase.list('Users')
+  // }
 
   registerUser(email: string, pass: string) {
     return new Promise((resolve, reject) => {
@@ -36,13 +36,13 @@ export class AuthService {
     });
   }
 
-  saveUser(uid: string, name: string, email: string, role: string) {
-    this.firebase.database.ref('users/' + uid).set({
-      name: name,
-      email: email,
-      role: role
-    })
-  }
+  // saveUser(uid: string, name: string, email: string, role: string) {
+  //   this.firebase.database.ref('users/' + uid).set({
+  //     name: name,
+  //     email: email,
+  //     role: role
+  //   })
+  // }
 
 
 
