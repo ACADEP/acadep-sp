@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms/src/directives/ng_form';
+import { Component, OnInit, ɵConsole } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from "../../services/activities.service";
@@ -26,7 +26,7 @@ export class EventsComponent implements OnInit {
   types = [
 
     'auditoria',
-    'servicio',
+    // 'servicio',
     'supervision',
     'revision'
 
@@ -39,6 +39,7 @@ export class EventsComponent implements OnInit {
   eventDocEdit = {} as Event;
   toolEdit: string;
   tool = {} as tool;
+  person = {} as tool;
 
 
 
@@ -82,9 +83,10 @@ export class EventsComponent implements OnInit {
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
+    this.eventDoc.personal = [];
 
     this.tool.name ='';
-    this.tool.quantity = 0;
+    this.tool.quantity = null;
   }
 
   toogleEvents()
@@ -105,6 +107,7 @@ export class EventsComponent implements OnInit {
 
 
   addEvent(form: NgForm) {
+    console.log(form)
     if (form.valid) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
@@ -123,6 +126,13 @@ export class EventsComponent implements OnInit {
       } else {
         $('#name').removeClass('error')
         $('#labelname').removeClass('errortxt')
+      }
+      if (form.controls.type.invalid) {
+        $('#type').addClass('error')
+        $('#labeltype').addClass('errortxt')
+      } else {
+        $('#type').removeClass('error')
+        $('#labeltype').removeClass('errortxt')
       }
       if (form.controls.start.invalid) {
         $('#start').addClass('error')
@@ -171,36 +181,60 @@ export class EventsComponent implements OnInit {
 
   }
 
-  deleteEvent(event) {
-
-
-    // this.eventsService.deleteEvent(event.$key).then(() => {
-    //   this.notifier.notify('success', 'Evento eliminado!');
-
-    // }).catch((err) => {
-    //   this.notifier.notify('error', 'No se pudo eliminar!');
-
-    //   console.log(err)
-    // });
-
+  objectValues(obj) {
+    return Object.values(obj);
   }
 
-  pushTool() {
+  
 
-    console.log(this.tool);
-    this.eventDoc.tools.push(this.tool);
+  pushTool(form: NgForm) {
 
+// console.log(form)
+if (form.valid) {
+  const tool : tool = {
+    name: form.controls.toolname.value,
+    quantity : form.controls.toolquant.value
   }
+  this.eventDoc.tools.push(tool);
+  this.tool.name = '';
+  this.tool.quantity = null;
+  console.log(this.eventDoc)
+
+} else {
+  this.notifier.notify('error', 'Los campos de herramienta no se pueden enviar vacíos');
+
+}
+   
+  }
+
+
+  pushPersonal(form: NgForm) {
+console.log(form)
+if (form.valid) {
+  const person : tool = {
+    name: form.controls.personname.value,
+    quantity : form.controls.personquant.value
+  }
+
+  // console.log(person);
+  this.eventDoc.personal.push(person);
+  this.person.name = '';
+  this.person.quantity = null;
+  console.log(this.eventDoc)
+} else {
+  this.notifier.notify('error', 'Los campos de personal no se pueden enviar vacíos');
+}
+   
+  }
+
   deleteTool(item) {
     this.eventDoc.tools.splice(item, 1);
   }
+  deletePersonal(item) {
+    this.eventDoc.personal.splice(item, 1);
+  }
 
-  // pushToolEdit() {
 
-  //   this.eventDocEdit.tools.push(this.toolEdit);
-  //   console.log(this.eventDocEdit.tools);
-  //   this.toolEdit = '';
-  // }
   deleteToolEdit(item) {
     this.eventDocEdit.tools.splice(item, 1);
   }

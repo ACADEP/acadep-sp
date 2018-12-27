@@ -11,5 +11,6 @@ export interface Event {
     user_id : string;
     activity_id : string;
     tools : tool [];
+    personal : tool [];
     active : boolean;
 }

@@ -41,6 +41,7 @@ export class EventsService {
         start: event.start,
         end: event.end,
         tools: event.tools,
+        personal: event.personal,
         deleted: false,
       }).then((res: any) =>
       {

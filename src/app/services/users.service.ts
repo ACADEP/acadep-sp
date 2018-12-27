@@ -91,12 +91,20 @@ export class UsersService {
     return this.db.collection('users', ref => ref.where('id', '==', id)).get();
   }
 
-  updateUser(user:User){
+ 
 
-    this.userDoc = this.db.doc(`users/${user.id}`) ;
-    this.userDoc.update(user);
+  updateUser(user: User, role: boolean) {
+    return new Promise ((resolve, reject) => {
+      this.db.collection('users').doc(user.id).update({
+       name : user.name,
+       email : user.email,
+       role :{
+         administrator :role
+       }
+
+      }).then((res:any) => resolve(res), err => reject(err));
+    })
   }
-
 
 
 

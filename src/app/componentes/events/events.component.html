@@ -65,10 +65,13 @@
                       <div class="col-md-6">
                         <b>Herramientas:</b><br>
                         <ul>
-                          <li *ngFor="let item of event.tools">{{item}}</li>
-
+                          <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
                         </ul>
-
+<hr>
+                        <b>Personal:</b><br>
+                        <ul>
+                          <li *ngFor="let person of event.personal">{{person.quantity}}&nbsp;{{person.name}}</li>
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -119,8 +122,8 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label>Tipo de actividad <span class="required">*</span></label>
-                    <select class="form-control" [(ngModel)]="eventDoc.type" name="type">
+                    <label id="labeltype">Tipo de actividad <span class="required">*</span></label>
+                    <select id="type" class="form-control" [(ngModel)]="eventDoc.type" name="type" required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let item of types' [ngValue]="item">{{item}}</option>
                     </select>
@@ -180,12 +183,13 @@
                         <hr class="b-s-dashed">
 
                         <label for="atext3">Herramientas</label>
-                        <form (submit)="pushTool()" >
+                        <form #formTool="ngForm" (submit)="pushTool(formTool)"  >
                           <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <p>Cantidad</p>
-                                    <input type="text" size="2px" [(ngModel)]="tool.quantity" name="toolquant" class="form-control" id="exampleInputName2" placeholder="cantidad">
+                                    <input type="number" min="1" size="2px" name="toolquant"  [(ngModel)]="tool.quantity" 
+                                    class="form-control" placeholder="cantidad" required>
                                   </div>
                             </div>
                             <div class="col-md-8">
@@ -196,34 +200,16 @@
                                   <div class="form-group">
                                       <p>Nombre</p>
                                       <div class="icon-after-input">
-                                        <input type="text" class="form-control input-sm p-r-80" id="atext3" name="toolname" placeholder="nombre..."
-                                          [(ngModel)]="tool.name">
+                                        <input type="text" class="form-control input-sm p-r-80"  
+                                        name="toolname" placeholder="nombre..." [(ngModel)]="tool.name" required>
                                         <div class="icon">
                                           <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
                                         </div>
                                       </div>
                                     </div>
                             </div>
-
-                            <!-- <div class="col-md-12 text-center"> 
-                                <button type="submit" style="margin-right:0%" class="btn btn-info">Agregar<i class="fa fa-check"></i></button>
-                              </div> -->
-                           
                           </div>
-
-                          <!-- <div class="row">
-                              <div class="col-md-12">
-                                  <label for="exampleInputEmail2"></label>
-  
-                                  <button type="submit" style="margin-right:0%" class="btn btn-info"><i class="fa fa-check"></i></button>
-  
-                              </div>
-                          </div> -->
-              
-                         
-                          
                         </form>
-
                         <!-- <form (submit)="pushTool()">
                           <div class="form-group">
                             <label for="atext3">Herramientas</label>
@@ -242,6 +228,43 @@
                           <li class="list-group-item" *ngFor="let tool of eventDoc.tools; let i = index">{{tool.quantity}} {{tool.name}} <i
                               style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteTool(i)"></i>&nbsp;</li>
                         </ul>
+
+                        <hr class="b-s-dashed">
+
+                        <label for="atext3">Personal</label>
+                        <form #formPersonal="ngForm" (submit)="pushPersonal(formPersonal)"  >
+                          <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <p>Cantidad</p>
+                                    <input type="number" min="1" size="2px" name="personquant"  [(ngModel)]="person.quantity" 
+                                    class="form-control" placeholder="cantidad" required>
+                                  </div>
+                            </div>
+                            <div class="col-md-8">
+                                <!-- <div class="form-group">
+                                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="nombre de herramienta">
+                                  </div> -->
+
+                                  <div class="form-group">
+                                      <p>Nombre</p>
+                                      <div class="icon-after-input">
+                                        <input type="text" class="form-control input-sm p-r-80"  
+                                        name="personname" placeholder="nombre..." [(ngModel)]="person.name" required>
+                                        <div class="icon">
+                                          <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                                        </div>
+                                      </div>
+                                    </div>
+                            </div>
+                          </div>
+                        </form>
+
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item" *ngFor="let person of eventDoc.personal; let i = index">{{person.quantity}} {{person.name}} <i
+                                style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonal(i)"></i>&nbsp;</li>
+                          </ul>
 
                         <div class="col-md-12 text-center" style="margin-top:30px">
                           <button type="submit" class="btn btn-success btn-block">Crear Evento</button>

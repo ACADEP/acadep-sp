@@ -41,9 +41,6 @@
                 <article class="list-group-item" *ngFor="let user of usersCollection; let i = index">
                     
                   <header class="filter-header">
-
-            
-                    
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                       <i class="icon-action fa fa-edit" style="color:#6fb478"   (click)="editUser(user)"></i>
                       <i class="icon-action fa fa-times" style="color:#d64040"  ></i>
@@ -192,11 +189,12 @@
         </button>
       </div>
       <div class="modal-body">
-          <form (submit)="onUpdateuser($event)">
+          <form (submit)="onUpdateuser($event, formEdit)" #formEdit="ngForm">
               <div class="form-group">
-                <label for="itext">Nombre <span class="required">*</span></label>
+                <label id="labelnameedit" for="itext">Nombre <span class="required">*</span></label>
                 <div class="icon-before-input">
-                  <input type="text" class="form-control" [(ngModel)]="nameEdit"  name="namme" placeholder="Escriba un nombre para el proyecto ...">
+                  <input id="nameedit" type="text" class="form-control" [(ngModel)]="userDocEdit.name"  
+                  name="nameedit" placeholder="Escriba un nombre para el proyecto ..." required>
                   <div class="icon">
                     <i class="fa fa-fw fa-pencil"></i>
                   </div>
@@ -214,7 +212,8 @@
                       <div class="form-group">
                         <label for="itext">E-mail <span class="required">*</span></label>
                         <div class="icon-before-input">
-                          <input type="text" class="form-control" [(ngModel)]="emailEdit" name="email" placeholder="Escriba un nombre para el proyecto ...">
+                          <input readonly type="text" class="form-control" [(ngModel)]="userDocEdit.email" 
+                          name="emailedit" placeholder="Escriba un nombre para el proyecto ..." required >
                           <div class="icon">
                             <i class="fa fa-fw fa-pencil"></i>
                           </div>
@@ -224,9 +223,12 @@
               <hr class="b-s-dashed">
 
               <div class="form-group">
-                <label for="itext">Rol de empleado <span class="required">*</span></label>
-                <select class="form-control" [(ngModel)]="roleEdit" name="role" >
-                  <option *ngFor='let element of roles' [selected]="element == roleEdit" [value]="element">{{element | titlecase}}</option>
+                <label id="labelroledit" for="itext">Rol de empleado <span class="required">*</span></label>
+                <select id="roledit" class="form-control" [(ngModel)]="roleEdit" name="roledit" required>
+                    <option value="">Seleccione una opción</option>
+                    <option value="employee">Empleado</option>
+                    <option value="administrator">Administrador</option>
+                  <!-- <option *ngFor='let element of roles' [selected]="element == roleEdit" [value]="element">{{element | titlecase}}</option> -->
                 </select>
                 <!-- <p></ `p> -->
 

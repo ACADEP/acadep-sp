@@ -33,3 +33,7 @@ background:#f5f5f5;
   .errortxt {
     color: rgb(161, 43, 43);
   }
+
+  #btncolapse{
+      cursor: pointer;
+  }
