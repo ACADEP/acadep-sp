@@ -78,12 +78,15 @@ export class EventsComponent implements OnInit {
     this.eventDoc.user_id = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.description = '';
-    this.eventDoc.start = '';
-    this.eventDoc.end = '';
+    this.eventDoc.start.date = '';
+    this.eventDoc.start.time = '';
+    this.eventDoc.end.date = '';
+    this.eventDoc.end.time = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
     this.eventDoc.personal = [];
+    this.eventDoc.type = '';
 
     this.tool.name ='';
     this.tool.quantity = null;

@@ -63,11 +63,15 @@
                         <b>Usuario que lo realizará:</b> {{event.user_id}}
                       </div>
                       <div class="col-md-6">
-                        <b>Herramientas:</b><br>
-                        <ul>
-                          <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
-                        </ul>
-<hr>
+                        <div *ngIf="event.tools.length > 0"> 
+                            <b>Herramientas: </b><br>
+                            <ul>
+                              <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                            </ul>
+                            <hr>
+                        </div>
+                        
+
                         <b>Personal:</b><br>
                         <ul>
                           <li *ngFor="let person of event.personal">{{person.quantity}}&nbsp;{{person.name}}</li>
@@ -145,20 +149,36 @@
 
                         <div class="row text-center">
                           <div class="col-md-12">
-                            <label id="labelstart" for="">Inicio <span class="required">*</span></label>
+                            <label id="labelstartdate" for="">Inicio de evento <span class="required">*</span></label>
                             <div class="input-group col-centered">
-                              <input type="datetime-local" id="start" name="start" [(ngModel)]="eventDoc.start"
-                                required>
+                              <div class="col-md-6">
+                                  <input type="date" id="startdate" name="startdate" [(ngModel)]="eventDoc.start.date"
+                                  required>
+                              </div>
+                              <div class="col-md-6">
+                                  <input type="time" id="start" name="start" [(ngModel)]="eventDoc.start.time"
+                                  required>
+                              </div>
+                              
                             </div>
                           </div>
 
-                          <div class="col-md-12">
-                            <label id="labelend" for="">Final <span class="required">*</span></label>
-                            <div class="input-group col-centered">
-                              <input type="datetime-local" id="end" name="end" [(ngModel)]="eventDoc.end" required>
-
+                 
+                          <div class="col-md-12" style="margin-top:15px">
+                              <label id="labelstart" for="">Fin de evento <span class="required">*</span></label>
+                              <div class="input-group col-centered">
+                                <div class="col-md-6">
+                                    <input type="date" id="start" name="start" [(ngModel)]="eventDoc.start.date"
+                                    required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="time" id="start" name="start" [(ngModel)]="eventDoc.start.time"
+                                    required>
+                                </div>
+                                
+                              </div>
                             </div>
-                          </div>
+
                         </div>
                         <hr class="b-s-dashed">
                         <div class="form-group">
