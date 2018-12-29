@@ -1,10 +1,7 @@
 
 import { tool } from "./tool";
-// import { Time } from "@angular/common";
-interface datetime{
-    date: string;
-    time: string;
-}
+import { datetime } from "./dateTime";
+
 
 export interface Event {
     id? : string;
