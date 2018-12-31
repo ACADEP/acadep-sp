@@ -7,8 +7,11 @@ import { RegisterUserComponent } from "./componentes/register-user/register-user
 import { InicioComponent } from "./componentes/inicio/inicio.component";
 import { CreateProyectComponent } from "./componentes/proyectos/create-proyect/create-proyect.component";
 import { EventsComponent } from "./componentes/events/events.component";
+import { GmapComponent } from "./componentes/gmap/gmap.component";
+
 const routes: Routes = [
   { path: '', component:  InicioComponent },
+  { path: 'map', component:  GmapComponent },
   { path: 'users', component:  RegisterUserComponent },
   { path: 'events', component:  EventsComponent },
   { path: 'activities', component:  ActivitiesComponent },

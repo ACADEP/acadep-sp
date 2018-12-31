@@ -123,12 +123,11 @@
                           </div> -->
                   <div class="form-group">
                     <label for="itext">Descripción </label>
+
                     <div class="">
                       <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
                         name="description" [(ngModel)]="projectDoc.description" data-plugin="autosize" required></textarea>
-                      <!-- <div class="icon">
-                                  <i class="fa fa-fw fa-pencil"></i>
-                                </div> -->
+                   
                     </div>
                   </div>
 
@@ -137,11 +136,7 @@
                   <div class="form-group">
                     <label for="itext">Ubicación <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <textarea class="form-control" rows="3" id="textarea1" name="ubication" [(ngModel)]="projectDoc.ubication" placeholder="Escriba la ubicación del proyecto ..."
-                        data-plugin="autosize"  ></textarea>
-                      <div class="icon">
-                        <i class="fa fa-2x fa-map-marker"></i>
-                      </div>
+                        <app-gmap></app-gmap>
                     </div>
                   </div>
 
