@@ -9,6 +9,7 @@ import { isNgTemplate } from '@angular/compiler';
 import { UsersService } from "../../services/users.service";
 
 import { NgForm } from '@angular/forms/src/directives/ng_form';
+import { datetime } from 'src/app/models/dateTime';
 
 // import { isNgTemplate } from '@angular/compiler';
 
@@ -41,8 +42,8 @@ export class ActivitiesComponent implements OnInit {
   public tools: string[];
   public project_id: string;
   public users: string[];
-  public start: string;
-  public end: string;
+  public start: datetime;
+  public end: datetime;
 
   persons;
 
@@ -60,13 +61,13 @@ export class ActivitiesComponent implements OnInit {
 
   ];
 
-
-
-
-
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService, public userservice : UsersService) {
     this.notifier = notifierService;
+    this.activityDoc.start = {} as datetime;
+    this.activityDoc.end = {} as datetime;
+    this.activityEdit.start = {} as datetime;
+    this.activityEdit.end = {} as datetime;
     this.emptyForm()
 
   }
@@ -75,7 +76,6 @@ export class ActivitiesComponent implements OnInit {
     //actividades
     this.activitiesService.getActivities().subscribe(items => {
       this.activities = items;
-      console.log(this.activities)
     })
 
     //proyectos
@@ -91,19 +91,9 @@ export class ActivitiesComponent implements OnInit {
 
   }
 
-
-  openActivities()
-  {
-    alert("en proceso")
-  }
-
-
-
   addActivity(form: NgForm) {
-
-
+    
     if (form.valid) {
-
       this.activitiesService.addActivity(this.activityDoc).then((result) => {
         this.removeErrors();
         this.notifier.notify('success', 'Actividad creada!');
@@ -142,27 +132,76 @@ export class ActivitiesComponent implements OnInit {
         $('#labelproject').removeClass('errortxt')
       }
 
-      if (form.controls.start.invalid) {
-        $('#start').addClass('error')
+       
+      if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
+        $('#starttime').addClass('error')
+        $('#startdate').addClass('error')
         $('#labelstart').addClass('errortxt')
-
       } else {
-        $('#start').removeClass('error')
+        $('#startdate').removeClass('error')
+        $('#starttime').removeClass('error')
         $('#labelstart').removeClass('errortxt')
       }
-
-      if (form.controls.end.invalid) {
-        $('#end').addClass('error')
+      if (form.controls.enddate.invalid) {
+        $('#enddate').addClass('error')
         $('#labelend').addClass('errortxt')
-
       } else {
-        $('#end').removeClass('error')
+        $('#enddate').removeClass('error')
         $('#labelend').removeClass('errortxt')
       }
+      if (form.controls.endtime.invalid) {
+        $('#endtime').addClass('error')
+        $('#labelend').addClass('errortxt')
+      } else {
+        $('#endtime').removeClass('error')
+        if (form.controls.enddate.valid) {
+          $('#labelend').removeClass('errortxt')
+        }
+      }
+
+      if (form.controls.startdate.invalid) {
+        $('#startdate').addClass('error')
+        $('#labelstart').addClass('errortxt')
+      } else {
+        $('#startdate').removeClass('error')
+        $('#labelstart').removeClass('errortxt')
+      }
+      if (form.controls.starttime.invalid) {
+        $('#starttime').addClass('error')
+        $('#labelstart').addClass('errortxt')
+      } else {
+        $('#starttime').removeClass('error')
+        if (form.controls.startdate.valid) {
+          $('#labelstart').removeClass('errortxt')
+        }
+      }
+
+      if (this.activityDoc.users.length < 1) {
+        $('#admin').addClass('error')
+        $('#labeladmin').addClass('errortxt')
+
+      } else {
+        $('#admin').removeClass('error')
+        $('#labeladmin').removeClass('errortxt')
+      }
+
+
+
+
+
+      // if (form.controls.end.invalid) {
+      //   $('#end').addClass('error')
+      //   $('#labelend').addClass('errortxt')
+
+      // } else {
+      //   $('#end').removeClass('error')
+      //   $('#labelend').removeClass('errortxt')
+      // }
 
 
       this.notifier.notify('error', 'Verifica que los campos no esten vacíos');
 
+      console.log(form);
     }
 
 
@@ -237,8 +276,10 @@ export class ActivitiesComponent implements OnInit {
     this.activityDoc.tools = [];
     this.activityDoc.project_id = '';
     this.activityDoc.users = [];
-    this.activityDoc.start = '';
-    this.activityDoc.end = '';
+    this.activityDoc.start.date = '';
+    this.activityDoc.start.time = '';
+    this.activityDoc.end.date = '';
+    this.activityDoc.end.time = '';
   }
 
 

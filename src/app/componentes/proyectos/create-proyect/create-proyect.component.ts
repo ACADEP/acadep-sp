@@ -14,6 +14,7 @@ import { NotifierService } from 'angular-notifier';
 import { project } from 'src/app/models/project';
 import { User } from 'src/app/models/user';
 import { TitleCasePipe } from '@angular/common';
+import { datetime } from 'src/app/models/dateTime';
 
 
 declare var $:any;
@@ -48,13 +49,16 @@ export class CreateProyectComponent implements OnInit {
   users: User[];
   projectDoc = {} as project;
   editProjectDoc = {} as project;
-    query: string;
+  query: string;
 
   
   constructor(public projectsService: ProjectsService, notifierService: NotifierService,
    public userservice : UsersService, private afs : AngularFirestore) {
     this.notifier = notifierService;
-    // this.projectDoc.name = "";
+    this.projectDoc.start = {} as datetime;
+    this.projectDoc.end = {} as datetime;
+    this.editProjectDoc.start = {} as datetime;
+    this.editProjectDoc.end = {} as datetime;
   }
 
   ngOnInit() {
@@ -89,8 +93,10 @@ addProject()
     this.projectDoc.administrators = [];
     this.projectDoc.description = "";
     this.projectDoc.ubication = null;
-    this.projectDoc.start = null;
-    this.projectDoc.end = null;
+    this.projectDoc.start.date = "";
+    this.projectDoc.start.time = "";
+    this.projectDoc.end.date = "";
+    this.projectDoc.end.time = "";
 
   }).catch((err) => {
     this.notifier.notify( 'error', 'Opps! algo salío mal' );

@@ -1,3 +1,5 @@
+import { datetime } from "./dateTime";
+
 export interface activity {
     id:string;
     name: string;
@@ -6,7 +8,7 @@ export interface activity {
     tools : string[];
     project_id : string;
     users: string[];
-    start: string;
-    end: string;
+    start: datetime;
+    end: datetime;
     deleted : any
   }

@@ -75,7 +75,7 @@
 
                         <b>Personal:</b><br>
                         <ul>
-                          <li *ngFor="let person of event.personal">{{person.quantity}}&nbsp;{{person.name}}</li>
+                          <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
                         </ul>
                       </div>
                     </div>
@@ -262,7 +262,7 @@
                   </form>
 
                   <ul class="list-group list-group-flush">
-                    <li class="list-group-item" *ngFor="let person of eventDoc.personal; let i = index">{{person.quantity}}
+                    <li class="list-group-item" *ngFor="let person of eventDoc.staff; let i = index">{{person.quantity}}
                       {{person.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonal(i)"></i>&nbsp;</li>
                   </ul>
                   <!-- Fin de Personal -->
@@ -320,20 +320,37 @@
             </div>
           </div>
           <hr class="b-s-dashed">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="">Inicio <span class="required">*</span></label>
-              <div class="input-group">
-                <input type="datetime-local" name="start" [(ngModel)]="eventDocEdit.start">
+
+          <div class="row text-center">
+              <div class="col-md-12">
+                <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start.time" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="margin-top:15px">
+                <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <label for="">Final <span class="required">*</span></label>
-              <div class="input-group">
-                <input type="datetime-local" name="end" [(ngModel)]="eventDocEdit.end">
-              </div>
-            </div>
-          </div>
+
+
           <hr class="b-s-dashed">
           <div class="form-group">
             <label class="">Usuario que realizara evento <span class="required">*</span></label>
@@ -414,7 +431,7 @@
           </form>
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" *ngFor="let person of eventDocEdit.personal; let i = index">{{person.quantity}}
+            <li class="list-group-item" *ngFor="let person of eventDocEdit.staff; let i = index">{{person.quantity}}
               {{person.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonalEdit(i)"></i>&nbsp;</li>
           </ul>
           <!-- Fin de Personal -->

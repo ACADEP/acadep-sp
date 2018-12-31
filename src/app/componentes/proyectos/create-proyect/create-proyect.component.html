@@ -31,18 +31,15 @@
           <div class="col-xs-12">
             <div class="box">
               <header>
-
                 <h3>Lista de proyectos</h3>
                 <div class="box-tools">
                   <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent" (click)="toogleProjects()"></i>
                 </div>
               </header>
-
               <div class="list-group filter-wrap">
                 <div class="row">
                   <div class="col-md-4">
-
-                    <form  >
+                    <form>
                        <div class="form-group" style="padding:5px">
                           <label for="itext">Buscar Proyecto</label>
                           <div class="icon-after-input">
@@ -53,88 +50,44 @@
                             </div>
                           </div>
                         </div>
-                      </form>
-
-                         
-                      
-                       
+                      </form> 
                   </div>
                 </div>
                 <article class="list-group-item" *ngFor="let project of clubs; let i = index">
-
                   <header class="filter-header">
-
-
-
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
-
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
-                     
-                    <h6 class="title"> <label class="switch pull-right">
-                      <input class="hidden" type="checkbox">
-                      <i class="fa fa-lg"></i>
-          
-                    </label> {{project.name | titlecase}}</h6>
-
-
+                    <h6 class="title">{{project.name | titlecase}}</h6>
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                     <div class="row">
                       <div class="col-md-6">
                           <b>Descripción:</b> {{project.description}} <br>
                           <b>Ubicación:</b> {{project.ubication}} <br>
-                          <!-- <b>Administrador:</b> {{project.administrators}} <br> -->
-                          <b>Inicio:</b> {{project.start}} <br>
-                          <b>Final:</b> {{project.end}} <br>
-
-                          <div class="checkbox">
-                            <label class="switch">
-                              <input class="hidden" type="checkbox">
-                              <i class="fa fa-2x"></i>
-                              activado
-                            </label>
-                          </div>
+                          <b>Inicio:</b> {{project.start.date | date}}&nbsp;{{project.start.time }} hrs.<br>
+                          <b>Final:</b> {{project.end.date | date}}&nbsp;{{project.end.time}} hrs.<br>
                       </div>
                       <div class="col-md-6">
                         <b>Administradores:</b><br>
                       <ul>
-
                         <li *ngFor="let admin of objectValues(project.administrators)" >{{admin}}</li>
-
-                        
                       </ul>
-
                     </div>
                     </div>
                   </div>
                 </article>
-
                 <div *ngIf="clubs?.length < 1">
                   <p class="text-center">Ningún resultado para "{{searchterm}}"</p>
                 </div>
               </div>
-              <!-- <div class="box-body">
-                <div class="panel panel-default">
-
-                  <ul class="list-group">
-                    <a class="list-group-item" *ngFor="let project of projectListArray">{{project.name}}</a>
-                  </ul>
-                </div>
-
-              </div> -->
             </div>
           </div>
         </div>
-        <!-- END: clave.js -->
-
-
       </div>
-
       <div class="col-md-4">
         <!-- BEGIN: flatpickr -->
         <div class="row">
-
           <div class="col-xs-12">
             <div class="box">
               <header class="bg-belize-hole text-white">
@@ -149,7 +102,6 @@
                 <!-- END: box-tools -->
               </header>
               <div class="box-body collapse in">
-
                 <form (submit)="addProject()">
                   <div class="form-group">
                     <label for="itext">Nombre <span class="required">*</span></label>
@@ -183,7 +135,7 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Ubicación </label>
+                    <label for="itext">Ubicación <span class="required">*</span></label>
                     <div class="icon-before-input">
                       <textarea class="form-control" rows="3" id="textarea1" name="ubication" [(ngModel)]="projectDoc.ubication" placeholder="Escriba la ubicación del proyecto ..."
                         data-plugin="autosize"  ></textarea>
@@ -195,30 +147,51 @@
 
                   <hr class="b-s-dashed">
 
-                  <div class="row text-center">
-
+                  <!-- <div class="row text-center">
                     <span>
                       <div class="col-md-12">
                         <label for="">Inicio <span class="required">*</span></label>
                         <div class="input-group col-centered">
-
-                          <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
                           <input type="datetime-local" name="start" [(ngModel)]="projectDoc.start" required>
-
                         </div>
                       </div>
                       <div class="col-md-12 ">
                         <label for="">Final <span class="required">*</span></label>
                         <div class="input-group col-centered">
-
                           <input type="datetime-local" name="end" [(ngModel)]="projectDoc.end" required>
-
                         </div>
                       </div>
                     </span>
+                  </div> -->
 
+                  <div class="row text-center">
+                    <div class="col-md-12">
+                      <label id="labelstart" for="">Inicio de Proyecto <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="startdate" name="startdate" [(ngModel)]="projectDoc.start.date" required>
+                        </div>
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="starttime" name="starttime" [(ngModel)]="projectDoc.start.time" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12" style="margin-top:15px">
+                      <label id="labelend" for="">Fin de Proyecto <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="enddate" name="enddate" [(ngModel)]="projectDoc.end.date" required>
+                        </div>
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="endtime" name="endtime" [(ngModel)]="projectDoc.end.time" required>
+                        </div>
 
-
+                      </div>
+                    </div>
                   </div>
 
 
@@ -330,26 +303,33 @@
           <hr class="b-s-dashed">
 
           <div class="row text-center">
-
-            <span>
-              <div class="col-md-6">
-                <label for="">Inicio <span class="required">*</span></label>
-                <div class="input-group col-centered">
-
-                  <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                  <input type="datetime-local" name="start" [(ngModel)]="editProjectDoc.start" >
-
+            <div class="col-md-12">
+              <label id="labelstart" for="">Inicio de Proyecto <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="editProjectDoc.start.date" required>
+                </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="editProjectDoc.start.time" required>
                 </div>
               </div>
-              <div class="col-md-6 ">
-                <label for="">Final <span class="required">*</span></label>
-                <div class="input-group col-centered">
-
-                  <input type="datetime-local" name="end" [(ngModel)]="editProjectDoc.end">
-
+            </div>
+            <div class="col-md-12" style="margin-top:15px">
+              <label id="labelend" for="">Fin de Proyecto <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="enddate" name="editenddate" [(ngModel)]="editProjectDoc.end.date" required>
                 </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="endtime" name="editendtime" [(ngModel)]="editProjectDoc.end.time" required>
+                </div>
+
               </div>
-            </span>
+            </div>
           </div>
 
 

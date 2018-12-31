@@ -53,6 +53,8 @@ export class EventsComponent implements OnInit {
     this.notifier = notifierService;
     this.eventDoc.start = {} as datetime;
     this.eventDoc.end = {} as datetime;
+    this.eventDocEdit.start = {} as datetime;
+    this.eventDocEdit.end = {} as datetime;
     this.emptyForm();
   }
 
@@ -87,7 +89,7 @@ export class EventsComponent implements OnInit {
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
-    this.eventDoc.personal = [];
+    this.eventDoc.staff = [];
     this.eventDoc.type = '';
 
     this.tool.name = '';
@@ -138,6 +140,7 @@ export class EventsComponent implements OnInit {
         $('#type').removeClass('error')
         $('#labeltype').removeClass('errortxt')
       }
+      
       if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
         $('#starttime').addClass('error')
         $('#startdate').addClass('error')
@@ -163,6 +166,7 @@ export class EventsComponent implements OnInit {
           $('#labelend').removeClass('errortxt')
         }
       }
+
       if (form.controls.startdate.invalid) {
         $('#startdate').addClass('error')
         $('#labelstart').addClass('errortxt')
@@ -179,6 +183,8 @@ export class EventsComponent implements OnInit {
           $('#labelstart').removeClass('errortxt')
         }
       }
+
+
       if (form.controls.user.invalid) {
         $('#user').addClass('error')
         $('#labeluser').addClass('errortxt')
@@ -197,7 +203,8 @@ export class EventsComponent implements OnInit {
 
   }
 
-  updateEvent() {
+  updateEvent(form:NgForm) {
+    console.log(this.eventDocEdit)
     this.eventsService.updateEvent(this.eventDocEdit).then(res => {
       this.notifier.notify('success', 'Evento actualizdo');
       $('#modalEdit').modal('hide');
@@ -258,7 +265,7 @@ export class EventsComponent implements OnInit {
         name: form.controls.personname.value,
         quantity: form.controls.personquant.value
       }
-      this.eventDoc.personal.push(person);
+      this.eventDoc.staff.push(person);
       this.person.name = '';
       this.person.quantity = null;
       $('#personquant').focus();
@@ -275,7 +282,7 @@ export class EventsComponent implements OnInit {
         name: form.controls.personname.value,
         quantity: form.controls.personquant.value
       }
-      this.eventDocEdit.personal.push(person);
+      this.eventDocEdit.staff.push(person);
       this.personEdit.name = '';
       this.personEdit.quantity = null;
       $('#personquantedit').focus();
@@ -290,7 +297,7 @@ export class EventsComponent implements OnInit {
   }
   
   deletePersonal(item) {
-    this.eventDoc.personal.splice(item, 1);
+    this.eventDoc.staff.splice(item, 1);
   }
 
   deleteToolEdit(item) {
@@ -298,7 +305,7 @@ export class EventsComponent implements OnInit {
   }
   
   deletePersonalEdit(item) {
-    this.eventDocEdit.personal.splice(item, 1);
+    this.eventDocEdit.staff.splice(item, 1);
   }
 
 
