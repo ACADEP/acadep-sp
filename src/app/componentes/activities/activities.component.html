@@ -58,8 +58,8 @@
                         <b>Tipo:</b> {{activity.type}} <br>
                         <b>proyecto:</b> {{activity.project_id}} <br>
                         <b>Descripción:</b> {{activity.description}} <br>
-                        <b>Inicio:</b> {{activity.start}} <br>
-                        <b>Final:</b> {{activity.end}}
+                        <b>Inicio:</b> {{activity.start.date | date}}&nbsp;{{activity.start.time }} hrs.<br>
+                        <b>Final:</b> {{activity.end.date | date}}&nbsp;{{activity.end.time }} hrs.
                       </div>
                       <div class="col-md-6">
                         <b>Insumos necesarios:</b><br>
@@ -119,6 +119,16 @@
                   </div>
 
                   <hr class="b-s-dashed">
+                  
+                  <div class="form-group">
+                    <label for="itext">Descripción </label>
+                    <div class="">
+                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
+                        name="description" [(ngModel)]="activityDoc.description" data-plugin="autosize"></textarea>
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
 
                   <label id="labeltype" class="">Tipo de Actividad <span class="required">*</span></label>
                   <div class="form-group">
@@ -142,80 +152,76 @@
                         <option *ngFor="let project of projects" [selected]="project.id == activityDoc.project_id" value="{{project.id}}">{{project.name}}</option>
                       </select>
                     </div>
-                  </div>
-                  <br>
-
-                  <hr class="b-s-dashed">
-
-
-
-                  <!-- <div class="form-group">
-                              <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
-                              <div class="col-sm-8">
-                                <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
-                              </div>
-                            </div> -->
-                  <div class="form-group">
-                    <label for="itext">Descripción </label>
-                    <div class="">
-                      <textarea class="form-control" rows="3" id="textarea1" placeholder="Escriba un descripción para el proyecto ..."
-                        name="description" [(ngModel)]="activityDoc.description" data-plugin="autosize"></textarea>
-                    </div>
-                  </div>
+                  </div>              
 
                   <hr class="b-s-dashed">
 
                   <div class="row text-center">
-
                     <div class="col-md-12">
-                      <label for="">Inicio <span class="required">*</span></label>
-
+                      <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
                       <div class="input-group col-centered">
-                      <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                        <input type="datetime-local" id="start" name="start" [(ngModel)]="activityDoc.start" required>
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="startdate" name="startdate" [(ngModel)]="activityDoc.start.date" required>
+                        </div>
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="starttime" name="starttime" [(ngModel)]="activityDoc.start.time" required>
+                        </div>
                       </div>
                     </div>
-
-                    <div class="col-md-12 ">
-                      <label for="">Final <span class="required">*</span></label>
+                    <div class="col-md-12" style="margin-top:15px">
+                      <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
                       <div class="input-group col-centered">
-
-                        <input type="datetime-local" name="end" [(ngModel)]="activityDoc.end">
-
-
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="enddate" name="enddate" [(ngModel)]="activityDoc.end.date" required>
+                        </div>
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="endtime" name="endtime" [(ngModel)]="activityDoc.end.time" required>
+                        </div>
+        
                       </div>
                     </div>
                   </div>
-
+        
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
+                    <label id="labeladmin" class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
                     <div class="col-sm-12"> 
-                      <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityDoc.users" >
+                      <select id="admin" class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityDoc.users" required>
                           <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
                       </select>
                     </div>
                   </div>
 
+                  
 
                   <hr class="b-s-dashed">
 
 
-                  <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
 
-                  <form (submit)="pushTool()">
-                    <div class="form-group">
-                      <label for="atext3">Insumos necesarios</label>
-                      <div class="icon-after-input">
-                        <input type="text" class="form-control input-sm p-r-80" id="atext3" name="tool" placeholder="escriba..."
-                          [(ngModel)]="tool">
-                        <div class="icon">
-                          <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                  <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
+        
+                  <div style="margin-top:135px">
+                    <form (submit)="pushTool()">
+                      <div class="form-group">
+                        <label for="atext3">Insumos necesarios</label>
+                        <div class="icon-after-input">
+                          <input type="text" class="form-control input-sm p-r-80" id="atext3" name="tool" placeholder="escriba..."
+                            [(ngModel)]="tool">
+                          <div class="icon">
+                            <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
+         
+
+                
 
                   <ul class="list-group list-group-flush">
 
@@ -288,15 +294,6 @@
           </div>
 
           <hr class="b-s-dashed">
-
-
-
-          <!-- <div class="form-group">
-                      <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
-                      <div class="col-sm-8">
-                        <textarea class="form-control" rows="3" id="textarea1" placeholder="Type ..." data-plugin="autosize"></textarea>
-                      </div>
-                    </div> -->
           <div class="form-group">
             <label for="itext">Descripción </label>
             <div class="">
@@ -311,28 +308,33 @@
           <hr class="b-s-dashed">
 
           <div class="row text-center">
-            <div class="col-md-6">
-              <label for="">Inicio <span class="required">*</span></label>
-              <div class="input-group col-centered">
-
-                <!-- <ngb-datepicker #inicio (select)="onDateInicioSelect($event)"></ngb-datepicker> -->
-                <input type="datetime-local" name="start" [(ngModel)]="activityEdit.start">
-
+              <div class="col-md-12">
+                <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="starttime" name="editstarttime" [(ngModel)]="activityEdit.start.time" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="margin-top:15px">
+                <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="enddate" name="editenddate" [(ngModel)]="activityEdit.end.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="endtime" name="editendtime" [(ngModel)]="activityEdit.end.time" required>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6 ">
-              <label for="">Final <span class="required">*</span></label>
-              <div class="input-group col-centered">
-
-                <!-- <ngb-datepicker #final (select)="onDateFinalSelect($event)"></ngb-datepicker> -->
-                <input type="datetime-local" name="end" [(ngModel)]="activityEdit.end">
-
-              </div>
-            </div>
-
-
-
-          </div>
 
           <hr class="b-s-dashed">
 

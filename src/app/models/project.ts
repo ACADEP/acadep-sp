@@ -1,9 +1,11 @@
+import { datetime } from "../models/datetime";
+
 export interface project {
 id?: string;
 name:string;
 description: string;
 ubication: Geolocation;
-start: Date;
-end: Date;
+start: datetime;
+end: datetime;
 administrators: string[];
 }

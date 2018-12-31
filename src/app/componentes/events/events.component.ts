@@ -8,6 +8,7 @@ import { activity } from "../../models/activity";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../models/user";
 import { tool } from "../../models/tool";
+import { datetime } from "../../models/dateTime"
 
 declare var $: any;
 
@@ -37,9 +38,12 @@ export class EventsComponent implements OnInit {
   activitiesCollection: activity[];
   eventDoc = {} as Event;
   eventDocEdit = {} as Event;
-  toolEdit: string;
+
   tool = {} as tool;
+  toolEdit = {} as tool;
+
   person = {} as tool;
+  personEdit = {} as tool;
 
 
 
@@ -47,14 +51,14 @@ export class EventsComponent implements OnInit {
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService) {
     this.notifier = notifierService;
+    this.eventDoc.start = {} as datetime;
+    this.eventDoc.end = {} as datetime;
+    this.eventDocEdit.start = {} as datetime;
+    this.eventDocEdit.end = {} as datetime;
     this.emptyForm();
-
-
   }
 
   ngOnInit() {
-
-
     this.eventsService.getEvents().subscribe(events => {
       this.eventsCollection = events;
       // console.log(this.eventsCollection);
@@ -63,7 +67,7 @@ export class EventsComponent implements OnInit {
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      // console.log(this.usersCollection)
+      console.log(this.usersCollection)
     })
 
     this.activitiesService.getActivities().subscribe(items => {
@@ -78,19 +82,21 @@ export class EventsComponent implements OnInit {
     this.eventDoc.user_id = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.description = '';
-    this.eventDoc.start = '';
-    this.eventDoc.end = '';
+    // this.eventDoc.start.date = '';
+    // this.eventDoc.start.time = '';
+    // this.eventDoc.end.date = '';
+    // this.eventDoc.end.time = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
-    this.eventDoc.personal = [];
+    this.eventDoc.staff = [];
+    this.eventDoc.type = '';
 
-    this.tool.name ='';
+    this.tool.name = '';
     this.tool.quantity = null;
   }
 
-  toogleEvents()
-  {
+  toogleEvents() {
 
     if ($('#btncolapse').hasClass('fa-plus-circle')) {
       $('#btncolapse').removeClass('fa-plus-circle');
@@ -102,12 +108,12 @@ export class EventsComponent implements OnInit {
     }
 
     $('.fa-chevron-down').trigger('click');
-    
+
   }
 
 
   addEvent(form: NgForm) {
-    console.log(form)
+    // console.log(this.eventDoc)
     if (form.valid) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
@@ -119,7 +125,7 @@ export class EventsComponent implements OnInit {
       })
     } else {
       this.notifier.notify('error', 'Completa los campos obligatorios');
-      
+
       if (form.controls.name.invalid) {
         $('#name').addClass('error')
         $('#labelname').addClass('errortxt')
@@ -134,20 +140,51 @@ export class EventsComponent implements OnInit {
         $('#type').removeClass('error')
         $('#labeltype').removeClass('errortxt')
       }
-      if (form.controls.start.invalid) {
-        $('#start').addClass('error')
+      
+      if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
+        $('#starttime').addClass('error')
+        $('#startdate').addClass('error')
         $('#labelstart').addClass('errortxt')
       } else {
-        $('#start').removeClass('error')
+        $('#startdate').removeClass('error')
+        $('#starttime').removeClass('error')
         $('#labelstart').removeClass('errortxt')
       }
-      if (form.controls.end.invalid) {
-        $('#end').addClass('error')
+      if (form.controls.enddate.invalid) {
+        $('#enddate').addClass('error')
         $('#labelend').addClass('errortxt')
       } else {
-        $('#end').removeClass('error')
+        $('#enddate').removeClass('error')
         $('#labelend').removeClass('errortxt')
       }
+      if (form.controls.endtime.invalid) {
+        $('#endtime').addClass('error')
+        $('#labelend').addClass('errortxt')
+      } else {
+        $('#endtime').removeClass('error')
+        if (form.controls.enddate.valid) {
+          $('#labelend').removeClass('errortxt')
+        }
+      }
+
+      if (form.controls.startdate.invalid) {
+        $('#startdate').addClass('error')
+        $('#labelstart').addClass('errortxt')
+      } else {
+        $('#startdate').removeClass('error')
+        $('#labelstart').removeClass('errortxt')
+      }
+      if (form.controls.starttime.invalid) {
+        $('#starttime').addClass('error')
+        $('#labelstart').addClass('errortxt')
+      } else {
+        $('#starttime').removeClass('error')
+        if (form.controls.startdate.valid) {
+          $('#labelstart').removeClass('errortxt')
+        }
+      }
+
+
       if (form.controls.user.invalid) {
         $('#user').addClass('error')
         $('#labeluser').addClass('errortxt')
@@ -163,9 +200,11 @@ export class EventsComponent implements OnInit {
         $('#labelactivity').removeClass('errortxt')
       }
     }
+
   }
 
-  updateEvent() {
+  updateEvent(form:NgForm) {
+    console.log(this.eventDocEdit)
     this.eventsService.updateEvent(this.eventDocEdit).then(res => {
       this.notifier.notify('success', 'Evento actualizdo');
       $('#modalEdit').modal('hide');
@@ -178,69 +217,99 @@ export class EventsComponent implements OnInit {
   editEvent(event) {
     this.eventDocEdit = event;
     $('#modalEdit').modal('show');
-
   }
 
   objectValues(obj) {
     return Object.values(obj);
   }
 
-  
+
 
   pushTool(form: NgForm) {
+    if (form.valid) {
+      const tool: tool = {
+        name: form.controls.toolname.value,
+        quantity: form.controls.toolquant.value
+      }
+      this.eventDoc.tools.push(tool);
+      this.tool.name = '';
+      this.tool.quantity = null;
+      $('#toolquant').focus();
 
-// console.log(form)
-if (form.valid) {
-  const tool : tool = {
-    name: form.controls.toolname.value,
-    quantity : form.controls.toolquant.value
+    } else {
+      this.notifier.notify('error', 'Los campos de herramienta no se pueden enviar vacíos');
+    }
   }
-  this.eventDoc.tools.push(tool);
-  this.tool.name = '';
-  this.tool.quantity = null;
-  console.log(this.eventDoc)
 
-} else {
-  this.notifier.notify('error', 'Los campos de herramienta no se pueden enviar vacíos');
+  pushToolEdit(form: NgForm) {
+    console.log(form)
+    if (form.valid) {
+      const tool: tool = {
+        name: form.controls.toolname.value,
+        quantity: form.controls.toolquant.value
+      }
+      this.eventDocEdit.tools.push(tool);
+      this.toolEdit.name = '';
+      this.toolEdit.quantity = null;
+      $('#toolquantedit').focus();
 
-}
-   
+    } else {
+      this.notifier.notify('error', 'Los campos de herramienta no se pueden enviar vacíos');
+    }
   }
 
 
   pushPersonal(form: NgForm) {
-console.log(form)
-if (form.valid) {
-  const person : tool = {
-    name: form.controls.personname.value,
-    quantity : form.controls.personquant.value
+    if (form.valid) {
+      const person: tool = {
+        name: form.controls.personname.value,
+        quantity: form.controls.personquant.value
+      }
+      this.eventDoc.staff.push(person);
+      this.person.name = '';
+      this.person.quantity = null;
+      $('#personquant').focus();
+
+
+    } else {
+      this.notifier.notify('error', 'Los campos de personal no se pueden enviar vacíos');
+    }
   }
 
-  // console.log(person);
-  this.eventDoc.personal.push(person);
-  this.person.name = '';
-  this.person.quantity = null;
-  console.log(this.eventDoc)
-} else {
-  this.notifier.notify('error', 'Los campos de personal no se pueden enviar vacíos');
-}
-   
+  pushPersonalEdit(form: NgForm) {
+    if (form.valid) {
+      const person: tool = {
+        name: form.controls.personname.value,
+        quantity: form.controls.personquant.value
+      }
+      this.eventDocEdit.staff.push(person);
+      this.personEdit.name = '';
+      this.personEdit.quantity = null;
+      $('#personquantedit').focus();
+
+    } else {
+      this.notifier.notify('error', 'Los campos de personal no se pueden enviar vacíos');
+    }
   }
 
   deleteTool(item) {
     this.eventDoc.tools.splice(item, 1);
   }
+  
   deletePersonal(item) {
-    this.eventDoc.personal.splice(item, 1);
+    this.eventDoc.staff.splice(item, 1);
   }
-
 
   deleteToolEdit(item) {
     this.eventDocEdit.tools.splice(item, 1);
   }
+  
+  deletePersonalEdit(item) {
+    this.eventDocEdit.staff.splice(item, 1);
+  }
 
-  removeErrors()
-  {
+
+  removeErrors() {
     $('input').removeClass('error');
     $('label').removeClass('errortxt');
     $('select').removeClass('error');

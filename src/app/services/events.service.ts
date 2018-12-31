@@ -35,14 +35,33 @@ export class EventsService {
         active: true,
         activity_id: event.activity_id,
         user_id: event.user_id,
-        type : event.type,
+        type_activity : event.type,
         name: event.name,
         description: event.description,
+
         start: event.start,
         end: event.end,
         tools: event.tools,
-        personal: event.personal,
+        staff: event.staff,
         deleted: false,
+
+        // observations : {
+        //   before :{
+        //     photos:{},
+        //     texts: {},
+        //     active:true
+        //   },
+        //   during :{
+        //     photos:{},
+        //     texts: {},
+        //     active:true
+        //   },
+        //   after :{
+        //     photos:{},
+        //     texts: {},
+        //     active:true
+        //   }
+        // }
       }).then((res: any) =>
       {
         this.db.collection('events').doc(res.id).update({
@@ -70,7 +89,8 @@ export class EventsService {
         description: event.description,
         start: event.start,
         end: event.end,
-        tools: event.tools
+        tools: event.tools,
+        staff: event.staff
       }).then((res:any) => resolve(res), err => reject(err));
     })
   }

@@ -34,7 +34,8 @@
               <header>
                 <h3>Lista de eventos</h3>
                 <div class="box-tools">
-                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent" (click)="toogleEvents()"></i>
+                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent"
+                    (click)="toogleEvents()"></i>
                   <!-- <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i> -->
                 </div>
               </header>
@@ -57,20 +58,24 @@
                       <div class="col-md-6">
                         <b>Descripción:</b> {{event.description}} <br>
                         <b>Tipo de actividad:</b> {{event.actividad}} <br>
-                        <b>Inicio:</b> {{event.start}} <br>
-                        <b>Final:</b> {{event.end}} <br>
+                        <b>Inicio:</b> {{event.start.date}}&nbsp;{{event.start.time}} hrs. <br>
+                        <b>Final:</b> {{event.end.date}}&nbsp;{{event.end.time}} hrs.<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
                         <b>Usuario que lo realizará:</b> {{event.user_id}}
                       </div>
                       <div class="col-md-6">
-                        <b>Herramientas:</b><br>
-                        <ul>
-                          <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
-                        </ul>
-<hr>
+                        <div *ngIf="event.tools.length > 0">
+                          <b>Herramientas: </b><br>
+                          <ul>
+                            <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                          </ul>
+                          <hr>
+                        </div>
+
+
                         <b>Personal:</b><br>
                         <ul>
-                          <li *ngFor="let person of event.personal">{{person.quantity}}&nbsp;{{person.name}}</li>
+                          <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
                         </ul>
                       </div>
                     </div>
@@ -143,132 +148,127 @@
                       <div class="input-group col-centered">
                         <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end"> -->
 
-                        <div class="row text-center">
-                          <div class="col-md-12">
-                            <label id="labelstart" for="">Inicio <span class="required">*</span></label>
-                            <div class="input-group col-centered">
-                              <input type="datetime-local" id="start" name="start" [(ngModel)]="eventDoc.start"
-                                required>
-                            </div>
-                          </div>
-
-                          <div class="col-md-12">
-                            <label id="labelend" for="">Final <span class="required">*</span></label>
-                            <div class="input-group col-centered">
-                              <input type="datetime-local" id="end" name="end" [(ngModel)]="eventDoc.end" required>
-
-                            </div>
-                          </div>
+                  <div class="row text-center">
+                    <div class="col-md-12">
+                      <label id="labelstart" for="">Inicio de evento <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="startdate" name="startdate" [(ngModel)]="eventDoc.start.date" required>
                         </div>
-                        <hr class="b-s-dashed">
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="starttime" name="starttime" [(ngModel)]="eventDoc.start.time" required>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-12" style="margin-top:15px">
+                      <label id="labelend" for="">Fin de evento <span class="required">*</span></label>
+                      <div class="input-group col-centered">
+                        <div class="col-md-6">
+                          <p><small>Fecha:</small></p>
+                          <input type="date" id="enddate" name="enddate" [(ngModel)]="eventDoc.end.date" required>
+                        </div>
+                        <div class="col-md-6">
+                          <p><small>Hora:</small></p>
+                          <input type="time" id="endtime" name="endtime" [(ngModel)]="eventDoc.end.time" required>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                  <hr class="b-s-dashed">
+                  <div class="form-group">
+                    <label id="labeluser" class="">Usuario que realizara evento <span class="required">*</span></label>
+                    <select class="form-control" id="user" [(ngModel)]="eventDoc.user_id" name="user" required>
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id" [value]="user.id">{{user.name
+                        | titlecase}}</option>
+                    </select>
+                  </div>
+                  <hr class="b-s-dashed">
+                  <div class="form-group">
+                    <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
+                    <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity"
+                      required>
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
+                        [value]="activity.name">{{activity.name | titlecase}}</option>
+                    </select>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <!-- Inicio de Herramientas -->
+                  <label for="atext3">Herramientas</label>
+                  <form #formTool="ngForm" (submit)="pushTool(formTool)">
+                    <div class="row">
+                      <div class="col-md-4">
                         <div class="form-group">
-                          <label id="labeluser" class="">Usuario que realizara evento <span class="required">*</span></label>
-                          <select class="form-control" id="user" [(ngModel)]="eventDoc.user_id" name="user" required>
-                            <option value="">Seleccione una opción </option>
-                            <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id"
-                              [value]="user.id">{{user.name
-                              | titlecase}}</option>
-                          </select>
+                          <p>Cantidad</p>
+                          <input id="toolquant" type="number" min="1" size="2px" name="toolquant" [(ngModel)]="tool.quantity" class="form-control"
+                            placeholder="cantidad" required>
                         </div>
-                        <hr class="b-s-dashed">
+                      </div>
+                      <div class="col-md-8">
                         <div class="form-group">
-                          <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
-                          <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity"
-                            required>
-                            <option value="">Seleccione una opción </option>
-                            <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
-                              [value]="activity.name">{{activity.name | titlecase}}</option>
-                          </select>
+                          <p>Nombre</p>
+                          <div class="icon-after-input">
+                            <input type="text" class="form-control input-sm p-r-80" name="toolname" placeholder="nombre..."
+                              [(ngModel)]="tool.name" required>
+                            <div class="icon">
+                              <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                            </div>
+                          </div>
                         </div>
-                        <hr class="b-s-dashed">
+                      </div>
+                    </div>
+                  </form>
 
-                        <label for="atext3">Herramientas</label>
-                        <form #formTool="ngForm" (submit)="pushTool(formTool)"  >
-                          <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <p>Cantidad</p>
-                                    <input type="number" min="1" size="2px" name="toolquant"  [(ngModel)]="tool.quantity" 
-                                    class="form-control" placeholder="cantidad" required>
-                                  </div>
-                            </div>
-                            <div class="col-md-8">
-                                <!-- <div class="form-group">
-                                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="nombre de herramienta">
-                                  </div> -->
-
-                                  <div class="form-group">
-                                      <p>Nombre</p>
-                                      <div class="icon-after-input">
-                                        <input type="text" class="form-control input-sm p-r-80"  
-                                        name="toolname" placeholder="nombre..." [(ngModel)]="tool.name" required>
-                                        <div class="icon">
-                                          <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
-                                        </div>
-                                      </div>
-                                    </div>
-                            </div>
-                          </div>
-                        </form>
-                        <!-- <form (submit)="pushTool()">
-                          <div class="form-group">
-                            <label for="atext3">Herramientas</label>
-                            <div class="icon-after-input">
-                              <input type="text" class="form-control input-sm p-r-80" id="atext3" name="tool"
-                                placeholder="escriba..." [(ngModel)]="tool">
-                              <div class="icon">
-                                <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
-                              </div>
-                            </div>
-                          </div>
-                        </form> -->
-
-                        <ul class="list-group list-group-flush">
-
-                          <li class="list-group-item" *ngFor="let tool of eventDoc.tools; let i = index">{{tool.quantity}} {{tool.name}} <i
-                              style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteTool(i)"></i>&nbsp;</li>
-                        </ul>
-
-                        <hr class="b-s-dashed">
-
-                        <label for="atext3">Personal</label>
-                        <form #formPersonal="ngForm" (submit)="pushPersonal(formPersonal)"  >
-                          <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <p>Cantidad</p>
-                                    <input type="number" min="1" size="2px" name="personquant"  [(ngModel)]="person.quantity" 
-                                    class="form-control" placeholder="cantidad" required>
-                                  </div>
-                            </div>
-                            <div class="col-md-8">
-                                <!-- <div class="form-group">
-                                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="nombre de herramienta">
-                                  </div> -->
-
-                                  <div class="form-group">
-                                      <p>Nombre</p>
-                                      <div class="icon-after-input">
-                                        <input type="text" class="form-control input-sm p-r-80"  
-                                        name="personname" placeholder="nombre..." [(ngModel)]="person.name" required>
-                                        <div class="icon">
-                                          <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
-                                        </div>
-                                      </div>
-                                    </div>
-                            </div>
-                          </div>
-                        </form>
-
-                        <ul class="list-group list-group-flush">
-
-                            <li class="list-group-item" *ngFor="let person of eventDoc.personal; let i = index">{{person.quantity}} {{person.name}} <i
-                                style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonal(i)"></i>&nbsp;</li>
-                          </ul>
-
-                        <div class="col-md-12 text-center" style="margin-top:30px">
-                          <button type="submit" class="btn btn-success btn-block">Crear Evento</button>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let tool of eventDoc.tools; let i = index">{{tool.quantity}}
+                      {{tool.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteTool(i)"></i>&nbsp;</li>
+                  </ul>
+                  <!-- Fin de Herramientas -->
+                  <hr class="b-s-dashed">
+                  <!-- Inicio de Personal -->
+                  <label for="atext3">Personal</label>
+                  <form #formPersonal="ngForm" (submit)="pushPersonal(formPersonal)">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <p>Cantidad</p>
+                          <input id="personquant" type="number" min="1" size="2px" name="personquant" [(ngModel)]="person.quantity"
+                            class="form-control" placeholder="cantidad" required>
                         </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <p>Nombre</p>
+                          <div class="icon-after-input">
+                            <input type="text" class="form-control input-sm p-r-80" name="personname" placeholder="nombre..."
+                              [(ngModel)]="person.name" required>
+                            <div class="icon">
+                              <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let person of eventDoc.staff; let i = index">{{person.quantity}}
+                      {{person.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonal(i)"></i>&nbsp;</li>
+                  </ul>
+                  <!-- Fin de Personal -->
+                  <div class="col-md-12 text-center" style="margin-top:30px">
+                    <button type="submit" class="btn btn-success btn-block">Crear Evento</button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -299,7 +299,7 @@
       </div>
       <div class="modal-body">
 
-        <form (submit)="updateEvent()">
+        <form (submit)="updateEvent(formEdit)" #formEdit="ngForm">
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
@@ -320,20 +320,37 @@
             </div>
           </div>
           <hr class="b-s-dashed">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="">Inicio <span class="required">*</span></label>
-              <div class="input-group">
-                <input type="datetime-local" name="start" [(ngModel)]="eventDocEdit.start">
+
+          <div class="row text-center">
+              <div class="col-md-12">
+                <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start.time" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="margin-top:15px">
+                <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+                <div class="input-group col-centered">
+                  <div class="col-md-6">
+                    <p><small>Fecha:</small></p>
+                    <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
+                  </div>
+                  <div class="col-md-6">
+                    <p><small>Hora:</small></p>
+                    <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <label for="">Final <span class="required">*</span></label>
-              <div class="input-group">
-                <input type="datetime-local" name="end" [(ngModel)]="eventDocEdit.end">
-              </div>
-            </div>
-          </div>
+
+
           <hr class="b-s-dashed">
           <div class="form-group">
             <label class="">Usuario que realizara evento <span class="required">*</span></label>
@@ -355,38 +372,71 @@
           <hr class="b-s-dashed">
 
 
-          <!-- <form class="form-inline">
-              <label for="atext3">Herramientas</label>
-
-            <div class="form-group">
-              <label for="exampleInputName2">Cant.</label>
-              <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail2">tipo</label>
-              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
-            </div>
-            <button type="submit" class="btn btn-info">Send invitation</button>
-          </form> -->
-
-          <form (submit)="pushToolEdit()">
-            <div class="form-group">
-              <label for="atext3">Herramientas</label>
-              <div class="icon-after-input">
-                <input type="text" class="form-control input-sm p-r-80" id="atext3" name="toolEdit" placeholder="escriba..."
-                  [(ngModel)]="toolEdit">
-                <div class="icon">
-                  <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+          <!-- Inicio de Herramientas -->
+          <label for="atext3">Herramientas</label>
+          <form #formEditTool="ngForm" (submit)="pushToolEdit(formEditTool)">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <p>Cantidad</p>
+                  <input type="number" id="toolquantedit" min="1" size="2px" name="toolquant" [(ngModel)]="toolEdit.quantity" class="form-control"
+                    placeholder="cantidad" required>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <p>Nombre</p>
+                  <div class="icon-after-input">
+                    <input type="text"  class="form-control input-sm p-r-80" name="toolname" placeholder="nombre..."
+                      [(ngModel)]="toolEdit.name" required>
+                    <div class="icon">
+                      <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </form>
 
           <ul class="list-group list-group-flush">
-
-            <li class="list-group-item" *ngFor="let toolEdit of eventDocEdit.tools; let i = index">{{toolEdit}} <i
-                style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteToolEdit(i)"></i>&nbsp;</li>
+            <li class="list-group-item" *ngFor="let tool of eventDocEdit.tools; let i = index">{{tool.quantity}}
+              {{tool.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteToolEdit(i)"></i>&nbsp;</li>
           </ul>
+          <!-- Fin de Herramientas -->
+          <hr class="b-s-dashed">
+          <!-- Inicio de Personal -->
+          <label for="atext3">Personal</label>
+          <form #formPersonalEdit="ngForm" (submit)="pushPersonalEdit(formPersonalEdit)">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <p>Cantidad</p>
+                  <input type="number" id="personquantedit" min="1" size="2px" name="personquant" [(ngModel)]="personEdit.quantity" class="form-control"
+                    placeholder="cantidad" required>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <p>Nombre</p>
+                  <div class="icon-after-input">
+                    <input type="text" class="form-control input-sm p-r-80" name="personname" placeholder="nombre..."
+                      [(ngModel)]="personEdit.name" required>
+                    <div class="icon">
+                      <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let person of eventDocEdit.staff; let i = index">{{person.quantity}}
+              {{person.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deletePersonalEdit(i)"></i>&nbsp;</li>
+          </ul>
+          <!-- Fin de Personal -->
+
+
           <div class="col-md-12 text-center" style="margin-top:30px">
             <button type="submit" class="btn btn-success">Actualizar Evento</button>
           </div>
