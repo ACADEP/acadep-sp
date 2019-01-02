@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MouseEvent, MarkerManager } from '@agm/core';
+
+
 
 @Component({
   selector: 'app-gmap',
@@ -6,12 +9,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gmap.component.css']
 })
 export class GmapComponent implements OnInit {
-  title: string = 'My first AGM project';
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-  constructor() { }
 
-  ngOnInit() {
-  }
+  // title: string = 'My first AGM project';
+  
+  // Position: any;
+  constructor() {
+   }
 
+ngOnInit() {
+
+ 
+
+ 
+ 
+
+  // showPosition(position: Position): any {
+  //   throw new Error("Method not implemented.");
+  // }
+
+}
 }

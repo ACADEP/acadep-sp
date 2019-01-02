@@ -64,7 +64,6 @@
                     <div class="row">
                       <div class="col-md-6">
                           <b>Descripción:</b> {{project.description}} <br>
-                          <b>Ubicación:</b> {{project.ubication}} <br>
                           <b>Inicio:</b> {{project.start.date | date}}&nbsp;{{project.start.time }} hrs.<br>
                           <b>Final:</b> {{project.end.date | date}}&nbsp;{{project.end.time}} hrs.<br>
                       </div>
@@ -73,6 +72,16 @@
                       <ul>
                         <li *ngFor="let admin of objectValues(project.administrators)" >{{admin}}</li>
                       </ul>
+
+                      <b>Ubicación:</b> <br>
+                          <agm-map [zoom]="14" [latitude]="project.ubication.lat" [longitude]="project.ubication.lng">
+                            <agm-marker 
+                            [latitude]="project.ubication.lat" 
+                            [longitude]="project.ubication.lng" 
+                            [markerDraggable]="false"
+                            ></agm-marker>
+                          </agm-map>   
+                           <br>
                     </div>
                     </div>
                   </div>
@@ -136,7 +145,14 @@
                   <div class="form-group">
                     <label for="itext">Ubicación <span class="required">*</span></label>
                     <div class="icon-before-input">
-                        <app-gmap></app-gmap>
+                      <agm-map [latitude]="projectDoc.ubication.lat" [longitude]="projectDoc.ubication.lng">
+                        <agm-marker 
+                        [latitude]="projectDoc.ubication.lat" 
+                        [longitude]="projectDoc.ubication.lng" 
+                        [markerDraggable]="true"
+                        (dragEnd)="markerDragEnd( $event)"
+                        ></agm-marker>
+                      </agm-map>   
                     </div>
                   </div>
 
@@ -287,11 +303,14 @@
           <div class="form-group">
             <label for="itext">Ubicación </label>
             <div class="icon-before-input">
-              <textarea class="form-control" rows="3" id="textarea1" name="ubication" [(ngModel)]="editProjectDoc.ubication" placeholder="Escriba la ubicación del proyecto ..."
-                data-plugin="autosize"  ></textarea>
-              <div class="icon">
-                <i class="fa fa-2x fa-map-marker"></i>
-              </div>
+              <agm-map [latitude]="editProjectDoc.ubication.lat" [longitude]="editProjectDoc.ubication.lng">
+                <agm-marker 
+                [latitude]="editProjectDoc.ubication.lat" 
+                [longitude]="editProjectDoc.ubication.lng" 
+                [markerDraggable]="true"
+                (dragEnd)="EditmarkerDragEnd( $event)"
+                ></agm-marker>
+              </agm-map> 
             </div>
           </div>
 
