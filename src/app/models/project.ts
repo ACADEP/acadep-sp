@@ -4,7 +4,10 @@ export interface project {
 id?: string;
 name:string;
 description: string;
-ubication: Geolocation;
+ubication: {
+    lat : number,
+    lng : number
+};
 start: datetime;
 end: datetime;
 administrators: string[];

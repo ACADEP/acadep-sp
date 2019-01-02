@@ -25,6 +25,10 @@ import { EventsComponent } from './componentes/events/events.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ActivitiesComponent } from './componentes/activities/activities.component';
 
+//gmaps
+import { AgmCoreModule } from "@agm/core";
+import { GmapComponent } from './componentes/gmap/gmap.component';
+
 
 
 const customNotifierOptions: NotifierOptions = {
@@ -81,6 +85,7 @@ const customNotifierOptions: NotifierOptions = {
     CreateProyectComponent,
     EventsComponent,
     ActivitiesComponent,
+    GmapComponent,
   ],
   imports: [
     BrowserModule,
@@ -101,6 +106,9 @@ const customNotifierOptions: NotifierOptions = {
     AngularFirestoreModule.enablePersistence(),
     NotifierModule.withConfig(customNotifierOptions),
     NgbModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBmWGfkOq71k0RF2z2bYFNHdKO-l1zsM5s'
+    })
 
   ],
   providers: [AuthService],
