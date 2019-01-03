@@ -38,12 +38,25 @@ export class EventsService {
         type_activity : event.type,
         name: event.name,
         description: event.description,
-
         start: event.start,
         end: event.end,
         tools: event.tools,
         staff: event.staff,
         deleted: false,
+        observation : {
+          before : {
+            active : true,
+            evidence : []
+          },
+          during : {
+            active : true,
+            evidence : []
+          },
+          after : {
+            active : true,
+            evidence : []
+          },
+        }
 
         // observations : {
         //   before :{
