@@ -50,11 +50,11 @@ export class ActivitiesService {
 
         name: activity.name,
         description: activity.description,
-        type: activity.type,
+        // type: activity.type,
         project_id : activity.project_id,
         start: activity.start,
         end: activity.end,
-        tools : activity.tools,
+        material : activity.material,
         users : activity.users,
         deleted : false,
       }).then((res: any) => resolve(res), err => reject(err));
@@ -70,11 +70,11 @@ export class ActivitiesService {
       this.db.collection('activities').doc(activity.id).update({
         name: activity.name,
         description: activity.description,
-        type: activity.type,
+        // type: activity.type,
         project_id : activity.project_id,
         start: activity.start,
         end: activity.end,
-        tools : activity.tools,
+        material : activity.material,
       }).then((res:any) => resolve(res), err => reject(err));
     })
 

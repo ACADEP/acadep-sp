@@ -4,12 +4,10 @@ import { ActivitiesService } from "../../services/activities.service";
 import { ProjectsService } from "../../services/projects.service";
 import { activity } from '../../models/activity';
 import { project } from '../../models/project';
-
-import { isNgTemplate } from '@angular/compiler';
 import { UsersService } from "../../services/users.service";
-
 import { NgForm } from '@angular/forms/src/directives/ng_form';
 import { datetime } from 'src/app/models/dateTime';
+import { tool } from 'src/app/models/tool';
 
 // import { isNgTemplate } from '@angular/compiler';
 
@@ -27,19 +25,19 @@ export class ActivitiesComponent implements OnInit {
   // activity: activity[];
   activityDoc = {} as activity;
   activityCloneDoc = {} as activity;
-
   activityEdit = {} as activity;
-
+  material = {} as tool;
+  materialEdit = {} as tool;
 
 
   projects: project[];
 
-  public tool: string;
-  public toolEdit: string;
+  // public tool: string;
+  // public toolEdit: string;
   public name: string;
   public type: string;
   public description: string;
-  public tools: string[];
+  public tools: tool[];
   public project_id: string;
   public users: string[];
   public start: datetime;
@@ -47,8 +45,9 @@ export class ActivitiesComponent implements OnInit {
 
   persons;
 
-
-
+  public searchText : any;
+  public searching: boolean = false;
+  public faqs: any = [];
 
   // activitiesListArray: any[];
   // projectsListArray: any[];
@@ -58,8 +57,8 @@ export class ActivitiesComponent implements OnInit {
     'auditoria',
     'servicio',
     'supervision'
-
   ];
+
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService, public userservice : UsersService) {
@@ -68,6 +67,8 @@ export class ActivitiesComponent implements OnInit {
     this.activityDoc.end = {} as datetime;
     this.activityEdit.start = {} as datetime;
     this.activityEdit.end = {} as datetime;
+    this.activityDoc.material = [];
+    this.activityEdit.material = [];
     this.emptyForm()
 
   }
@@ -75,20 +76,35 @@ export class ActivitiesComponent implements OnInit {
   ngOnInit() {
     //actividades
     this.activitiesService.getActivities().subscribe(items => {
-      this.activities = items;
-    })
+      this.faqs = items;
+      // items.forEach(element => {
+        
+      //   this.faqs.push(element.name);
+      // });
 
+      console.log(this.faqs)
+    })
     //proyectos
     this.projectsService.getProjects().subscribe(items => {
       this.projects = items;
-      this.activityDoc.tools = [];
+      this.activityDoc.material = [];
     })
-
     this.userservice.getUsers().subscribe(items =>{
       this.persons = items;
       // console.log(this.users)
     })
 
+    // console.log(this.searchText)
+  }
+
+  public showSearchResults(event: any): void {
+    if (event.target.value.length >= 3) {
+      this.searching = true;
+      // console.log(this.searching)
+    } else {
+      this.searching = false;
+      // console.log(this.searching)
+    }
   }
 
   addActivity(form: NgForm) {
@@ -210,7 +226,7 @@ export class ActivitiesComponent implements OnInit {
 
   editActivity(activity) {
     this.activityEdit = activity;
-    console.log(this.activityEdit.type);
+    // console.log(this.activityEdit.type);
 
     $('#modalEdit').modal('show');
   }
@@ -226,9 +242,9 @@ export class ActivitiesComponent implements OnInit {
     this.end = activity.end;
 
     this.activityDoc.name = this.name;
-    this.activityDoc.type = this.type;
+    // this.activityDoc.type = this.type;
     this.activityDoc.description = this.description;
-    this.activityDoc.tools = this.tools;
+    this.activityDoc.material = this.tools;
     this.activityDoc.project_id = this.project_id;
     this.activityDoc.users = this.users;
     this.activityDoc.start = this.start;
@@ -236,29 +252,46 @@ export class ActivitiesComponent implements OnInit {
 
   }
 
-
-
-  pushTool() {
-
-    // console.log(this.tool);
-    this.activityDoc.tools.push(this.tool);
-    this.tool = '';
+  pushMaterial(form : NgForm) {
+    if (form.valid) {
+      const material: tool = {
+        name: form.controls.materialname.value,
+        quantity: form.controls.materialquant.value
+      }
+      this.activityDoc.material.push(material);      
+      this.material.name = '';
+      this.material.quantity = null;
+      $('#materialquant').focus();
+    } else {
+      this.notifier.notify('error', 'Los campos de insumos se pueden enviar vacíos');
+    }
   }
 
-  pushToolEdit() {
-
-    this.activityEdit.tools.push(this.toolEdit);
-    console.log(this.activityEdit.tools);
-    this.toolEdit = '';
+  pushMaterialEdit(form : NgForm) {
+    if (form.valid) {
+      const material: tool = {
+        name: form.controls.materialnameedit.value,
+        quantity: form.controls.materialquantedit.value
+      }
+      this.activityEdit.material.push(material);      
+      this.materialEdit.name = '';
+      this.materialEdit.quantity = null;
+      $('#materialquantedit').focus();
+    } else {
+      this.notifier.notify('error', 'Los campos de insumos se pueden enviar vacíos');
+    }
   }
 
-  deleteTool(item) {
-    this.activityDoc.tools.splice(item, 1);
+ 
+
+  deleteMaterial(index) {
+    this.activityDoc.material.splice(index, 1);
   }
 
-  deleteToolEdit(item) {
-    this.activityEdit.tools.splice(item, 1);
+  deleteMaterialEdit(index) {
+    this.activityEdit.material.splice(index, 1);
   }
+
 
   updateActivity() {
     this.activitiesService.updateActivity(this.activityEdit).then((result) => {
@@ -271,9 +304,9 @@ export class ActivitiesComponent implements OnInit {
 
   emptyForm() {
     this.activityDoc.name = '';
-    this.activityDoc.type = '';
+    // this.activityDoc.type = '';
     this.activityDoc.description = '';
-    this.activityDoc.tools = [];
+    this.activityDoc.material = [];
     this.activityDoc.project_id = '';
     this.activityDoc.users = [];
     this.activityDoc.start.date = '';
@@ -281,22 +314,6 @@ export class ActivitiesComponent implements OnInit {
     this.activityDoc.end.date = '';
     this.activityDoc.end.time = '';
   }
-
-
-
-  // onDeleteActivity(item) {
-  //   // console.log(item)
-  //   this.activitiesService.deleteActivity(item.$key);
-  // }
-
-  // getProyect(item) {
-
-  //   this.projectsService.getProyect(item.project_id).then((result: any) => {
-  //     return result.name;
-  //   }).catch((err) => {
-  //     console.log(err)
-  //   });
-  // }
 
   removeErrors()
   {
@@ -307,18 +324,14 @@ export class ActivitiesComponent implements OnInit {
 
   toogleActivities()
   {
-
     if ($('#btncolapse').hasClass('fa-plus-circle')) {
       $('#btncolapse').removeClass('fa-plus-circle');
       $('#btncolapse').addClass('fa-minus-circle');
     } else {
       $('#btncolapse').removeClass('fa-minus-circle');
       $('#btncolapse').addClass('fa-plus-circle');
-
     }
-
     $('.fa-chevron-down').trigger('click');
-    
   }
 
 }

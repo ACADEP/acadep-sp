@@ -1,11 +1,12 @@
 import { datetime } from "./dateTime";
+import { tool } from "./tool";
 
 export interface activity {
     id:string;
     name: string;
-    type: string;
+    // type: string;
     description: string;
-    tools : string[];
+    material : tool[];
     project_id : string;
     users: string[];
     start: datetime;

@@ -28,6 +28,7 @@ import { ActivitiesComponent } from './componentes/activities/activities.compone
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
+ import { SearchPipe } from './pipes/search.pipe';
 
 
 
@@ -86,6 +87,7 @@ const customNotifierOptions: NotifierOptions = {
     EventsComponent,
     ActivitiesComponent,
     GmapComponent,
+    SearchPipe,
   ],
   imports: [
     BrowserModule,
@@ -103,7 +105,7 @@ const customNotifierOptions: NotifierOptions = {
         messagingSenderId: "958208857248"
       }
     ),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     NotifierModule.withConfig(customNotifierOptions),
     NgbModule,
     AgmCoreModule.forRoot({
