@@ -1,0 +1,42 @@
+<mat-toolbar style="background: none">
+  <span>{{data.event.name}}</span>
+</mat-toolbar>
+<mat-tab-group animationDuration="2000ms" class="col-centered">
+  <mat-tab>
+    <ng-template active mat-tab-label>
+      <mat-icon class="example-tab-icon">arrow_back</mat-icon>
+      Antes
+    </ng-template>
+
+
+    <mat-card style="margin-top: 10px" class="example-card" style="background: #dcf8c6; border-radius:12px" *ngFor="let msg of data.before">
+      <img  width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu" *ngIf="msg.type == 'image'">
+      <mat-card-content>
+        <p *ngIf="msg.type == 'text'">
+         {{msg.src}}
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+
+
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">arrow_downward</mat-icon>
+      Durante
+    </ng-template>
+    Content 2
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">arrow_forward
+      </mat-icon>
+      Despues
+    </ng-template>
+
+    Content 3
+  </mat-tab>
+</mat-tab-group>

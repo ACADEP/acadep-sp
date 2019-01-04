@@ -41,7 +41,7 @@
               </header>
               <div class="list-group filter-wrap">
 
-                <article class="list-group-item" *ngFor="let event of eventsCollection; let i = index">
+                <article class="list-group-item" *ngFor="let event of eventsCollection; let i = index" [ngStyle]="{'background':event.active === false ? 'rgb(237, 255, 237)' : 'inherit' }">
 
                   <header class="filter-header">
 
@@ -50,6 +50,7 @@
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editEvent(event)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
+                    <i class="icon-action fa fa-eye" style="color: black" (click)="seeEvent(event)" *ngIf="event.active === false"></i>
                     <h6 class="title">{{event.name}} </h6>
 
                   </header>
@@ -210,8 +211,8 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <p>Cantidad</p>
-                          <input id="toolquant" type="number" min="1" size="2px" name="toolquant" [(ngModel)]="tool.quantity" class="form-control"
-                            placeholder="cantidad" required>
+                          <input id="toolquant" type="number" min="1" size="2px" name="toolquant" [(ngModel)]="tool.quantity"
+                            class="form-control" placeholder="cantidad" required>
                         </div>
                       </div>
                       <div class="col-md-8">
@@ -322,33 +323,33 @@
           <hr class="b-s-dashed">
 
           <div class="row text-center">
-              <div class="col-md-12">
-                <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
-                <div class="input-group col-centered">
-                  <div class="col-md-6">
-                    <p><small>Fecha:</small></p>
-                    <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start.date" required>
-                  </div>
-                  <div class="col-md-6">
-                    <p><small>Hora:</small></p>
-                    <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start.time" required>
-                  </div>
+            <div class="col-md-12">
+              <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start.date" required>
                 </div>
-              </div>
-              <div class="col-md-12" style="margin-top:15px">
-                <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
-                <div class="input-group col-centered">
-                  <div class="col-md-6">
-                    <p><small>Fecha:</small></p>
-                    <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
-                  </div>
-                  <div class="col-md-6">
-                    <p><small>Hora:</small></p>
-                    <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
-                  </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start.time" required>
                 </div>
               </div>
             </div>
+            <div class="col-md-12" style="margin-top:15px">
+              <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
+                </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
           <hr class="b-s-dashed">
@@ -379,15 +380,15 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <p>Cantidad</p>
-                  <input type="number" id="toolquantedit" min="1" size="2px" name="toolquant" [(ngModel)]="toolEdit.quantity" class="form-control"
-                    placeholder="cantidad" required>
+                  <input type="number" id="toolquantedit" min="1" size="2px" name="toolquant" [(ngModel)]="toolEdit.quantity"
+                    class="form-control" placeholder="cantidad" required>
                 </div>
               </div>
               <div class="col-md-8">
                 <div class="form-group">
                   <p>Nombre</p>
                   <div class="icon-after-input">
-                    <input type="text"  class="form-control input-sm p-r-80" name="toolname" placeholder="nombre..."
+                    <input type="text" class="form-control input-sm p-r-80" name="toolname" placeholder="nombre..."
                       [(ngModel)]="toolEdit.name" required>
                     <div class="icon">
                       <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
@@ -411,8 +412,8 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <p>Cantidad</p>
-                  <input type="number" id="personquantedit" min="1" size="2px" name="personquant" [(ngModel)]="personEdit.quantity" class="form-control"
-                    placeholder="cantidad" required>
+                  <input type="number" id="personquantedit" min="1" size="2px" name="personquant" [(ngModel)]="personEdit.quantity"
+                    class="form-control" placeholder="cantidad" required>
                 </div>
               </div>
               <div class="col-md-8">
@@ -444,6 +445,85 @@
 
       </div>
       <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- moda para ver evidencia -->
+
+<!-- Modal -->
+<div class="modal fade" id="seeevent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" style="color:red" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3>{{EventSee.name | titlecase}}</h3>
+      </div>
+      <div class="modal-body">
+
+        <mat-tab-group animationDuration="2000ms" class="col-centered">
+          <mat-tab>
+            <ng-template active mat-tab-label>
+              <mat-icon class="example-tab-icon">arrow_back</mat-icon>
+              Antes
+            </ng-template>
+            <div *ngFor="let msg of EventSee.observation.before.evidence">
+              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
+                *ngIf="msg.type == 'image'">
+                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
+                <mat-card-content>
+                </mat-card-content>
+              </mat-card>
+              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
+                {{msg.src}}
+              </mat-card>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">arrow_downward</mat-icon>
+              Durante
+            </ng-template>
+            <div *ngFor="let msg of EventSee.observation.during.evidence">
+                <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
+                  *ngIf="msg.type == 'image'">
+                  <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                  </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
+                  {{msg.src}}
+                </mat-card>
+              </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="example-tab-icon">arrow_forward
+              </mat-icon>
+              Despues
+            </ng-template>
+            <div *ngFor="let msg of EventSee.observation.after.evidence">
+                <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
+                  *ngIf="msg.type == 'image'">
+                  <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                  </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
+                  {{msg.src}}
+                </mat-card>
+              </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
     </div>
