@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
@@ -9,8 +9,15 @@ import { UsersService } from "../../services/users.service";
 import { User } from "../../models/user";
 import { tool } from "../../models/tool";
 import { datetime } from "../../models/dateTime"
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 
 declare var $: any;
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 
 
@@ -22,15 +29,11 @@ declare var $: any;
 export class EventsComponent implements OnInit {
 
   private readonly notifier: NotifierService;
-
-
   types = [
-
     'auditoria',
     // 'servicio',
     'supervision',
     'revision'
-
   ];
 
   eventsCollection: Event[];
@@ -44,18 +47,21 @@ export class EventsComponent implements OnInit {
 
   person = {} as tool;
   personEdit = {} as tool;
+  EventSee: { observation: { before: { evidence: any[]; }; during: { evidence: any[]; }; after: { evidence: any[]; }; }; };
 
 
 
 
   constructor(public users: UsersService, public eventsService: EventsService,
-    notifierService: NotifierService, public activitiesService: ActivitiesService) {
+    notifierService: NotifierService, public activitiesService: ActivitiesService
+    , public dialog: MatDialog) {
     this.notifier = notifierService;
     this.eventDoc.start = {} as datetime;
     this.eventDoc.end = {} as datetime;
     this.eventDocEdit.start = {} as datetime;
     this.eventDocEdit.end = {} as datetime;
     this.emptyForm();
+    this.eventSeeNull();
   }
 
   ngOnInit() {
@@ -74,7 +80,6 @@ export class EventsComponent implements OnInit {
       this.activitiesCollection = items;
     })
 
-
   }
 
   emptyForm() {
@@ -82,10 +87,6 @@ export class EventsComponent implements OnInit {
     this.eventDoc.user_id = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.description = '';
-    // this.eventDoc.start.date = '';
-    // this.eventDoc.start.time = '';
-    // this.eventDoc.end.date = '';
-    // this.eventDoc.end.time = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.user_id = '';
     this.eventDoc.tools = [];
@@ -96,19 +97,31 @@ export class EventsComponent implements OnInit {
     this.tool.quantity = null;
   }
 
-  toogleEvents() {
+  eventSeeNull(): void {
+    this.EventSee = {
+      observation: {
+        before: {
+          evidence: []
+        },
+        during: {
+          evidence: []
+        },
+        after: {
+          evidence: []
+        }
+      }
+    }
+  }
 
+  toogleEvents() {
     if ($('#btncolapse').hasClass('fa-plus-circle')) {
       $('#btncolapse').removeClass('fa-plus-circle');
       $('#btncolapse').addClass('fa-minus-circle');
     } else {
       $('#btncolapse').removeClass('fa-minus-circle');
       $('#btncolapse').addClass('fa-plus-circle');
-
     }
-
     $('.fa-chevron-down').trigger('click');
-
   }
 
 
@@ -140,7 +153,7 @@ export class EventsComponent implements OnInit {
         $('#type').removeClass('error')
         $('#labeltype').removeClass('errortxt')
       }
-      
+
       if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
         $('#starttime').addClass('error')
         $('#startdate').addClass('error')
@@ -203,7 +216,7 @@ export class EventsComponent implements OnInit {
 
   }
 
-  updateEvent(form:NgForm) {
+  updateEvent(form: NgForm) {
     console.log(this.eventDocEdit)
     this.eventsService.updateEvent(this.eventDocEdit).then(res => {
       this.notifier.notify('success', 'Evento actualizdo');
@@ -222,8 +235,6 @@ export class EventsComponent implements OnInit {
   objectValues(obj) {
     return Object.values(obj);
   }
-
-
 
   pushTool(form: NgForm) {
     if (form.valid) {
@@ -295,7 +306,7 @@ export class EventsComponent implements OnInit {
   deleteTool(item) {
     this.eventDoc.tools.splice(item, 1);
   }
-  
+
   deletePersonal(item) {
     this.eventDoc.staff.splice(item, 1);
   }
@@ -303,7 +314,7 @@ export class EventsComponent implements OnInit {
   deleteToolEdit(item) {
     this.eventDocEdit.tools.splice(item, 1);
   }
-  
+
   deletePersonalEdit(item) {
     this.eventDocEdit.staff.splice(item, 1);
   }
@@ -313,7 +324,14 @@ export class EventsComponent implements OnInit {
     $('input').removeClass('error');
     $('label').removeClass('errortxt');
     $('select').removeClass('error');
+  }
 
+  seeEvent(event) {
+    
+      this.EventSee = event;
+      $('#seeevent').modal('show');
+
+  
   }
 
 }

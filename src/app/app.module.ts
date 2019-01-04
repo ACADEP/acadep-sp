@@ -28,6 +28,15 @@ import { ActivitiesComponent } from './componentes/activities/activities.compone
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { 
+  MatTabsModule,
+  MatIconModule,
+  MatDialogModule,
+  MatInputModule,
+  MatCardModule,
+  MatToolbarModule
+ } from "@angular/material";
 
 
 
@@ -74,6 +83,7 @@ const customNotifierOptions: NotifierOptions = {
 
 @NgModule({
   declarations: [
+
     AppComponent,
     LoginComponent,
     DashboardComponent,
@@ -89,8 +99,14 @@ const customNotifierOptions: NotifierOptions = {
   ],
   imports: [
     BrowserModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
+    MatInputModule,
     AppRoutingModule,
     FormsModule,
+    MatDialogModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(
@@ -108,8 +124,11 @@ const customNotifierOptions: NotifierOptions = {
     NgbModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBmWGfkOq71k0RF2z2bYFNHdKO-l1zsM5s'
-    })
+    }),
+    NoopAnimationsModule
 
+  ],
+  entryComponents: [
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

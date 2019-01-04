@@ -43,3 +43,12 @@
 .errortxt {
   color: rgb(161, 43, 43);
 }
+
+img{
+  display:block;
+  margin:auto;
+  }
+
+  .mat-card{
+    margin-top: 15px !important;
+  }
