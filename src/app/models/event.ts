@@ -4,6 +4,8 @@ import { datetime } from "./dateTime";
 
 
 export interface Event {
+  
+    status : number;
     id? : string;
     name : string;
     description : string,

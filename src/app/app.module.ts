@@ -13,7 +13,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import {environment} from '../environments/environment';
+import { FullCalendarModule } from 'ng-fullcalendar';
 
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
@@ -24,6 +24,7 @@ import { CreateProyectComponent } from './componentes/proyectos/create-proyect/c
 import { EventsComponent } from './componentes/events/events.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ActivitiesComponent } from './componentes/activities/activities.component';
+import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 
 //gmaps
 import { AgmCoreModule } from "@agm/core";
@@ -96,10 +97,13 @@ const customNotifierOptions: NotifierOptions = {
     EventsComponent,
     ActivitiesComponent,
     GmapComponent,
+    CalendarEventsComponent
+    
   ],
   imports: [
     BrowserModule,
     MatTabsModule,
+    FullCalendarModule,
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
@@ -119,7 +123,7 @@ const customNotifierOptions: NotifierOptions = {
         messagingSenderId: "958208857248"
       }
     ),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     NotifierModule.withConfig(customNotifierOptions),
     NgbModule,
     AgmCoreModule.forRoot({

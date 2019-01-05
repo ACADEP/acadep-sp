@@ -43,6 +43,7 @@ export class EventsService {
         tools: event.tools,
         staff: event.staff,
         deleted: false,
+        status : 1,
         observation : {
           before : {
             active : true,
@@ -103,7 +104,8 @@ export class EventsService {
         start: event.start,
         end: event.end,
         tools: event.tools,
-        staff: event.staff
+        staff: event.staff,
+        status : 1
       }).then((res:any) => resolve(res), err => reject(err));
     })
   }

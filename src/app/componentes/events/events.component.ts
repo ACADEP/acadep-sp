@@ -47,7 +47,7 @@ export class EventsComponent implements OnInit {
 
   person = {} as tool;
   personEdit = {} as tool;
-  EventSee: { observation: { before: { evidence: any[]; }; during: { evidence: any[]; }; after: { evidence: any[]; }; }; };
+  EventSee:any = { observation: { before: { evidence: [] }, during: { evidence: [] }, after: { evidence: [] } } };
 
 
 
