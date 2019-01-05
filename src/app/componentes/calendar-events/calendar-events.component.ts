@@ -28,6 +28,22 @@ export class CalendarEventsComponent implements OnInit {
   ) {
 
     this.events = [];
+    this.eventShow = {
+      name: '',
+      description: '',
+      start: {
+        date:'',
+        time: ''
+      },
+      end: {
+        date:'',
+        time: ''
+      },
+      activity_id: '',
+      user_id: '',
+      tools: [],
+      staff: []
+    }
 
   }
 

@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Event } from '../models/event';
 import { Action } from 'rxjs/internal/scheduler/Action';
 
+declare var $ : any;
 
 @Injectable({
   providedIn: 'root'
@@ -59,27 +60,32 @@ export class EventsService {
           },
         }
 
-        // observations : {
-        //   before :{
-        //     photos:{},
-        //     texts: {},
-        //     active:true
-        //   },
-        //   during :{
-        //     photos:{},
-        //     texts: {},
-        //     active:true
-        //   },
-        //   after :{
-        //     photos:{},
-        //     texts: {},
-        //     active:true
-        //   }
-        // }
       }).then((res: any) =>
       {
         this.db.collection('events').doc(res.id).update({
           id: res.id
+        }).then(async res =>{
+
+          //notificacion push
+
+           
+          $.ajax({
+            data : {
+              "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
+              "included_segments": ["All"],
+              "template_id":"0d112e3e-acb1-4e78-9ad3-7fa19b9f1c86"
+              // "contents": {"es": "tienes trabajo por hacer!", "en": "tienes trabajo por hacer!"}
+            },
+            url : 'https://onesignal.com/api/v1/notifications',
+            type : 'post',
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader ("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
+          },
+            success : function (res){
+              console.log(res);
+            }
+          })
+
         })
         resolve(res)
       } , err => reject(err));

@@ -39,6 +39,8 @@ import {
   MatToolbarModule
  } from "@angular/material";
 
+ import { HttpClientModule } from '@angular/common/http'; 
+
 
 
 const customNotifierOptions: NotifierOptions = {
@@ -102,6 +104,7 @@ const customNotifierOptions: NotifierOptions = {
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     MatTabsModule,
     FullCalendarModule,
     MatToolbarModule,
@@ -134,7 +137,7 @@ const customNotifierOptions: NotifierOptions = {
   ],
   entryComponents: [
   ],
-  providers: [AuthService],
+  providers: [AuthService,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

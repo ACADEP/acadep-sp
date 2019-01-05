@@ -222,7 +222,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                   <b>Descripción:</b> {{eventShow.description}} <br>
                   <!-- <b>Tipo de actividad:</b> {{eventShow.activity_id}} <br> -->
                   <b>Inicio:</b> {{eventShow.start.date}}&nbsp;{{eventShow.start.time}} hrs. <br>
@@ -232,21 +232,30 @@
                   <!-- <b>tools:</b> {{eventShow.tools}} -->
 
                 </div>
-                <!-- <div class="col-md-6">
-                  <div *ngIf="eventShow.tools.length > 0">
+                <div class="col-md-6">
+                  <div >
                     <b>Herramientas: </b><br>
                     <ul>
                       <li *ngFor="let item of eventShow.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
                     </ul>
+                    <div *ngIf="eventShow.tools.length < 1">
+                        <small><i>Ninguna herramienta registrada</i></small>
+                      </div>
                     <hr>
                   </div>
 
+                  <div >
 
-                  <b>Personal:</b><br>
-                  <ul>
-                    <li *ngFor="let person of eventShow.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
-                  </ul>
-                </div> -->
+                    <b>Personal:</b><br>
+                    <ul>
+                      <li *ngFor="let person of eventShow.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
+                    </ul>
+                    <div *ngIf="eventShow.staff.length < 1">
+                      <small><i>Ninguna persona registrada</i></small>
+                    </div>
+                  </div>
+
+                </div>
               </div>
         </div>
         <div class="modal-footer">
