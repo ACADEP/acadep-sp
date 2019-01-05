@@ -16,6 +16,7 @@ export class EventsService {
   events: Observable<Event[]>;
   eventDoc: Event;
 
+  public nameEvent: string;
   constructor(public db: AngularFirestore) { }
 
   getEvents() {
@@ -31,6 +32,7 @@ export class EventsService {
   }
 
   addEvent(event: Event) {
+    this.nameEvent = event.name;
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
@@ -67,14 +69,13 @@ export class EventsService {
         }).then(async res =>{
 
           //notificacion push
-
-           
+             
           $.ajax({
             data : {
               "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
               "included_segments": ["All"],
-              "template_id":"0d112e3e-acb1-4e78-9ad3-7fa19b9f1c86"
-              // "contents": {"es": "tienes trabajo por hacer!", "en": "tienes trabajo por hacer!"}
+              "headings":{"es":"📆 Nuevo evento", "en":"📆 Nuevo evento"},
+               "contents": {"es": this.nameEvent, "en": this.nameEvent}
             },
             url : 'https://onesignal.com/api/v1/notifications',
             type : 'post',
