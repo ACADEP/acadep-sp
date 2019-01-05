@@ -79,8 +79,17 @@ export class CalendarEventsComponent implements OnInit {
           center: 'title',
           right: 'month,agendaWeek,agendaDay,listMonth'
         },
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Día',
+            list:     'Lista'
+        },
         selectable: true,
         events: this.events,
+        locale: 'es',
+       
       };
       // console.log(this.events);
     })
