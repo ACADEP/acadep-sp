@@ -8,15 +8,15 @@ import { InicioComponent } from "./componentes/inicio/inicio.component";
 import { CreateProyectComponent } from "./componentes/proyectos/create-proyect/create-proyect.component";
 import { EventsComponent } from "./componentes/events/events.component";
 import { GmapComponent } from "./componentes/gmap/gmap.component";
-
+import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 const routes: Routes = [
-  { path: '', component:  InicioComponent },
+  { path: '', component:  CalendarEventsComponent },
   { path: 'map', component:  GmapComponent },
   { path: 'users', component:  RegisterUserComponent },
   { path: 'events', component:  EventsComponent },
   { path: 'activities', component:  ActivitiesComponent },
   { path: 'projects', component:  CreateProyectComponent },
-  { path: 'calendar', component:  CalendarComponent },
+  { path: 'calendar', component:  InicioComponent },
   { path: 'aside', component:  AsideComponent },
   { path: '**', pathMatch: 'full', redirectTo: ''}
 

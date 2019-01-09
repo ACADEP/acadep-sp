@@ -1,0 +1,267 @@
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        ACADEP
+      </h6>
+      <h3 class="dashhead-title">Inicio</h3>
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Inicio
+      </div>
+    </div>
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+
+
+
+
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="box">
+          <!-- <h2 class="text-center">hola</h2> -->
+          <form action="">
+
+            <form style="margin-top:10px; margin-left:15px">
+              <div class="row">
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <!-- <label for="itext">Buscar Proyecto</label> -->
+                    <div class="icon-after-input">
+                      <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar...">
+                      <div class="icon">
+                        <button class="btn btn-info btn-sm btn-rect" style="background: #337ab7; border: #337ab7" type="button"><i class="fa fa-search fa-lg"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-2 pull-left">
+                  <div class="form-group">
+                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                    <select id="type" class="form-control" name="type" required>
+                      <option value="">Proyectos</option>
+                      <option value="">proyecto 1 </option>
+                      <option value="">proyecto 2 </option>
+                      <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                    <select id="type" class="form-control" name="type" required>
+                      <option value="">Asignaciones</option>
+                      <option value="">jhon doe</option>
+                      <option value="">jane doe</option>
+                      <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2" style="text-align:right">
+                    <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                         <span class="vertical-super">Actividades</span> 
+                        </label>
+                      </div>
+                </div>
+                <div class="col-md-2" style="text-align:left">
+                    <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" checked name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                         <span class="vertical-super">Eventos</span> 
+                        </label>
+                      </div>
+                </div>
+
+              </div>
+            </form>
+
+
+
+          </form>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Eventos</h3>
+              </header>
+              <div class="box-body">
+
+                <button id="newEventBtn" type="button" class="btn btn-outline btn-primary btn-block" data-toggle="modal"
+                  data-target="#eventModal">
+                  Nuevo <i class="fa fa-plus"></i>
+                </button>
+              </div>
+              <br>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Código de colores</h3>
+              </header>
+              <div class="box-body">
+                <!-- <p>Arrastre un evento para insertarlo en el calendario.</p> -->
+                <div id='external-events'>
+                  <div class='fc-event bg-turquoise'>Sin iniciar</div>
+                  <div class='fc-event bg-peter-river'>En curso</div>
+                  <div class='fc-event bg-amethyst'>Realizado</div>
+                  <div class='fc-event bg-sun-flower'>No relizado</div>
+                  <div class='fc-event bg-pomegranate'>No definido</div>
+                </div>
+                <!-- <div class="checkbox">
+              <label class="text-wisteria switch fa-lg" for='drop-remove'>
+                <input class="hidden" type='checkbox' id='drop-remove' />
+                <i class="fa"></i>
+                Remover despues de insertar
+              </label>
+            </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <div class="box">
+          <div class="box-body">
+            <!-- <p>
+          calendar-events works!
+        </p> -->
+            <div *ngIf="calendarOptions">
+              <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)"
+                (eventDrop)="updateEvent($event.detail)" (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEGIN: modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="eventModalLabel">Crear nuevo evento</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="title">Nombre de evento</label>
+                <input type="text" class="form-control" id="title" placeholder="Nombre de evento" required>
+              </div>
+
+              <div class="checkbox">
+                <label class="switch">
+                  <input class="hidden" type="checkbox" id="allDay">
+                  <i class="fa fa-lg text-wisteria"></i>
+                  Todo el día
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="start">Empieza</label>
+                <input class="form-control" id="start" data-plugin=flatpickr data-enable-time=true required>
+              </div>
+              <div class="form-group">
+                <label for="end">Termina</label>
+                <input class="form-control" id="end" data-plugin=flatpickr data-enable-time=true>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" id="deleteEventBtn">Eliminar Evento</button>
+            <button type="button" class="btn btn-success" id="updateEventBtn" data-dismiss="modal">Actualizar Evento</button>
+            <button type="button" class="btn btn-primary" id="createEventBtn" data-dismiss="modal">Crear Evento</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END: modal -->
+
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" style="color:red" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          <h3 class="modal-title text-center" id="exampleModalLabel">{{eventShow.name}}</h3>
+          <!-- <h5 class="text-center">Actividad: {{eventShow.activity_id }}</h5> -->
+          
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                  <b>Descripción:</b> {{eventShow.description}} <br>
+                  <!-- <b>Tipo de actividad:</b> {{eventShow.activity_id}} <br> -->
+                  <b>Inicio:</b> {{eventShow.start.date}}&nbsp;{{eventShow.start.time}} hrs. <br>
+                  <b>Final:</b> {{eventShow.end.date}}&nbsp;{{eventShow.end.time}} hrs.<br>
+                  <b>Actividad:</b> {{eventShow.activity_id }} <br>
+                  <b>Usuario que lo realizará:</b> {{eventShow.user_id}}
+                  <!-- <b>tools:</b> {{eventShow.tools}} -->
+
+                </div>
+                <div class="col-md-6">
+                  <div >
+                    <b>Herramientas: </b><br>
+                    <ul>
+                      <li *ngFor="let item of eventShow.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                    </ul>
+                    <div *ngIf="eventShow.tools.length < 1">
+                        <small><i>Ninguna herramienta registrada</i></small>
+                      </div>
+                    <hr>
+                  </div>
+
+                  <div >
+
+                    <b>Personal:</b><br>
+                    <ul>
+                      <li *ngFor="let person of eventShow.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
+                    </ul>
+                    <div *ngIf="eventShow.staff.length < 1">
+                      <small><i>Ninguna persona registrada</i></small>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
