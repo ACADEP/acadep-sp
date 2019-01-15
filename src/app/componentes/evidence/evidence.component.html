@@ -1,0 +1,144 @@
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        App / Evidencia
+      </h6>
+      <h3 class="dashhead-title">Evidencia</h3>
+
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Evidencia
+      </div>
+    </div>
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN: clave.js -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Evidencia de eventos</h3>
+                <div class="box-tools">
+                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent"
+                    (click)="toogleEvents()"></i>
+                  <!-- <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i> -->
+                </div>
+              </header>
+              <div class="list-group filter-wrap">
+
+                <article class="list-group-item">
+
+                  <header class="filter-header">
+
+
+
+                    <!-- <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
+                    <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editEvent(event)"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
+                    <i class="icon-action fa fa-eye" style="color: black" (click)="seeEvent(event)" *ngIf="event.active === false"></i> -->
+                    <h4 class="title">nombre de evento capturado</h4>
+
+                  </header>
+                  <div>
+                    <div class="row">
+
+                      <div class="col-md-8">
+                        <h4>Texto</h4>
+                        <p style="padding:20px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa id, facere nesciunt nihil culpa
+                          earum neque. Reprehenderit quibusdam labore dignissimos earum porro voluptate eum suscipit,
+                          aperiam quas nisi tempore dolor.</p></div>
+                      <div class="col-md-4"><h4>Documentos</h4></div>
+                      <div class="col-md-12"><h4>imagenes</h4>
+                        <div class="gallerize-example">
+                          <div class="row">
+                            <div class="col-md-1" *ngFor="let item of items; index as i">
+                              <div class="container">
+                                <img  
+                                [lightbox]="i"
+                                [src]="item.data.thumb">
+
+                              </div>
+                            </div>
+                          </div>
+                          
+                            <!-- <p class="container">
+                              
+                            </p>
+                           -->
+                          </div>
+                      </div>
+                      
+                      <!-- <div class="col-md-6">
+                        <b>Descripción:</b> {{event.description}} <br>
+                        <b>Tipo de actividad:</b> {{event.actividad}} <br>
+                        <b>Inicio:</b> {{event.start}} <br>
+                        <b>Final:</b> {{event.end}}<br>
+                        <b>Actividad:</b> {{event.activity_id }} <br>
+                        <b>Usuario que lo realizará:</b> {{event.user_id}}
+                      </div> -->
+                      <!-- <div class="col-md-6">
+                        <div *ngIf="event.tools.length > 0">
+                          <b>Herramientas: </b><br>
+                          <ul>
+                            <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                          </ul>
+                          <hr>
+                        </div>
+                        <b>Personal:</b><br>
+                        <ul>
+                          <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
+                        </ul>
+                      </div> -->
+                    </div>
+                  </div>
+                </article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END: clave.js -->
+
+
+      </div>
+
+      <!-- <div class="col-md-4">
+        <div class="row">
+
+          <div class="col-xs-12">
+            <div class="box">
+              <header class="bg-asbestos text-white">
+                <h4>Crear nuevo evento</h4>
+              </header>
+              <div class="box-body collapse in">
+
+               
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> -->
+    </div>
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>
+<!-- END: .main-content -->

@@ -46,7 +46,7 @@
         <li class="nav-header">Principal</li>
 
         <li>
-          <a class="active" routerLink="">
+          <a routerLink="/home" [routerLinkActive]="['active']">
             <span class="nav-icon">
               <i class="fa fa-fw fa-calendar"></i>
             </span>
@@ -59,7 +59,7 @@
         <!-- BEGIN: chart -->
 
         <li>
-            <a href="" routerLink="events">
+            <a href="" routerLink="events" [routerLinkActive]="['active']">
               <span class="nav-icon">
                 <i class="fa fa-fw fa-file"> </i>
               </span>
@@ -76,7 +76,7 @@
                   </ul> -->
           </li>
           <li>
-              <a href="" routerLink="activities">
+              <a href="" routerLink="activities" [routerLinkActive]="['active']">
                 <span class="nav-icon">
                   <i class="fa fa-fw fa-folder-open"> </i>
                 </span>
@@ -93,7 +93,7 @@
                     </ul> -->
             </li>
             <li>
-              <a href="" routerLink="projects">
+              <a href="" routerLink="projects" [routerLinkActive]="['active']">
                 <span class="nav-icon">
                   <i class="fa fa-fw fa-archive"> </i>
                 </span>
@@ -102,7 +102,7 @@
             </li>
 
         <li>
-          <a href="" routerLink="users">
+          <a href="" routerLink="users" [routerLinkActive]="['active']">
             <span class="nav-icon">
               <i class="fa fa-fw fa-users"> </i>
             </span>

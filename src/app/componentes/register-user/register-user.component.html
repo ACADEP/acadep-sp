@@ -107,7 +107,7 @@
                             </div>
                           </div> -->
                           <div class="form-group">
-                            <label id="labelemail" for="itext">E-mail <span class="required">*</span></label>
+                            <label id="labelemail" for="itext">Correo electrónico <span class="required">*</span></label>
                             <div class="icon-before-input">
                               <input id="email" type="text" class="form-control" [(ngModel)]="userDoc.email" name="email" 
                               placeholder="Escriba un nombre para el proyecto ..." required>
@@ -120,7 +120,7 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label id="labelrole" for="itext">Rol de empleado <span class="required">*</span></label>
+                    <label id="labelrole" for="itext">Rol <span class="required">*</span></label>
                     <select id="role" class="form-control" [(ngModel)]="selectRol" name="role" [(ngModel)]="this.role" required>
                       <option value="">Seleccione una opción</option>
                       <option value="employee">Empleado</option>
@@ -131,7 +131,7 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label id="labelpass" for="itext">Password <span class="required">*</span></label>
+                    <label id="labelpass" for="itext">Contraseña <span class="required">*</span></label>
                       <p *ngIf="pass.invalid && pass.touched">
                           <small class="errortxt"><b> la contraseña debe tener al menos 6 caracteres</b></small>
                       </p> 
@@ -158,7 +158,7 @@
                     </div>
                   </div>
                   <div class="col-md-12 text-center" style="margin-top:30px">
-                    <button type="submit" class="btn btn-success">Crear Usuario</button>
+                    <button type="submit" class="btn btn-success">Crear</button>
                   </div>
 
                 </form>

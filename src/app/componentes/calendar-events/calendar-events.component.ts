@@ -3,6 +3,7 @@ import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 import { EventsService } from "../../services/events.service";
 import { reduce } from 'rxjs/operators';
+import { EventManager } from '@angular/platform-browser';
 
 declare var $: any;
 
@@ -75,9 +76,9 @@ export class CalendarEventsComponent implements OnInit {
         }
 
         const data = {
-          title: event.name,
-          start: event.start.date,
-          end: event.end.date,
+          title: event.title,
+          start: event.start,
+          end: event.end,
           color: color,
           details: event
         }
@@ -100,7 +101,7 @@ export class CalendarEventsComponent implements OnInit {
             month:    'Mes',
             week:     'Semana',
             day:      'Día',
-            list:     'Lista'
+            list:     'Lista',
         },
         selectable: true,
         events: this.events,
@@ -124,4 +125,11 @@ export class CalendarEventsComponent implements OnInit {
     $('#details').modal('show');
   }
 
+  clickButton(event){
+    console.log(event) //nothing
+  }
+
+  updateEvent($event){
+console.log($event)
+  }
 }

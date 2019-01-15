@@ -29,17 +29,27 @@ import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { 
   MatTabsModule,
   MatIconModule,
   MatDialogModule,
   MatInputModule,
+  MatCheckboxModule,
   MatCardModule,
   MatToolbarModule
  } from "@angular/material";
 
- import { HttpClientModule } from '@angular/common/http'; 
+ //faltpickr
+import { FlatpickrModule } from 'angularx-flatpickr';
+
+ import { HttpClientModule } from '@angular/common/http';
+import { EvidenceComponent } from './componentes/evidence/evidence.component'; 
+
+import { GalleryModule } from  '@ngx-gallery/core';
+import { LightboxModule } from  '@ngx-gallery/lightbox';
+
+
 
 
 
@@ -99,16 +109,26 @@ const customNotifierOptions: NotifierOptions = {
     EventsComponent,
     ActivitiesComponent,
     GmapComponent,
-    CalendarEventsComponent
+    CalendarEventsComponent,
+    EvidenceComponent
     
   ],
   imports: [
+    GalleryModule,
+    BrowserAnimationsModule,
+    LightboxModule,
+    FlatpickrModule.forRoot(
+      {
+      // locale: 'Es'
+      }
+    ),
     BrowserModule,
     HttpClientModule,
     MatTabsModule,
     FullCalendarModule,
     MatToolbarModule,
     MatIconModule,
+    MatCheckboxModule,
     MatCardModule,
     MatInputModule,
     AppRoutingModule,

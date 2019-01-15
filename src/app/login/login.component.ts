@@ -3,7 +3,6 @@ import { AuthService } from '../servicios/auth.service';
 import { NgForm } from '@angular/forms/src/directives/ng_form';
 import { NotifierService } from 'angular-notifier';
 
-
 import { AngularFireDatabase, AngularFireList, snapshotChanges } from '@angular/fire/database';
 
 import { Router } from '@angular/router';
@@ -35,16 +34,25 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmitLogin(form : NgForm) {
-    console.log(form);
+    // console.log(form);
     if (form.valid) {
       $('#mail').removeClass('error')
       $('#pass').removeClass('error')
 
       //  console.log(form);
     this.authService.login(this.email, this.password)
-      .then((res) => {
-        console.log(res);
-        this.router.navigate(['/'])
+      .then((res :any) => {
+        
+        this.authService.getAdmin(res.user.uid).then( res => {
+          if (res == true) {
+            // console.log('redirigido')
+            this.router.navigate(['/'])
+          } else {
+            this.notifier.notify('error', 'No tienes permiso para entrar');
+            this.authService.logout();
+          }
+        });       
+       
       }).catch((err) => {
         console.log(err);
         switch (err.code) {

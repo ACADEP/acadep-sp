@@ -8,7 +8,7 @@ import { activity } from "../../models/activity";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../models/user";
 import { tool } from "../../models/tool";
-import { datetime } from "../../models/dateTime"
+// import { datetime } from "../../models/dateTime"
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
@@ -55,11 +55,15 @@ export class EventsComponent implements OnInit {
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService
     , public dialog: MatDialog) {
+
     this.notifier = notifierService;
-    this.eventDoc.start = {} as datetime;
-    this.eventDoc.end = {} as datetime;
-    this.eventDocEdit.start = {} as datetime;
-    this.eventDocEdit.end = {} as datetime;
+    this.eventDoc.start = new Date().toJSON();
+    this.eventDoc.end = new Date().toJSON();
+
+    this.eventDocEdit.start = new Date().toJSON();
+    this.eventDocEdit.end = new Date().toJSON();
+
+    console.log(this.eventDoc.start)
     this.emptyForm();
     this.eventSeeNull();
   }
@@ -83,7 +87,7 @@ export class EventsComponent implements OnInit {
   }
 
   emptyForm() {
-    this.eventDoc.name = '';
+    this.eventDoc.title = '';
     this.eventDoc.user_id = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.description = '';

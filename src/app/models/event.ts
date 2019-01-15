@@ -1,16 +1,16 @@
 
 import { tool } from "./tool";
-import { datetime } from "./dateTime";
+// import { datetime } from "./dateTime";
 
 
 export interface Event {
   
     status : number;
     id? : string;
-    name : string;
+    title : string;
     description : string,
-    start : datetime;
-    end : datetime;
+    start : string;
+    end : string;
     type : string;
     user_id : string;
     activity_id : string;

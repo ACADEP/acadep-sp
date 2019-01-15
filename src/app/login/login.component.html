@@ -16,7 +16,7 @@
               </div>
 
                 <div class="form-group has-feedback ">
-                <input class="form-control" placeholder="Correo electrónico" #mail="ngModel" id="mail" type="email" 
+                <input class="form-control" placeholder="Correo electrónico" autocomplete="email" #mail="ngModel" id="mail" type="email" 
                 [(ngModel)]="email" name="mail" required>
                 <span class="form-control-feedback">
                   <i class="fa fa-fw fa-envelope"></i>
@@ -27,7 +27,7 @@
               <small style="color:red" *ngIf="pass.touched && !pass.valid">Ingrese la Contraseña</small>
 
               <div class="form-group has-feedback">
-                <input class="form-control" id="pass" placeholder="Contraseña" type="password" #pass="ngModel" [(ngModel)]="password" name="pass" required>
+                <input class="form-control" id="pass" placeholder="Contraseña" type="password" autocomplete="current-password" #pass="ngModel" [(ngModel)]="password" name="pass" required>
                 <span class="form-control-feedback">
                   <i class="fa fa-fw fa-key"></i>
                 </span>

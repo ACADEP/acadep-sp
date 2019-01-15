@@ -37,7 +37,7 @@
       <!-- END: .navbar-header-left with image -->
       <nav class="nav navbar-header-nav">
 
-        <a class="visible-xs b-r" href="#" data-side=collapse>
+        <a class="visible-xs b-r" data-side=collapse (click)="navCollapsemini()">
           <i class="fa fa-fw fa-bars"></i>
         </a>
 
@@ -156,7 +156,7 @@
         <li class="dropdown b-l">
           <a class="dropdown-toggle profile-pic" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <!-- <img class="img-circle" src="../assets/img/m4.jpg" alt="Jane Doe"> -->
-            <b class="hidden-xs hidden-sm">Jane Doe</b>
+            <b class="hidden-xs hidden-sm">{{authUser.email}}</b>
           </a>
           <ul class="dropdown-menu animated flipInY pull-right">
             <li>

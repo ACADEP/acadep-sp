@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Event } from '../models/event';
 import { Action } from 'rxjs/internal/scheduler/Action';
 
-declare var $ : any;
+declare var $: any;
 
 @Injectable({
   providedIn: 'root'
@@ -32,68 +32,62 @@ export class EventsService {
   }
 
   addEvent(event: Event) {
-    this.nameEvent = event.name;
+    this.nameEvent = event.title;
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
         activity_id: event.activity_id,
         user_id: event.user_id,
-        type_activity : event.type,
-        name: event.name,
+        type_activity: event.type,
+        title: event.title,
         description: event.description,
         start: event.start,
         end: event.end,
         tools: event.tools,
         staff: event.staff,
         deleted: false,
-        status : 1,
-        observation : {
-          before : {
-            active : true,
-            evidence : []
-          },
-          during : {
-            active : true,
-            evidence : []
-          },
-          after : {
-            active : true,
-            evidence : []
-          },
-        }
+        status: 1,
+        // observation : {
+        //   before : {
+        //     active : true,
+        //     evidence : []
+        //   },
+        //   during : {
+        //     active : true,
+        //     evidence : []
+        //   },
+        //   after : {
+        //     active : true,
+        //     evidence : []
+        //   },
+        // }
 
-      }).then((res: any) =>
-      {
+      }).then((res: any) => {
         this.db.collection('events').doc(res.id).update({
           id: res.id
-        }).then(async res =>{
-
+        }).then(async res => {
           //notificacion push
-             
           $.ajax({
-            data : {
+            data: {
               "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
               "included_segments": ["All"],
-              "headings":{"es":"📆 Nuevo evento", "en":"📆 Nuevo evento"},
-               "contents": {"es": this.nameEvent, "en": this.nameEvent}
+              "headings": { "es": "📆 Nuevo evento", "en": "📆 Nuevo evento" },
+              "contents": { "es": this.nameEvent, "en": this.nameEvent }
             },
-            url : 'https://onesignal.com/api/v1/notifications',
-            type : 'post',
+            url: 'https://onesignal.com/api/v1/notifications',
+            type: 'post',
             beforeSend: function (xhr) {
-              xhr.setRequestHeader ("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
-          },
-            success : function (res){
+              xhr.setRequestHeader("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
+              // xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            },
+            success: function (res) {
               console.log(res);
             }
           })
-
         })
         resolve(res)
-      } , err => reject(err));
-
-
+      }, err => reject(err));
     })
-
   }
 
   deleteEvent(key: string) {
@@ -101,19 +95,19 @@ export class EventsService {
   }
 
   updateEvent(event: Event) {
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.db.collection('events').doc(event.id).update({
         active: true,
         activity_id: event.activity_id,
         user_id: event.user_id,
-        name: event.name,
+        title: event.title,
         description: event.description,
         start: event.start,
         end: event.end,
         tools: event.tools,
         staff: event.staff,
-        status : 1
-      }).then((res:any) => resolve(res), err => reject(err));
+        status: 1
+      }).then((res: any) => resolve(res), err => reject(err));
     })
   }
 

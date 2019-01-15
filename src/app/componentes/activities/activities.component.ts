@@ -9,7 +9,9 @@ import { isNgTemplate } from '@angular/compiler';
 import { UsersService } from "../../services/users.service";
 
 import { NgForm } from '@angular/forms/src/directives/ng_form';
-import { datetime } from 'src/app/models/dateTime';
+import { tool } from 'src/app/models/tool';
+import { isNullOrUndefined } from 'util';
+// import { datetime } from 'src/app/models/dateTime';
 
 // import { isNgTemplate } from '@angular/compiler';
 
@@ -34,42 +36,42 @@ export class ActivitiesComponent implements OnInit {
 
   projects: project[];
 
-  public tool: string;
-  public toolEdit: string;
+  public insumo: tool = {} as tool;
+  public insumoEdit: tool = {} as tool;
+
+
   public name: string;
   public type: string;
   public description: string;
-  public tools: string[];
+  public insumos: tool[] = [];
   public project_id: string;
   public users: string[];
-  public start: datetime;
-  public end: datetime;
+  public subproject: any;
+  public start: string;
+  public end: string;
+
 
   persons;
 
-
+public subprojects: string[] = [];
 
 
   // activitiesListArray: any[];
   // projectsListArray: any[];
 
   types = [
-
     'auditoria',
     'servicio',
     'supervision'
-
   ];
+  
+  
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService, public userservice : UsersService) {
     this.notifier = notifierService;
-    this.activityDoc.start = {} as datetime;
-    this.activityDoc.end = {} as datetime;
-    this.activityEdit.start = {} as datetime;
-    this.activityEdit.end = {} as datetime;
-    this.emptyForm()
 
+    this.emptyForm()
   }
 
   ngOnInit() {
@@ -81,7 +83,7 @@ export class ActivitiesComponent implements OnInit {
     //proyectos
     this.projectsService.getProjects().subscribe(items => {
       this.projects = items;
-      this.activityDoc.tools = [];
+      this.activityDoc.insumos = [];
     })
 
     this.userservice.getUsers().subscribe(items =>{
@@ -92,7 +94,6 @@ export class ActivitiesComponent implements OnInit {
   }
 
   addActivity(form: NgForm) {
-    
     if (form.valid) {
       this.activitiesService.addActivity(this.activityDoc).then((result) => {
         this.removeErrors();
@@ -114,14 +115,14 @@ export class ActivitiesComponent implements OnInit {
         $('#labelname').removeClass('errortxt')
       }
 
-      if (form.controls.type.invalid) {
-        $('#type').addClass('error')
-        $('#labeltype').addClass('errortxt')
+      // if (form.controls.type.invalid) {
+      //   $('#type').addClass('error')
+      //   $('#labeltype').addClass('errortxt')
 
-      } else {
-        $('#type').removeClass('error')
-        $('#labeltype').removeClass('errortxt')
-      }
+      // } else {
+      //   $('#type').removeClass('error')
+      //   $('#labeltype').removeClass('errortxt')
+      // }
 
       if (form.controls.project.invalid) {
         $('#project').addClass('error')
@@ -133,48 +134,56 @@ export class ActivitiesComponent implements OnInit {
       }
 
        
-      if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
-        $('#starttime').addClass('error')
-        $('#startdate').addClass('error')
+      if (form.controls.start.invalid ) {
+        $('#start').addClass('error')
         $('#labelstart').addClass('errortxt')
       } else {
-        $('#startdate').removeClass('error')
-        $('#starttime').removeClass('error')
+        $('#start').css('border' , 'red 1px solid')
         $('#labelstart').removeClass('errortxt')
-      }
-      if (form.controls.enddate.invalid) {
-        $('#enddate').addClass('error')
-        $('#labelend').addClass('errortxt')
-      } else {
-        $('#enddate').removeClass('error')
-        $('#labelend').removeClass('errortxt')
-      }
-      if (form.controls.endtime.invalid) {
-        $('#endtime').addClass('error')
-        $('#labelend').addClass('errortxt')
-      } else {
-        $('#endtime').removeClass('error')
-        if (form.controls.enddate.valid) {
-          $('#labelend').removeClass('errortxt')
-        }
       }
 
-      if (form.controls.startdate.invalid) {
-        $('#startdate').addClass('error')
-        $('#labelstart').addClass('errortxt')
+      if (form.controls.end.invalid) {
+        $('#end').addClass('error')
+        $('#labelend').addClass('errortxt')
       } else {
-        $('#startdate').removeClass('error')
-        $('#labelstart').removeClass('errortxt')
+        $('#end').removeClass('error')
+        $('#labelend').removeClass('errortxt')
       }
-      if (form.controls.starttime.invalid) {
-        $('#starttime').addClass('error')
-        $('#labelstart').addClass('errortxt')
-      } else {
-        $('#starttime').removeClass('error')
-        if (form.controls.startdate.valid) {
-          $('#labelstart').removeClass('errortxt')
-        }
-      }
+
+
+      // if (form.controls.enddate.invalid) {
+      //   $('#enddate').addClass('error')
+      //   $('#labelend').addClass('errortxt')
+      // } else {
+      //   $('#enddate').removeClass('error')
+      //   $('#labelend').removeClass('errortxt')
+      // }
+      // if (form.controls.endtime.invalid) {
+      //   $('#endtime').addClass('error')
+      //   $('#labelend').addClass('errortxt')
+      // } else {
+      //   $('#endtime').removeClass('error')
+      //   if (form.controls.enddate.valid) {
+      //     $('#labelend').removeClass('errortxt')
+      //   }
+      // }
+
+      // if (form.controls.startdate.invalid) {
+      //   $('#startdate').addClass('error')
+      //   $('#labelstart').addClass('errortxt')
+      // } else {
+      //   $('#startdate').removeClass('error')
+      //   $('#labelstart').removeClass('errortxt')
+      // }
+      // if (form.controls.starttime.invalid) {
+      //   $('#starttime').addClass('error')
+      //   $('#labelstart').addClass('errortxt')
+      // } else {
+      //   $('#starttime').removeClass('error')
+      //   if (form.controls.startdate.valid) {
+      //     $('#labelstart').removeClass('errortxt')
+      //   }
+      // }
 
       if (this.activityDoc.users.length < 1) {
         $('#admin').addClass('error')
@@ -210,55 +219,75 @@ export class ActivitiesComponent implements OnInit {
 
   editActivity(activity) {
     this.activityEdit = activity;
-    console.log(this.activityEdit.type);
+    // console.log(this.activityEdit.type);
 
     $('#modalEdit').modal('show');
   }
 
   copyActivity(activity) {
-    this.name = activity.name;
+
+    this.name = activity.title;
     this.type = activity.type;
     this.description = activity.description;
-    this.tools = activity.tools;
+    this.insumos = activity.insumos;
     this.project_id = activity.project_id;
+    this.subproject = activity.subproject;
     this.users = activity.users;
     this.start = activity.start;
     this.end = activity.end;
 
     this.activityDoc.name = this.name;
-    this.activityDoc.type = this.type;
+    // this.activityDoc.type = this.type;
     this.activityDoc.description = this.description;
-    this.activityDoc.tools = this.tools;
+    this.activityDoc.insumos = this.insumos;
     this.activityDoc.project_id = this.project_id;
     this.activityDoc.users = this.users;
     this.activityDoc.start = this.start;
     this.activityDoc.end = this.end;
 
+    console.log(activity)
+
   }
 
 
+  changeProject(project){
+    if(project.target.value)
+    {
+      this.projectsService.getProject(project.target.value).then((project : any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) =>(console.log(err)));
+    }
+    else{
+      // console.log('nah')
+      this.subprojects = []
+    }
 
-  pushTool() {
-
-    // console.log(this.tool);
-    this.activityDoc.tools.push(this.tool);
-    this.tool = '';
   }
 
-  pushToolEdit() {
+  pushInsumo(form: NgForm) {
+    if (form.valid) {
+      const insumo: tool = {
+        name: form.controls.insumoname.value,
+        quantity: form.controls.insumoquant.value
+      }
+      this.activityDoc.insumos.push(insumo);
+      this.insumo.name = '';
+      this.insumo.quantity = null;
+      $('#insumoquant').focus();
 
-    this.activityEdit.tools.push(this.toolEdit);
-    console.log(this.activityEdit.tools);
-    this.toolEdit = '';
+    } else {
+      this.notifier.notify('error', 'Los campos de insumo no se pueden enviar vacíos');
+    }
   }
 
-  deleteTool(item) {
-    this.activityDoc.tools.splice(item, 1);
+ 
+
+  deleteInsumo(item) {
+    this.activityDoc.insumos.splice(item, 1);
   }
 
-  deleteToolEdit(item) {
-    this.activityEdit.tools.splice(item, 1);
-  }
+ 
 
   updateActivity() {
     this.activitiesService.updateActivity(this.activityEdit).then((result) => {
@@ -271,15 +300,13 @@ export class ActivitiesComponent implements OnInit {
 
   emptyForm() {
     this.activityDoc.name = '';
-    this.activityDoc.type = '';
+    this.activityDoc.subproject = '';
     this.activityDoc.description = '';
-    this.activityDoc.tools = [];
+    this.activityDoc.insumos = [];
     this.activityDoc.project_id = '';
     this.activityDoc.users = [];
-    this.activityDoc.start.date = '';
-    this.activityDoc.start.time = '';
-    this.activityDoc.end.date = '';
-    this.activityDoc.end.time = '';
+    this.activityDoc.start = new Date().toJSON();
+    this.activityDoc.end = new Date().toJSON();
   }
 
 
