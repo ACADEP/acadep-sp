@@ -1,22 +1,34 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
 import { map } from 'rxjs/operators';
+import { EvidenceService } from "../../services/evidence.service";
 
 @Component({
   selector: 'app-evidence',
   templateUrl: './evidence.component.html',
   styleUrls: ['./evidence.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 
 })
 export class EvidenceComponent implements OnInit {
 
   items: GalleryItem[];
+  evidenceCollection: any[];
 
-  constructor(public gallery: Gallery) {
+  constructor(public gallery: Gallery, public evidenceService : EvidenceService) {
   }
 
   ngOnInit() {
+
+    this.evidenceService.getEvents().subscribe(events => {
+      this.evidenceCollection = events;
+      // this.evidenceCollection[0].description.get().then((doc) => {
+      //   console.log(doc.data())
+      // }).catch((err) => {
+      //   console.log(err)
+      // });
+    })
+    
     // 1. Create gallery items
     this.items = data.map(item =>
       new ImageItem({ src: item.srcUrl, thumb: item.previewUrl })

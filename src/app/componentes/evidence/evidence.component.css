@@ -8,7 +8,7 @@
     float: right;
   }
   
-  .container img {
+  .galery {
     display: flex;
     flex-wrap: wrap;
    
