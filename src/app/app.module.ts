@@ -22,23 +22,52 @@ import { CalendarComponent } from './componentes/calendar/calendar.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { CreateProyectComponent } from './componentes/proyectos/create-proyect/create-proyect.component';
 import { EventsComponent } from './componentes/events/events.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+// import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ActivitiesComponent } from './componentes/activities/activities.component';
 import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
-import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {  BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { 
-  MatTabsModule,
-  MatIconModule,
-  MatDialogModule,
-  MatInputModule,
-  MatCheckboxModule,
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
-  MatToolbarModule
+  MatCheckboxModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatInputModule,
+  MatIconModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatGridListModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatTableModule,
+  MatTooltipModule,
+  MatTreeModule,
  } from "@angular/material";
+ 
 
  //faltpickr
 import { FlatpickrModule } from 'angularx-flatpickr';
@@ -122,7 +151,35 @@ const customNotifierOptions: NotifierOptions = {
       // locale: 'Es'
       }
     ),
+    MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatGridListModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatTableModule,
+  MatTooltipModule,
+  MatTreeModule,
+    MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatButtonToggleModule,
     BrowserModule,
+    MatExpansionModule,
     HttpClientModule,
     MatTabsModule,
     FullCalendarModule,
@@ -148,11 +205,11 @@ const customNotifierOptions: NotifierOptions = {
     ),
     AngularFirestoreModule,
     NotifierModule.withConfig(customNotifierOptions),
-    NgbModule,
+    // NgbModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBmWGfkOq71k0RF2z2bYFNHdKO-l1zsM5s'
     }),
-    NoopAnimationsModule
+    // NoopAnimationsModule
 
   ],
   entryComponents: [
