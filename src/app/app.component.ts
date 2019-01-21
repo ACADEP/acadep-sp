@@ -17,10 +17,24 @@ export class AppComponent {
   ngOnInit() {
     this.authService.getAuth().subscribe( auth => {
       if (auth) {
-        this.isLogin = true;
+      
+        this.authService.getAdmin(auth.uid).then( pass => {
+          // console.log(pass)
+          if(pass == true)
+          {
+            this.isLogin = true;
+          }
+          else{
+            this.isLogin = false;
+          }
+
+        })
+
         // this.fotoUsuario = auth.photoURL;
       } else {
+
         this.isLogin = false;
+
       }
     });
   }

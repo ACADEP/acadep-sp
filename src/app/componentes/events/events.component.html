@@ -34,24 +34,66 @@
               <header>
                 <h3>Lista de eventos</h3>
                 <div class="box-tools">
-                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent"
-                    (click)="toogleEvents()"></i>
-                  <!-- <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x"></i> -->
+                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x pointer"
+                    (click)="openAll()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x pointer" (click)="closeAll()"></i>
                 </div>
               </header>
-              <div class="list-group filter-wrap">
+              <mat-accordion  class="example-headers-align" #myaccordion="matAccordion" multi="true">
+
+                <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <h4>{{event.title}} </h4>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{event.percentage}}%
+                      <mat-icon class="delete" (click)="deleteEvent(event)"> delete</mat-icon>
+                      <!-- <mat-icon> create</mat-icon> -->
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <div class="row">
+                      <div class="col-md-6">
+                        <b>Descripción:</b> {{event.description}} <br>
+                        <b>Tipo de actividad:</b> {{event.actividad}} <br>
+                        <b>Inicio:</b> {{event.start}} <br>
+                        <b>Final:</b> {{event.end}}<br>
+                        <b>Actividad:</b> {{event.activity_id }} <br>
+                        <b>Usuario que lo realizará:</b> {{event.user_id}}
+                      </div>
+                      <div class="col-md-6">
+                        <div *ngIf="event.tools.length > 0">
+                          <b>Herramientas: </b><br>
+                          <ul>
+                            <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                          </ul>
+                          <hr>
+                        </div>
+                        <b>Personal:</b><br>
+                        <ul>
+                          <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
+                        </ul>
+                      </div>
+                    </div>
+                
+                  <mat-action-row>
+                      <button class="btn_edit" mat-button (click)="editEvent(event)">Editar<mat-icon style="color:rgb(209, 212, 220)">create</mat-icon></button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+                
+
+              </mat-accordion>
+
+              <!-- <div class="list-group filter-wrap">
 
                 <article class="list-group-item" *ngFor="let event of eventsCollection; let i = index" [ngStyle]="{'background':event.active === false ? 'rgb(237, 255, 237)' : 'inherit' }">
-
                   <header class="filter-header">
-
-
-
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editEvent(event)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
                     <i class="icon-action fa fa-eye" style="color: black" (click)="seeEvent(event)" *ngIf="event.active === false"></i>
-                    <h6 class="title">{{event.name}} </h6>
+                    <h6 class="title">nombre evento {{i + 1}}</h6>
 
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
@@ -59,8 +101,8 @@
                       <div class="col-md-6">
                         <b>Descripción:</b> {{event.description}} <br>
                         <b>Tipo de actividad:</b> {{event.actividad}} <br>
-                        <b>Inicio:</b> {{event.start.date}}&nbsp;{{event.start.time}} hrs. <br>
-                        <b>Final:</b> {{event.end.date}}&nbsp;{{event.end.time}} hrs.<br>
+                        <b>Inicio:</b> {{event.start}} <br>
+                        <b>Final:</b> {{event.end}}<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
                         <b>Usuario que lo realizará:</b> {{event.user_id}}
                       </div>
@@ -82,7 +124,7 @@
                     </div>
                   </div>
                 </article>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -128,7 +170,7 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label id="labeltype">Tipo de actividad <span class="required">*</span></label>
+                    <label id="labeltype">Tipo <span class="required">*</span></label>
                     <select id="type" class="form-control" [(ngModel)]="eventDoc.type" name="type" required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let item of types' [ngValue]="item">{{item}}</option>
@@ -149,9 +191,29 @@
                       <div class="input-group col-centered">
                         <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end"> -->
 
-                  <div class="row text-center">
+                  <div class="form-group">
+                    <label for="itext">Fecha de inicio <span class="required">*</span></label>
+                    <div class="panel-body">
+                      <input class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="eventDoc.start"
+                        [altInput]="true" name="start" [convertModelValue]="false" placeholder="dd/mm/yyyy"
+                        [enableTime]="true" dateFormat="Y-m-dTH:i" required>
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label for="itext">Fecha de término <span class="required">*</span></label>
+                    <div class="panel-body">
+                      <input class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="eventDoc.end"
+                        [altInput]="true" name="end" placeholder="dd/mm/yyyy" [convertModelValue]="false" [enableTime]="true"
+                        dateFormat="Y-m-dTH:i" required>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row text-center">
                     <div class="col-md-12">
-                      <label id="labelstart" for="">Inicio de evento <span class="required">*</span></label>
+                      <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
                       <div class="input-group col-centered">
                         <div class="col-md-6">
                           <p><small>Fecha:</small></p>
@@ -167,7 +229,7 @@
 
 
                     <div class="col-md-12" style="margin-top:15px">
-                      <label id="labelend" for="">Fin de evento <span class="required">*</span></label>
+                      <label id="labelend" for="">Fecha de término <span class="required">*</span></label>
                       <div class="input-group col-centered">
                         <div class="col-md-6">
                           <p><small>Fecha:</small></p>
@@ -181,7 +243,11 @@
                       </div>
                     </div>
 
-                  </div>
+                  </div> -->
+
+
+
+
                   <hr class="b-s-dashed">
                   <div class="form-group">
                     <label id="labeluser" class="">Usuario que realizara evento <span class="required">*</span></label>
@@ -198,7 +264,7 @@
                       required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
-                        [value]="activity.name">{{activity.name | titlecase}}</option>
+                        [value]="activity.id">{{activity.title | titlecase}}</option>
                     </select>
                   </div>
 
@@ -490,16 +556,16 @@
               Durante
             </ng-template>
             <div *ngFor="let msg of EventSee.observation.during.evidence">
-                <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
-                  *ngIf="msg.type == 'image'">
-                  <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
-                  <mat-card-content>
-                  </mat-card-content>
-                </mat-card>
-                <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
-                  {{msg.src}}
-                </mat-card>
-              </div>
+              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
+                *ngIf="msg.type == 'image'">
+                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
+                <mat-card-content>
+                </mat-card-content>
+              </mat-card>
+              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
+                {{msg.src}}
+              </mat-card>
+            </div>
           </mat-tab>
 
           <mat-tab>
@@ -509,16 +575,16 @@
               Despues
             </ng-template>
             <div *ngFor="let msg of EventSee.observation.after.evidence">
-                <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
-                  *ngIf="msg.type == 'image'">
-                  <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
-                  <mat-card-content>
-                  </mat-card-content>
-                </mat-card>
-                <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
-                  {{msg.src}}
-                </mat-card>
-              </div>
+              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
+                *ngIf="msg.type == 'image'">
+                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
+                <mat-card-content>
+                </mat-card-content>
+              </mat-card>
+              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
+                {{msg.src}}
+              </mat-card>
+            </div>
           </mat-tab>
         </mat-tab-group>
       </div>

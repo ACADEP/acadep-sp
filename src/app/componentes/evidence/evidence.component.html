@@ -1,0 +1,269 @@
+<header class="main-heading shadow-2dp">
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        App / Evidencia
+      </h6>
+      <h3 class="dashhead-title">Evidencia</h3>
+
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Evidencia
+      </div>
+    </div>
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="box">
+              <!-- <h2 class="text-center">hola</h2> -->
+              <form action="">
+    
+                <form style="margin-top:10px; margin-left:15px">
+                  <div class="row">
+    
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <!-- <label for="itext">Buscar Proyecto</label> -->
+                        <div class="icon-after-input">
+                          <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar...">
+                          <div class="icon">
+                            <button class="btn btn-info btn-sm btn-rect" style="background: #337ab7; border: #337ab7" type="button"><i class="fa fa-search fa-lg"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                        <select id="type" class="form-control" name="type" required>
+                          <option value="">Proyectos</option>
+                          <option value="">proyecto 1 </option>
+                          <option value="">proyecto 2 </option>
+                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                        <select id="type" class="form-control" name="type" required>
+                          <option value="">Asignaciones</option>
+                          <option value="">jhon doe</option>
+                          <option value="">jane doe</option>
+                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4" >
+                        <button mat-raised-button color="warn">Exportar a PDF
+                        </button>
+
+                    </div>
+                    
+                    
+                  </div>
+                </form>
+    
+    
+    
+              </form>
+            </div>
+          </div>
+
+
+      <div class="col-md-12">
+        <!-- BEGIN: clave.js -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <header>
+                <h3>Evidencia de eventos</h3>
+                <div class="box-tools">
+                  <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x"
+                  (click)="openAll()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x" (click)="closeAll()"></i>
+                </div>
+              </header>
+
+              <mat-accordion #myaccordion="matAccordion" multi="true">
+
+                <mat-expansion-panel *ngFor="let evidence of evidenceCollection; index as i">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                     <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.event.name}}</mat-checkbox>
+
+                      <!-- <h4> </h4>  -->
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{evidence.percentage}}%
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="col-md-12">
+                        <!-- <h4>Texto</h4> -->
+                        <p style="padding:20px">{{evidence.description}}</p>
+                      </div>
+                      <div class="col-md-12">
+                        <h4>Imágenes</h4>
+                        <div>
+                          <div class="row">
+                            <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as i">
+                              <img class="galery" [src]="item.src" style="border: #ccc 1px solid" (click)="showImage($event)">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
+                      <h4>Documentos</h4>
+                      <div *ngIf="evidence.files.length; else no_files">
+
+                        <div *ngFor="let item of evidence.files">
+
+                            <a [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
+                              [style.color]="getColor(item.type)"></i>
+                            {{item.name}} </a>
+
+                        </div>
+                       
+
+                        <br>
+                      </div>
+                      <ng-template #no_files>
+                        <p><i>Ningún archivo adjunto</i></p>
+                      </ng-template>
+                      <!-- <i class="fa fa-file-word fa-2x" style="margin-top:10px; color:#3672f4"></i> archivo_word.docx -->
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+
+
+
+                <!-- <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Self aware panel
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <p>I'm visible because I am open</p>
+                  </mat-expansion-panel> -->
+
+              </mat-accordion>
+
+              <!-- <div class="list-group filter-wrap">
+                <article class="list-group-item" *ngFor="let evidence of evidenceCollection; index as i">
+                  <header class="filter-header">
+                    <i class="icon-action fa fa-chevron-down pull-right"></i>
+                    <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editEvent(event)"></i>
+                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
+                    <i class="icon-action fa fa-eye" style="color: black" (click)="seeEvent(event)" *ngIf="event.active === false"></i>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                      style="width:70%">
+                      70%
+                    </div> <br>
+                    <h4 class="title" data-toggle="collapse" [attr.data-target]="'#collapse'+ i">{{evidence.event.name}}
+                      <span class="pull-right"> 30%</span></h4>
+                  </header>
+                  <div class="filter-content collapse" id="{{'collapse' + i}}">
+                    <div class="row">
+                      <div class="col-md-9">
+                        <div class="col-md-12">
+                          <h4>Texto</h4>
+                          <p style="padding:20px">{{evidence.description}}</p>
+                        </div>
+                        <div class="col-md-12">
+                          <h4>Imágenes</h4>
+                          <div>
+                            <div class="row">
+                              <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as i">
+                                <img class="galery" [src]="item.src" style="border: #ccc 1px solid" (click)="showImage($event)">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
+                        <h4>Documentos</h4>
+                        <div *ngIf="evidence.files.length; else no_files">
+                          <i *ngFor="let item of evidence.files" class="fa fa-file-pdf fa-2x" [style.color]="getColor(item.type)"></i>
+                          doc.pdf <br>
+                        </div>
+                        <ng-template #no_files>
+                          <p><i>Ningún archivo adjunto</i></p>
+                        </ng-template>
+                        <i class="fa fa-file-word fa-2x" style="margin-top:10px; color:#3672f4"></i> archivo_word.docx
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div> -->
+
+            </div>
+          </div>
+        </div>
+        <!-- END: clave.js -->
+      </div>
+
+      <!-- <div class="col-md-4">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <header class="bg-asbestos text-white">
+                  <h4>Crear nuevo evento</h4>
+                </header>
+                <div class="box-body collapse in">
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+    </div>
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>
+<!-- END: .main-content -->
+
+
+<!-- Modal para ver imagenes -->
+<div class="modal fade" id="showimage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class="center" [src]="src" alt="">
+      </div>
+
+    </div>
+  </div>
+</div>

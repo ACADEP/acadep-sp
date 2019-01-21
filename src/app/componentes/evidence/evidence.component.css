@@ -1,0 +1,55 @@
+
+.basic-container {
+    padding: 5px;
+  }
+  
+  .version-info {
+    font-size: 8pt;
+    float: right;
+  }
+  
+  .galery {
+    display: flex;
+    flex-wrap: wrap;
+   
+      width: 100px;
+      height: 90px;
+      object-fit: cover;
+      margin: 5px;
+      cursor: pointer;
+   
+  }
+  
+  .galery:hover{
+    transform: scale(1.5);
+   border-radius: 50px;
+  }
+  
+  .g-overlay {
+    min-width: 320px;
+  }
+  
+  gallery {
+    font-size: 16px;
+  }
+  
+  /* img {
+    width: 150px;
+  } */
+  
+  .lightbox-example, .gallerize-example {
+    margin: 2em;
+  }
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+  
+  .title{
+    cursor: pointer;
+  }
+  
+

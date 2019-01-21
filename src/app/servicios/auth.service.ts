@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
-import { promise } from 'protractor';
-import { resolve } from 'dns';
-import { reject } from 'q';
+// import * as firebase from 'firebase/app';
+// import { promise } from 'protractor';
+// import { resolve } from 'dns';
+// import { reject } from 'q';
 import { map } from "rxjs/operators";
+
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+
 // import { AngularFirestore } from  'angularfire2/firestore';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 // import { User } from '../modelos/users'
-import { from } from 'rxjs';
+// import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class AuthService {
 
   constructor(
     public afAuth: AngularFireAuth,
-    private firebase: AngularFireDatabase
+    private db: AngularFirestore
   ) { }
 
 
@@ -36,18 +38,6 @@ export class AuthService {
     });
   }
 
-  // saveUser(uid: string, name: string, email: string, role: string) {
-  //   this.firebase.database.ref('users/' + uid).set({
-  //     name: name,
-  //     email: email,
-  //     role: role
-  //   })
-  // }
-
-
-
-
-
   login(email: string, pass: string) {
     return new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
@@ -59,6 +49,25 @@ export class AuthService {
 
   getAuth() {
     return this.afAuth.authState.pipe(map(auth => auth));
+  }
+
+ async getAdmin(uid) {
+
+  var pass;
+
+   await this.db.collection('users').doc(uid).ref.get().then((doc) => {
+      if (doc.data().role.administrator == true) {
+         pass = true;
+        //  console.log('eres administrador')
+      } else {
+        pass = false;
+        // console.log('eres un empleado')
+      }
+    }).catch((err) => {
+      console.log('no existe documento')
+    });
+   
+    return pass;
   }
 
 

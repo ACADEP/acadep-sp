@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
@@ -8,8 +8,8 @@ import { activity } from "../../models/activity";
 import { UsersService } from "../../services/users.service";
 import { User } from "../../models/user";
 import { tool } from "../../models/tool";
-import { datetime } from "../../models/dateTime"
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+// import { datetime } from "../../models/dateTime"
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
 
 
 declare var $: any;
@@ -27,6 +27,8 @@ export interface DialogData {
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent implements OnInit {
+
+  @ViewChild('myaccordion') myPanels: MatAccordion;
 
   private readonly notifier: NotifierService;
   types = [
@@ -55,11 +57,15 @@ export class EventsComponent implements OnInit {
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService
     , public dialog: MatDialog) {
+
     this.notifier = notifierService;
-    this.eventDoc.start = {} as datetime;
-    this.eventDoc.end = {} as datetime;
-    this.eventDocEdit.start = {} as datetime;
-    this.eventDocEdit.end = {} as datetime;
+    this.eventDoc.start = new Date().toJSON();
+    this.eventDoc.end = new Date().toJSON();
+
+    this.eventDocEdit.start = new Date().toJSON();
+    this.eventDocEdit.end = new Date().toJSON();
+
+    console.log(this.eventDoc.start)
     this.emptyForm();
     this.eventSeeNull();
   }
@@ -83,7 +89,7 @@ export class EventsComponent implements OnInit {
   }
 
   emptyForm() {
-    this.eventDoc.name = '';
+    this.eventDoc.title = '';
     this.eventDoc.user_id = '';
     this.eventDoc.activity_id = '';
     this.eventDoc.description = '';
@@ -113,16 +119,24 @@ export class EventsComponent implements OnInit {
     }
   }
 
-  toogleEvents() {
-    if ($('#btncolapse').hasClass('fa-plus-circle')) {
-      $('#btncolapse').removeClass('fa-plus-circle');
-      $('#btncolapse').addClass('fa-minus-circle');
-    } else {
-      $('#btncolapse').removeClass('fa-minus-circle');
-      $('#btncolapse').addClass('fa-plus-circle');
-    }
-    $('.fa-chevron-down').trigger('click');
+   openAll(){
+    this.myPanels.openAll();
   }
+
+  closeAll(){
+    this.myPanels.closeAll();
+  }
+
+  // toogleEvents() {
+  //   if ($('#btncolapse').hasClass('fa-plus-circle')) {
+  //     $('#btncolapse').removeClass('fa-plus-circle');
+  //     $('#btncolapse').addClass('fa-minus-circle');
+  //   } else {
+  //     $('#btncolapse').removeClass('fa-minus-circle');
+  //     $('#btncolapse').addClass('fa-plus-circle');
+  //   }
+  //   $('.fa-chevron-down').trigger('click');
+  // }
 
 
   addEvent(form: NgForm) {

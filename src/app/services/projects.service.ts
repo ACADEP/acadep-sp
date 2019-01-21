@@ -41,6 +41,33 @@ export class ProjectsService {
     return this.projects;
   }
 
+  getProject(id) {
+
+    return new Promise((resolve, reject) => {
+
+
+      this.db.collection('projects').doc(id).ref.get()
+      .then((res: any) => resolve(res.data()), err => reject(err));
+
+      
+      // this.db.collection('projects').add({
+    
+      //   title: project.name,
+      //   description: project.description,
+      //   ubication: project.ubication,
+      //   start: project.start,
+      //   end: project.end,
+      //   administrators: project.administrators,
+      //   deleted : false,
+      //   subprojects : project.subprojects
+      // }).then((res: any) => resolve(res), err => reject(err));
+    });
+    
+  }
+
+
+
+
   searchProjects(name:string)
   {
     this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
@@ -60,13 +87,14 @@ export class ProjectsService {
     return new Promise((resolve, reject) => {
       this.db.collection('projects').add({
     
-        name: project.name,
+        title: project.name,
         description: project.description,
         ubication: project.ubication,
         start: project.start,
         end: project.end,
         administrators: project.administrators,
         deleted : false,
+        subprojects : project.subprojects
       }).then((res: any) => resolve(res), err => reject(err));
     })
 

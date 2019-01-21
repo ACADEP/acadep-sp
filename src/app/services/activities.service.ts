@@ -48,13 +48,13 @@ export class ActivitiesService {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
 
-        name: activity.name,
+        title: activity.name,
         description: activity.description,
-        type: activity.type,
+        subproject: activity.subproject,
         project_id : activity.project_id,
         start: activity.start,
         end: activity.end,
-        tools : activity.tools,
+        insumos : activity.insumos,
         users : activity.users,
         deleted : false,
       }).then((res: any) => resolve(res), err => reject(err));
@@ -70,11 +70,11 @@ export class ActivitiesService {
       this.db.collection('activities').doc(activity.id).update({
         name: activity.name,
         description: activity.description,
-        type: activity.type,
+        subproject: activity.subproject,
         project_id : activity.project_id,
         start: activity.start,
         end: activity.end,
-        tools : activity.tools,
+        insumos : activity.insumos,
       }).then((res:any) => resolve(res), err => reject(err));
     })
 

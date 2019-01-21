@@ -8,7 +8,7 @@ import { MouseEvent, MarkerManager } from '@agm/core';
 import { NotifierService } from 'angular-notifier';
 import { project } from 'src/app/models/project';
 import { User } from 'src/app/models/user';
-import { datetime } from 'src/app/models/dateTime';
+// import { datetime } from 'src/app/models/dateTime';
 import { marker } from "../../../models/marker";
 
 declare var $: any;
@@ -23,13 +23,17 @@ export class CreateProyectComponent implements OnInit {
   private readonly notifier: NotifierService;
   // marker: marker = {} as marker;
 
+ 
+  public sub : boolean = false;
+  public subproject : string;
+
+
   searchterm: string;
   startAt = new Subject();
   endAt = new Subject();
 
   clubs;
   allclubs;
-
   startobs = this.startAt.asObservable();
   endobs = this.endAt.asObservable();
 
@@ -47,13 +51,15 @@ export class CreateProyectComponent implements OnInit {
 
     // this.marker.label = 'myPosition';
     this.notifier = notifierService;
-    this.projectDoc.start = {} as datetime;
-    this.projectDoc.end = {} as datetime;
-    this.editProjectDoc.start = {} as datetime;
-    this.editProjectDoc.end = {} as datetime;
+   
+    this.projectDoc.start = new Date().toJSON();
+    this.projectDoc.end = new Date().toJSON();
+    // this.editProjectDoc.start = {} as datetime;
+    // this.editProjectDoc.end = {} as datetime;
 
     this.projectDoc.ubication = {} as marker;
     this.editProjectDoc.ubication = {} as marker;
+    this.projectDoc.subprojects = [];
   }
 
   ngOnInit() {
@@ -75,6 +81,21 @@ export class CreateProyectComponent implements OnInit {
     })
 
   }
+
+
+  checkSub(){
+    if (this.sub == false) {
+      this.sub = true;
+    } else {
+      this.sub = false;
+      
+    }
+  }
+  async PushSubproject(){
+    await this.projectDoc.subprojects.push(this.subproject);
+    this.subproject = '';
+  }
+
 
   findMe() {
     if (navigator.geolocation) {
@@ -100,16 +121,22 @@ export class CreateProyectComponent implements OnInit {
 
 
   addProject() {
+
+    if (this.sub == false) {
+    this.projectDoc.subprojects = []
+    }
+
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
-      this.projectDoc.name = "";
-      this.projectDoc.administrators = [];
-      this.projectDoc.description = "";
-      this.projectDoc.ubication = null;
-      this.projectDoc.start.date = "";
-      this.projectDoc.start.time = "";
-      this.projectDoc.end.date = "";
-      this.projectDoc.end.time = "";
+
+    this.projectDoc.name = "";
+    this.projectDoc.administrators = [];
+    this.projectDoc.description = "";
+    this.projectDoc.start = new Date().toJSON();
+    this.projectDoc.end = new Date().toJSON();
+    this.projectDoc.subprojects = [];
+    this.sub = false;
+
     }).catch((err) => {
       this.notifier.notify('error', 'Opps! algo salío mal');
     });
@@ -123,6 +150,7 @@ export class CreateProyectComponent implements OnInit {
       $('#btncolapse').removeClass('fa-minus-circle');
       $('#btncolapse').addClass('fa-plus-circle');
     }
+    
     $('.fa-chevron-down').trigger('click');
   }
 
@@ -173,6 +201,11 @@ export class CreateProyectComponent implements OnInit {
 
   getallclubs() {
     return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
+  }
+
+  clearForm()
+  {
+   
   }
 
 }

@@ -14,6 +14,8 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { FullCalendarModule } from 'ng-fullcalendar';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
@@ -22,24 +24,63 @@ import { CalendarComponent } from './componentes/calendar/calendar.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { CreateProyectComponent } from './componentes/proyectos/create-proyect/create-proyect.component';
 import { EventsComponent } from './componentes/events/events.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+// import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ActivitiesComponent } from './componentes/activities/activities.component';
 import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {  BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { 
-  MatTabsModule,
-  MatIconModule,
-  MatDialogModule,
-  MatInputModule,
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
-  MatToolbarModule
+  MatCheckboxModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatInputModule,
+  MatIconModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatGridListModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatTableModule,
+  MatTooltipModule,
+  MatTreeModule,
  } from "@angular/material";
+ 
 
- import { HttpClientModule } from '@angular/common/http'; 
+ //faltpickr
+import { FlatpickrModule } from 'angularx-flatpickr';
+
+ import { HttpClientModule } from '@angular/common/http';
+import { EvidenceComponent } from './componentes/evidence/evidence.component'; 
+
+import { GalleryModule } from  '@ngx-gallery/core';
+import { LightboxModule } from  '@ngx-gallery/lightbox';
+
+
 
 
 
@@ -99,21 +140,60 @@ const customNotifierOptions: NotifierOptions = {
     EventsComponent,
     ActivitiesComponent,
     GmapComponent,
-    CalendarEventsComponent
+    CalendarEventsComponent,
+    EvidenceComponent
     
   ],
   imports: [
+    GalleryModule,
+    BrowserAnimationsModule,
+    LightboxModule,
+    FlatpickrModule.forRoot(
+      {
+      // locale: 'Es'
+      }
+    ),
+    MatChipsModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatGridListModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatTableModule,
+  MatTooltipModule,
+  MatTreeModule,
+    MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatButtonToggleModule,
     BrowserModule,
+    MatExpansionModule,
     HttpClientModule,
     MatTabsModule,
     FullCalendarModule,
     MatToolbarModule,
     MatIconModule,
+    MatCheckboxModule,
     MatCardModule,
     MatInputModule,
     AppRoutingModule,
     FormsModule,
     MatDialogModule,
+    AngularFireStorageModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(
@@ -128,11 +208,11 @@ const customNotifierOptions: NotifierOptions = {
     ),
     AngularFirestoreModule,
     NotifierModule.withConfig(customNotifierOptions),
-    NgbModule,
+    // NgbModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBmWGfkOq71k0RF2z2bYFNHdKO-l1zsM5s'
     }),
-    NoopAnimationsModule
+    // NoopAnimationsModule
 
   ],
   entryComponents: [

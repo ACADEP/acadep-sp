@@ -33,7 +33,8 @@
               <header>
                 <h3>Lista de actividades</h3>
                 <div class="box-tools">
-                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent" (click)="toogleActivities()"></i>
+                  <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent"
+                    (click)="toogleActivities()"></i>
                 </div>
               </header>
               <div class="list-group filter-wrap">
@@ -43,12 +44,11 @@
                   <header class="filter-header">
 
 
-
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-plus" style="color:#566dd6" (click)="copyActivity(activity)"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editActivity(activity)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteActivity(activity)"></i>
-                    <h6 class="title">{{activity.name}} </h6>
+                    <h6 class="title">{{activity.title}} </h6>
 
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
@@ -58,8 +58,8 @@
                         <b>Tipo:</b> {{activity.type}} <br>
                         <b>proyecto:</b> {{activity.project_id}} <br>
                         <b>Descripción:</b> {{activity.description}} <br>
-                        <b>Inicio:</b> {{activity.start.date | date}}&nbsp;{{activity.start.time }} hrs.<br>
-                        <b>Final:</b> {{activity.end.date | date}}&nbsp;{{activity.end.time }} hrs.
+                        <b>Inicio:</b> {{activity.start}}<br>
+                        <b>Final:</b> {{activity.end}}
                       </div>
                       <div class="col-md-6">
                         <b>Insumos necesarios:</b><br>
@@ -108,10 +108,10 @@
 
                 <form #formActivity="ngForm" (submit)="addActivity(formActivity)">
                   <div class="form-group">
-                    <label id="labelname" for="itext">Nombre de la Actividad <span class="required">*</span></label>
+                    <label id="labelname" for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="activityDoc.name" 
-                      placeholder="Escriba un nombre para el evento ..." required>
+                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="activityDoc.name"
+                        placeholder="Escriba un nombre para el evento ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -119,7 +119,7 @@
                   </div>
 
                   <hr class="b-s-dashed">
-                  
+
                   <div class="form-group">
                     <label for="itext">Descripción </label>
                     <div class="">
@@ -130,7 +130,7 @@
 
                   <hr class="b-s-dashed">
 
-                  <label id="labeltype" class="">Tipo de Actividad <span class="required">*</span></label>
+                  <!-- <label id="labeltype" class="">Tipo de Actividad <span class="required">*</span></label>
                   <div class="form-group">
                     <div class="col-sm-10">
                       <select class="form-control" id="type" name="type" [(ngModel)]="activityDoc.type" required>
@@ -141,22 +141,49 @@
                   </div>
                   <br>
 
-                  <hr class="b-s-dashed">
+                  <hr class="b-s-dashed"> -->
 
 
-                  <label id="labelproject" class="">Proyecto al que pertenece <span class="required">*</span></label>
+                  <label id="labelproject" class="">Proyecto<span class="required">*</span></label>
                   <div class="form-group">
-                    <div class="col-sm-10">
-                      <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id" required>
-                        <option value="">Seleccione una opción</option>
-                        <option *ngFor="let project of projects" [selected]="project.id == activityDoc.project_id" value="{{project.id}}">{{project.name}}</option>
+                    <div class="col-sm-6">
+                      <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id"
+                        (change)="changeProject($event)" required>
+                        <option value="">Seleccione una proyecto</option>
+                        <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
                       </select>
                     </div>
-                  </div>              
+                    <div class="col-sm-6">
+                      <select class="form-control" id="project" name="subproject" [(ngModel)]="activityDoc.subproject">
+                        <option value="">Ningúno</option>
+                        <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label id="labelstart">Fecha de inicio <span class="required">*</span></label>
+                    <div class="panel-body">
+                      <input class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="activityDoc.start"
+                        [altInput]="true" id="start" name="start" [convertModelValue]="false" placeholder="dd/mm/yyyy"
+                        [enableTime]="true" dateFormat="Y-m-dTH:i" required>
+                    </div>
+                  </div>
 
                   <hr class="b-s-dashed">
 
-                  <div class="row text-center">
+                  <div class="form-group">
+                    <label id="labelend">Fecha de término <span class="required">*</span></label>
+                    <div class="panel-body">
+                      <input class="form-control" type="text"  mwlFlatpickr [(ngModel)]="activityDoc.end"
+                        [altInput]="true" id="end" name="end" placeholder="dd/mm/yyyy" [convertModelValue]="false" [enableTime]="true"
+                        dateFormat="Y-m-dTH:i" required>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row text-center">
                     <div class="col-md-12">
                       <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
                       <div class="input-group col-centered">
@@ -181,31 +208,63 @@
                           <p><small>Hora:</small></p>
                           <input type="time" id="endtime" name="endtime" [(ngModel)]="activityDoc.end.time" required>
                         </div>
-        
                       </div>
                     </div>
-                  </div>
-        
+                  </div> -->
+
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label id="labeladmin" class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
-                    <div class="col-sm-12"> 
-                      <select id="admin" class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityDoc.users" required>
-                          <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
+                    <label id="labeladmin" class="col-sm-12 control-label">Administrador(es)<span class="required">*</span>
+                    </label>
+                    <div class="col-sm-12">
+                      <select id="admin" class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityDoc.users"
+                        required>
+                        <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
                       </select>
                     </div>
                   </div>
 
-                  
-
+<br>
+<br><br><br><br><br>
                   <hr class="b-s-dashed">
 
 
 
                   <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
-        
-                  <div style="margin-top:135px">
+
+                   <!-- Inicio de INSUMOS -->
+                   <label for="atext3">Insumos</label>
+                   <form #formInsumo="ngForm" (submit)="pushInsumo(formInsumo)">
+                     <div class="row">
+                       <div class="col-md-4">
+                         <div class="form-group">
+                           <p>Cantidad</p>
+                           <input id="insumoquant" type="number" min="1" size="2px" name="insumoquant" [(ngModel)]="insumo.quantity"
+                             class="form-control" placeholder="cantidad" required>
+                         </div>
+                       </div>
+                       <div class="col-md-8">
+                         <div class="form-group">
+                           <p>Nombre</p>
+                           <div class="icon-after-input">
+                             <input type="text" class="form-control input-sm p-r-80" name="insumoname" placeholder="nombre..."
+                               [(ngModel)]="insumo.name" required>
+                             <div class="icon">
+                               <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </form>
+ 
+                   <ul class="list-group list-group-flush">
+                     <li class="list-group-item" *ngFor="let tool of activityDoc.insumos; let i = index">{{tool.quantity}}
+                       {{tool.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteInsumo(i)"></i>&nbsp;</li>
+                   </ul>
+
+                  <!-- <div style="margin-top:135px">
                     <form (submit)="pushTool()">
                       <div class="form-group">
                         <label for="atext3">Insumos necesarios</label>
@@ -218,10 +277,10 @@
                         </div>
                       </div>
                     </form>
-                  </div>
-         
+                  </div> -->
 
-                
+
+
 
                   <ul class="list-group list-group-flush">
 
@@ -230,7 +289,7 @@
                   </ul>
 
                   <div class="col-md-12 text-center" style="margin-top:30px">
-                    <button type="submit" class="btn btn-success">Crear Actividad</button>
+                    <button type="submit" class="btn btn-success">Crear</button>
 
                   </div>
 
@@ -275,20 +334,12 @@
           </div>
           <hr class="b-s-dashed">
 
-          <div class="form-group">
-            <label class="">Tipo de Actividad <span class="required">*</span></label>
-            <select class="form-control" [(ngModel)]="activityEdit.type" name="role" >
-              <option *ngFor='let element of types' [selected]="element == activityEdit.type" [value]="element">{{element | titlecase}}</option>
-            </select>
-            <!-- <p></ `p> -->
-          </div>
-          
-          <hr class="b-s-dashed">
 
           <div class="form-group">
             <label class="">Proyecto al que pertenece <span class="required">*</span></label>
-            <select class="form-control" [(ngModel)]="activityEdit.project_id" name="project_ide" >
-              <option *ngFor='let project of projects' [selected]="project.id == activityEdit.project_id" [value]="project.id">{{project.name | titlecase}}</option>
+            <select class="form-control" [(ngModel)]="activityEdit.project_id" name="project_ide">
+              <option *ngFor='let project of projects' [selected]="project.id == activityEdit.project_id" [value]="project.id">{{project.name
+                | titlecase}}</option>
             </select>
             <!-- <p></ `p> -->
           </div>
@@ -307,42 +358,44 @@
 
           <hr class="b-s-dashed">
 
-          <div class="row text-center">
-              <div class="col-md-12">
-                <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
-                <div class="input-group col-centered">
-                  <div class="col-md-6">
-                    <p><small>Fecha:</small></p>
-                    <input type="date" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start.date" required>
-                  </div>
-                  <div class="col-md-6">
-                    <p><small>Hora:</small></p>
-                    <input type="time" id="starttime" name="editstarttime" [(ngModel)]="activityEdit.start.time" required>
-                  </div>
+          <h1>aqui va la hora</h1>
+
+          <!-- <div class="row text-center">
+            <div class="col-md-12">
+              <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start" required>
                 </div>
-              </div>
-              <div class="col-md-12" style="margin-top:15px">
-                <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
-                <div class="input-group col-centered">
-                  <div class="col-md-6">
-                    <p><small>Fecha:</small></p>
-                    <input type="date" id="enddate" name="editenddate" [(ngModel)]="activityEdit.end.date" required>
-                  </div>
-                  <div class="col-md-6">
-                    <p><small>Hora:</small></p>
-                    <input type="time" id="endtime" name="editendtime" [(ngModel)]="activityEdit.end.time" required>
-                  </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="activityEdit.start.time" required>
                 </div>
               </div>
             </div>
+            <div class="col-md-12" style="margin-top:15px">
+              <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <div class="col-md-6">
+                  <p><small>Fecha:</small></p>
+                  <input type="date" id="enddate" name="editenddate" [(ngModel)]="activityEdit.end.date" required>
+                </div>
+                <div class="col-md-6">
+                  <p><small>Hora:</small></p>
+                  <input type="time" id="endtime" name="editendtime" [(ngModel)]="activityEdit.end.time" required>
+                </div>
+              </div>
+            </div>
+          </div> -->
 
           <hr class="b-s-dashed">
 
           <div class="form-group">
             <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
-            <div class="col-sm-12"> 
-              <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityEdit.users" >
-                  <option *ngFor="let user of persons"  value="{{user.name}}">{{user.name}}</option>
+            <div class="col-sm-12">
+              <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityEdit.users">
+                <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
               </select>
             </div>
           </div>
@@ -367,8 +420,8 @@
 
           <ul class="list-group list-group-flush">
 
-            <li class="list-group-item" *ngFor="let toolEdit of activityEdit.tools; let i = index">{{toolEdit}} <i style="color:red"
-                class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteToolEdit(i)"></i>&nbsp;</li>
+            <li class="list-group-item" *ngFor="let toolEdit of activityEdit.tools; let i = index">{{toolEdit}} <i
+                style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteToolEdit(i)"></i>&nbsp;</li>
           </ul>
 
           <div class="col-md-12 text-center" style="margin-top:30px">

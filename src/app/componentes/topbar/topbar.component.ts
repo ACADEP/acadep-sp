@@ -8,9 +8,20 @@ declare var $: any;
 })
 export class TopbarComponent implements OnInit {
 
+  public authUser = {
+    name : '',
+    email : ''
+  }
+
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.getAuth().subscribe( auth => {
+     
+      this.authUser.email = auth.email;
+      this.authUser.name = auth.displayName;
+      
+    });
   }
 
   onClickLogout(){
@@ -33,6 +44,19 @@ export class TopbarComponent implements OnInit {
         $nav.removeClass('app-side-mini');
     } else {
       $nav.addClass('app-side-mini');
+    }
+  }
+
+  navCollapsemini(){
+
+    var $nav = $('#navcol');
+
+    if ($nav.hasClass('app-side-opened')) {
+        $nav.removeClass('app-side-opened');
+        $nav.addClass('app-side-closed');
+    } else {
+      $nav.removeClass('app-side-closed');
+      $nav.addClass('app-side-opened');
     }
   }
 

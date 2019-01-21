@@ -58,7 +58,7 @@
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
-                    <h6 class="title">{{project.name | titlecase}}</h6>
+                    <h6 class="title">{{project.title | titlecase}}</h6>
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                     <div class="row">
@@ -110,6 +110,7 @@
                         </div> -->
                 <!-- END: box-tools -->
               </header>
+
               <div class="box-body collapse in">
                 <form (submit)="addProject()">
                   <div class="form-group">
@@ -120,6 +121,27 @@
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
                     </div>
+                  </div>
+
+                  <hr class="b-s-dashed" >
+
+                  <mat-checkbox color="primary" (change)="checkSub()" style="float: 0px;"> Agregar subproyectos?</mat-checkbox>
+                  
+                  <!-- *ngIf="sub == true" -->
+
+                  <div *ngIf="sub == true">
+                    
+                    <form class="form-inline" (submit)="PushSubproject()">
+                      <div class="form-group">
+                        <!-- <label for="exampleInputEmail2">Email</label> -->
+                        <input type="text" name="subproject" class="form-control" [(ngModel)]="subproject" placeholder="Nombre de subproyecto">
+                      </div>
+                      <button type="submit" style="margin-left: 5px" class="btn btn-info"><i class="fa fa-check"></i></button>
+                    </form>
+  
+                  <ul>
+                    <li *ngFor="let subproject of projectDoc.subprojects"> {{subproject}}</li>
+                  </ul>
                   </div>
 
                   <hr class="b-s-dashed">
@@ -158,24 +180,67 @@
 
                   <hr class="b-s-dashed">
 
-                  <!-- <div class="row text-center">
-                    <span>
-                      <div class="col-md-12">
-                        <label for="">Inicio <span class="required">*</span></label>
-                        <div class="input-group col-centered">
-                          <input type="datetime-local" name="start" [(ngModel)]="projectDoc.start" required>
+                  <div class="form-group">
+                      <label for="itext">Fecha de inicio <span class="required">*</span></label>
+                      <div class="panel-body">
+                          <input
+                            class="form-control"
+                            minDate="today"                    
+                            type="text"
+                            mwlFlatpickr
+                            [(ngModel)]="projectDoc.start"
+                            [altInput]="true"
+                            name="start"
+                          
+                            [convertModelValue]="false"
+                            placeholder="dd/mm/yyyy"
+                            [enableTime]="true"
+                            dateFormat="Y-m-dTH:i" required>
                         </div>
-                      </div>
-                      <div class="col-md-12 ">
-                        <label for="">Final <span class="required">*</span></label>
-                        <div class="input-group col-centered">
-                          <input type="datetime-local" name="end" [(ngModel)]="projectDoc.end" required>
+                    </div>
+
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                      <label for="itext">Fecha de término <span class="required">*</span></label>
+                      <div class="panel-body">
+                          <input
+                            class="form-control"
+                            type="text"
+                            minDate="today"                    
+                            
+                            mwlFlatpickr
+                            [(ngModel)]="projectDoc.end"
+                            [altInput]="true"
+                            name="end"
+                            placeholder="dd/mm/yyyy"
+
+                            [convertModelValue]="false"
+                            [enableTime]="true"
+                            dateFormat="Y-m-dTH:i" required>
                         </div>
-                      </div>
-                    </span>
+                    </div>
+
+                  <!-- <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Date range picker</h3>
+                    </div>
+                    <div class="panel-body">
+                      <input
+                        class="form-control"
+                        type="text"
+                        mwlFlatpickr
+                        [(ngModel)]="rangeValue"
+                        [altInput]="true"
+                        [convertModelValue]="true"
+                        name="daterange" 
+                        [enableTime]="true"
+                        mode="range">
+                      NgModel value: {{ rangeValue | json }}
+                    </div>
                   </div> -->
 
-                  <div class="row text-center">
+                  <!-- <div class="row text-center">
                     <div class="col-md-12">
                       <label id="labelstart" for="">Inicio de Proyecto <span class="required">*</span></label>
                       <div class="input-group col-centered">
@@ -203,13 +268,13 @@
 
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
 
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                      <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
+                      <label class="col-sm-12 control-label">Administrador(es) <span class="required">*</span> </label>
                       <div class="col-sm-12">
                         <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="projectDoc.administrators" >
                             <option *ngFor="let user of users" value="{{user.name}}">{{user.name}}</option>
@@ -316,7 +381,7 @@
 
           <hr class="b-s-dashed">
 
-          <div class="row text-center">
+          <!-- <div class="row text-center">
             <div class="col-md-12">
               <label id="labelstart" for="">Inicio de Proyecto <span class="required">*</span></label>
               <div class="input-group col-centered">
@@ -344,7 +409,7 @@
 
               </div>
             </div>
-          </div>
+          </div> -->
 
 
           <hr class="b-s-dashed">

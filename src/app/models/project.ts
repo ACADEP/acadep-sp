@@ -1,4 +1,4 @@
-import { datetime } from "../models/datetime";
+// import { datetime } from "../models/datetime";
 
 export interface project {
 id?: string;
@@ -8,7 +8,9 @@ ubication: {
     lat : number,
     lng : number
 };
-start: datetime;
-end: datetime;
+start: string;
+end: string;
 administrators: string[];
+
+subprojects : string[];
 }
