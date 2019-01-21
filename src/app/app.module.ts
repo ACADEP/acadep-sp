@@ -14,6 +14,8 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { FullCalendarModule } from 'ng-fullcalendar';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
@@ -191,6 +193,7 @@ const customNotifierOptions: NotifierOptions = {
     AppRoutingModule,
     FormsModule,
     MatDialogModule,
+    AngularFireStorageModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(

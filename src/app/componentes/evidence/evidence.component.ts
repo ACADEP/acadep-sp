@@ -48,7 +48,7 @@ export class EvidenceComponent implements OnInit {
   showImage(event){
     this.src = event.target.src;
     $('#showimage').modal('show');
-    console.log(event)
+    console.log(this.src)
   }
 
   getColor(type){
@@ -62,6 +62,21 @@ export class EvidenceComponent implements OnInit {
       default:
       return 'inherit'
     }
+  }
+
+  getClass(type){
+    switch (type) {
+      case 'pdf':
+        return 'fa fa-file-pdf fa-2x'
+      case 'word':
+        return 'fa fa-file-word fa-2x'
+      default:
+      return 'fa fa-file fa-2x'
+    }
+  }
+
+  dowloadFile(){
+
   }
 
   

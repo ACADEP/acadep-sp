@@ -52,3 +52,22 @@ img{
   .mat-card{
     margin-top: 15px !important;
   }
+
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  mat-icon.delete:hover{
+    color:#d64040 !important
+  }
+
+  .btn_edit{
+    background: #397bbd;
+    color: white;
+  }

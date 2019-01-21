@@ -47,6 +47,7 @@ export class EventsService {
         staff: event.staff,
         deleted: false,
         status: 1,
+        percentage : 0
         // observation : {
         //   before : {
         //     active : true,
