@@ -79,6 +79,7 @@ import { EvidenceComponent } from './componentes/evidence/evidence.component';
 
 import { GalleryModule } from  '@ngx-gallery/core';
 import { LightboxModule } from  '@ngx-gallery/lightbox';
+import { ConfigurationComponent } from './componentes/configuration/configuration.component';
 
 
 
@@ -141,7 +142,8 @@ const customNotifierOptions: NotifierOptions = {
     ActivitiesComponent,
     GmapComponent,
     CalendarEventsComponent,
-    EvidenceComponent
+    EvidenceComponent,
+    ConfigurationComponent
     
   ],
   imports: [

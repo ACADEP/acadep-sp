@@ -28,67 +28,68 @@
     <div class="row">
 
 
-        <div class="col-md-12">
-            <div class="box">
-              <!-- <h2 class="text-center">hola</h2> -->
-              <form action="">
-    
-                <form style="margin-top:10px; margin-left:15px">
-                  <div class="row">
-    
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <!-- <label for="itext">Buscar Proyecto</label> -->
-                        <div class="icon-after-input">
-                          <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar...">
-                          <div class="icon">
-                            <button class="btn btn-info btn-sm btn-rect" style="background: #337ab7; border: #337ab7" type="button"><i class="fa fa-search fa-lg"></i></button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="col-md-2">
-                      <div class="form-group">
-                        <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                        <select id="type" class="form-control" name="type" required>
-                          <option value="">Proyectos</option>
-                          <option value="">proyecto 1 </option>
-                          <option value="">proyecto 2 </option>
-                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="form-group">
-                        <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                        <select id="type" class="form-control" name="type" required>
-                          <option value="">Asignaciones</option>
-                          <option value="">jhon doe</option>
-                          <option value="">jane doe</option>
-                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4" >
-                        <button mat-raised-button color="warn">Exportar a PDF
-                        </button>
-
-                    </div>
-                    
-                    
-                  </div>
-                </form>
-    
-    
-    
-              </form>
-            </div>
-          </div>
-
-
       <div class="col-md-12">
+        <div class="box">
+          <!-- <h2 class="text-center">hola</h2> -->
+          <form action="">
+
+            <form style="margin-top:10px; margin-left:15px">
+              <div class="row">
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <!-- <label for="itext">Buscar Proyecto</label> -->
+                    <div class="icon-after-input">
+                      <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar...">
+                      <div class="icon">
+                        <button class="btn btn-info btn-sm btn-rect" style="background: #337ab7; border: #337ab7" type="button"><i
+                            class="fa fa-search fa-lg"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                    <select id="type" class="form-control" name="type" (change)="UpdateEvidence($event)">
+                      <option value="">Todos los eventos</option>
+                      
+                      <option [value]="event.id" *ngFor="let event of eventsCollection">{{event.title}}</option>
+                      <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
+                    <select id="type" class="form-control" name="type" required>
+                      <option value="">Asignaciones</option>
+                      <option value="">jhon doe</option>
+                      <option value="">jane doe</option>
+                      <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <button mat-raised-button color="warn" (click)="pdf()">Exportar a PDF
+                  </button>
+
+                </div>
+
+
+              </div>
+            </form>
+
+
+
+          </form>
+        </div>
+      </div>
+
+
+      <div class="col-md-12" style="height:-webkit-fill-available">
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
@@ -96,9 +97,9 @@
               <header>
                 <h3>Evidencia de eventos</h3>
                 <div class="box-tools">
-                  <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x"
-                  (click)="openAll()"></i>
-                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x" (click)="closeAll()"></i>
+                  <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x" (click)="openAll()"></i>
+                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x"
+                    (click)="closeAll()"></i>
                 </div>
               </header>
 
@@ -107,7 +108,7 @@
                 <mat-expansion-panel *ngFor="let evidence of evidenceCollection; index as i">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                     <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.event.name}}</mat-checkbox>
+                      <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.event.name}}</mat-checkbox>
 
                       <!-- <h4> </h4>  -->
                     </mat-panel-title>
@@ -139,12 +140,11 @@
 
                         <div *ngFor="let item of evidence.files">
 
-                            <a [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
-                              [style.color]="getColor(item.type)"></i>
+                          <a [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)" [style.color]="getColor(item.type)"></i>
                             {{item.name}} </a>
 
                         </div>
-                       
+
 
                         <br>
                       </div>
@@ -266,4 +266,10 @@
 
     </div>
   </div>
+</div>
+
+
+<div id="content" #content>
+  <p>hola prexioxo</p>
+
 </div>

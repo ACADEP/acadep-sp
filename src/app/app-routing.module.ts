@@ -10,17 +10,19 @@ import { EventsComponent } from "./componentes/events/events.component";
 import { GmapComponent } from "./componentes/gmap/gmap.component";
 import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 import { EvidenceComponent } from "./componentes/evidence/evidence.component";
+import { ConfigurationComponent } from "./componentes/configuration/configuration.component";
 
 const routes: Routes = [
   { path: 'home', component:  CalendarEventsComponent },
   { path: 'evidence', component:  EvidenceComponent },
+  { path: 'configuration', component:  ConfigurationComponent },
   { path: 'map', component:  GmapComponent },
   { path: 'users', component:  RegisterUserComponent },
   { path: 'events', component:  EventsComponent },
   { path: 'activities', component:  ActivitiesComponent },
   { path: 'projects', component:  CreateProyectComponent },
   { path: 'calendar', component:  InicioComponent },
-  { path: 'aside', component:  AsideComponent },
+  // { path: 'aside', component:  AsideComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'home'}
 
 ];

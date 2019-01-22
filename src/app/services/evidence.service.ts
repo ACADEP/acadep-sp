@@ -32,7 +32,19 @@ export class EvidenceService {
         return data;
       });
     }));
-    console.log(this.evidence)
+    // console.log(this.evidence)
+    return this.evidence;
+  }
+  getEventsByUid(id) {
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('event.id', '==', id));
+    this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data();
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    // console.log(this.evidence)
     return this.evidence;
   }
 
