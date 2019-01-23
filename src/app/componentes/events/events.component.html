@@ -148,7 +148,7 @@
                   <div class="form-group">
                     <label id="labelname" for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="eventDoc.name"
+                      <input type="text" class="form-control" id="name" name="name" [(ngModel)]="eventDoc.title"
                         placeholder="Escriba un nombre para el evento ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
@@ -370,7 +370,7 @@
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
-              <input type="text" class="form-control" name="name" [(ngModel)]="eventDocEdit.name" placeholder="Escriba un nombre para el evento ...">
+              <input type="text" class="form-control" name="name" [(ngModel)]="eventDocEdit.title" placeholder="Escriba un nombre para el evento ...">
               <div class="icon">
                 <i class="fa fa-fw fa-pencil"></i>
               </div>
@@ -388,17 +388,17 @@
           </div>
           <hr class="b-s-dashed">
 
-          <div class="row text-center">
+          <!-- <div class="row text-center">
             <div class="col-md-12">
               <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
               <div class="input-group col-centered">
                 <div class="col-md-6">
                   <p><small>Fecha:</small></p>
-                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start.date" required>
+                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start" required>
                 </div>
                 <div class="col-md-6">
                   <p><small>Hora:</small></p>
-                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start.time" required>
+                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start" required>
                 </div>
               </div>
             </div>
@@ -415,7 +415,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
 
           <hr class="b-s-dashed">

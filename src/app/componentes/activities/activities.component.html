@@ -284,7 +284,7 @@
 
                   <ul class="list-group list-group-flush">
 
-                    <li class="list-group-item" *ngFor="let tool of activityDoc.tools; let i = index">{{tool}} <i style="color:red"
+                    <li class="list-group-item" *ngFor="let tool of activityDoc.insumos; let i = index">{{tool}} <i style="color:red"
                         class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteTool(i)"></i>&nbsp;</li>
                   </ul>
 
@@ -405,7 +405,7 @@
 
           <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
 
-          <form (submit)="pushToolEdit()">
+          <!-- <form (submit)="pushToolEdit()">
             <div class="form-group">
               <label for="atext3">Insumos necesarios</label>
               <div class="icon-after-input">
@@ -416,11 +416,11 @@
                 </div>
               </div>
             </div>
-          </form>
+          </form> -->
 
           <ul class="list-group list-group-flush">
 
-            <li class="list-group-item" *ngFor="let toolEdit of activityEdit.tools; let i = index">{{toolEdit}} <i
+            <li class="list-group-item" *ngFor="let toolEdit of activityEdit.insumos; let i = index">{{toolEdit}} <i
                 style="color:red" class="fa fa-close pull-right fa-lg deleteEvent" (click)="deleteToolEdit(i)"></i>&nbsp;</li>
           </ul>
 
