@@ -52,9 +52,9 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                    <select id="type" class="form-control" name="type" (change)="UpdateEvidence($event)">
+                    <select id="type" class="form-control" [(ngModel)]="idEvent" name="idevent" (change)="UpdateEvidence()">
                       <option value="">Todos los eventos</option>
-                      
+
                       <option [value]="event.id" *ngFor="let event of eventsCollection">{{event.title}}</option>
                       <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
                     </select>
@@ -63,10 +63,10 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                    <select id="type" class="form-control" name="type" required>
-                      <option value="">Asignaciones</option>
-                      <option value="">jhon doe</option>
-                      <option value="">jane doe</option>
+                    <select id="type" class="form-control" [(ngModel)]="idUser" name="iduser" (change)="UpdateEvidence()">
+                      <option value="">Todos los usuarios</option>
+                      <option [value]="user.id" *ngFor="let user of usersCollection">{{user.name}}</option>
+
                       <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
                     </select>
                   </div>
@@ -103,12 +103,17 @@
                 </div>
               </header>
 
+
+
+              <mat-spinner *ngIf="!eventsCollection"></mat-spinner>
+
+
               <mat-accordion #myaccordion="matAccordion" multi="true">
 
                 <mat-expansion-panel *ngFor="let evidence of evidenceCollection; index as i">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.event.name}}</mat-checkbox>
+                      <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.ref_event.name}}</mat-checkbox>
 
                       <!-- <h4> </h4>  -->
                     </mat-panel-title>
@@ -140,7 +145,8 @@
 
                         <div *ngFor="let item of evidence.files">
 
-                          <a [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)" [style.color]="getColor(item.type)"></i>
+                          <a target="_blank" [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
+                              [style.color]="getColor(item.type)"></i>
                             {{item.name}} </a>
 
                         </div>
@@ -269,7 +275,10 @@
 </div>
 
 
-<div id="content" #content>
-  <p>hola prexioxo</p>
+<div class="hidden" id="content" #content>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsa sit, sunt quasi aspernatur assumenda magnam ex
+    ipsum odit laboriosam, laborum id tempora perspiciatis veritatis illo dignissimos ab natus placeat?</p>
+
+
 
 </div>

@@ -3,11 +3,12 @@ import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '
 import { map } from 'rxjs/operators';
 import { EvidenceService } from "../../services/evidence.service";
 import { EventsService } from "../../services/events.service";
+import { UsersService } from "../../services/users.service";
 import { MatAccordion } from '@angular/material';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 import * as jsPDF from 'jspdf'
-declare var $ : any;
+declare var $: any;
 
 @Component({
   selector: 'app-evidence',
@@ -18,21 +19,27 @@ declare var $ : any;
 })
 export class EvidenceComponent implements OnInit {
 
-  @ViewChild('content') content : ElementRef;
+
+  idEvent="";
+  idUser="";
+
+
+  @ViewChild('content') content: ElementRef;
   public src: string;
   items: GalleryItem[];
   evidenceCollection: any[];
   eventsCollection: any[];
+  usersCollection: any[];
 
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
-  constructor(public gallery: Gallery, public evidenceService : EvidenceService,
-    public eventsService : EventsService) {
+  constructor(public gallery: Gallery, public evidenceService: EvidenceService,
+    public eventsService: EventsService, public usersService : UsersService) {
   }
 
   ngOnInit() {
 
-    this.evidenceService.getEvents().subscribe(evidence => {
+    this.evidenceService.getEvidence().subscribe(evidence => {
       this.evidenceCollection = evidence;
     })
 
@@ -40,23 +47,37 @@ export class EvidenceComponent implements OnInit {
       this.eventsCollection = events
     })
 
+    this.usersService.getUsers().subscribe(users => {
+      this.usersCollection = users
+    })
+
 
   }
 
-  UpdateEvidence($event){
-// console.log($event.target.value)
 
-this.evidenceService.getEventsByUid($event.target.value).subscribe(newEvidence => {
-  this.evidenceCollection = newEvidence
-})
+
+  UpdateEvidence() {
+
+    if (this.idEvent != "" || this.idUser != "" ) {
+
+          this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
+            this.evidenceCollection = newEvidence
+          })
+
+    }else{
+      this.evidenceService.getEvidence().subscribe(evidence => {
+        this.evidenceCollection = evidence;
+      })
+    }
+
 
   }
 
-  pdf(){
+  pdf() {
 
     let doc = new jsPDF();
     let specialElementhandlers = {
-      '#editor' : function(element, renderer) {
+      '#editor': function (element, renderer) {
         return true
       }
     };
@@ -64,58 +85,61 @@ this.evidenceService.getEventsByUid($event.target.value).subscribe(newEvidence =
 
     let content = this.content.nativeElement;
     doc.fromHTML(content.innerHTML, 15, 15, {
-      width : 190,
-      'elementHandlers' : specialElementhandlers
+      width: 190,
+      'elementHandlers': specialElementhandlers
     });
-
     doc.addImage(image, 'JPEG', 15, 40, 180, 160)
-
     doc.save('test.pdf');
   }
 
-  openAll(){
+  openAll() {
     this.myPanels.openAll();
   }
 
-  closeAll(){
+  closeAll() {
     this.myPanels.closeAll();
   }
 
-  showImage(event){
+  showImage(event) {
     this.src = event.target.src;
     $('#showimage').modal('show');
     console.log(this.src)
   }
 
-  getColor(type){
-    switch (type) {
+  getColor(type) {
+   type = type.toLowerCase();
+
+    switch (type ) {
       case 'pdf':
         return '#f43636'
-        
+
       case 'word':
         return '#3672f4'
-    
+
       default:
-      return 'inherit'
+        return 'inherit'
     }
   }
 
-  getClass(type){
+  getClass(type) {
+   type = type.toLowerCase();
     switch (type) {
       case 'pdf':
         return 'fa fa-file-pdf fa-2x'
       case 'word':
         return 'fa fa-file-word fa-2x'
+      case 'video':
+        return 'fa fa-file-video fa-2x'
       default:
-      return 'fa fa-file fa-2x'
+        return 'fa fa-file fa-2x'
     }
   }
 
-  convertFile(imagepath){
+  convertFile(imagepath) {
 
-    this.toDataUrl(imagepath, function(myBase64) {
+    this.toDataUrl(imagepath, function (myBase64) {
       console.log(myBase64); // myBase64 is the base64 string
-  });
+    });
 
   }
 
@@ -123,17 +147,17 @@ this.evidenceService.getEventsByUid($event.target.value).subscribe(newEvidence =
 
   toDataUrl(url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      }
+      reader.readAsDataURL(xhr.response);
     };
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.send();
-}
+  }
 
-  
+
 }

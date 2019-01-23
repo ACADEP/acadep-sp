@@ -23,8 +23,9 @@ export class EvidenceService {
   evidenceDoc: any;
   constructor(public db: AngularFirestore) { }
 
-  getEvents() {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('test', '==', true));
+  getEvidence() {
+    // this.evidenceCollection = this.db.collection('evidence', ref => ref.where('deleted', '==', false));
+    this.evidenceCollection = this.db.collection('evidence');
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -35,8 +36,9 @@ export class EvidenceService {
     // console.log(this.evidence)
     return this.evidence;
   }
-  getEventsByUid(id) {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('event.id', '==', id));
+
+  getEvidenceByEvent(id) {
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('ref_event.id', '==', id));
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -44,6 +46,45 @@ export class EvidenceService {
         return data;
       });
     }));
+    // console.log(this.evidence)
+    return this.evidence;
+  }
+
+  searchEvidence(idEvent, idUser) {
+    // var ref = this.db.collection('evidence');
+
+
+    if (idEvent != "" && idUser != "") {
+      this.evidenceCollection = this.db.collection('evidence', ref => ref.where('user_id', '==', idUser).where('ref_event.id', '==', idEvent));
+      this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          data.id = a.payload.doc.id;
+          return data;
+        });
+      }));
+    } else if (idUser != "") {
+      this.evidenceCollection = this.db.collection('evidence', ref => ref.where('user_id', '==', idUser));
+      this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          data.id = a.payload.doc.id;
+          return data;
+        });
+      }));
+    } else if (idEvent != "") {
+
+      this.evidenceCollection = this.db.collection('evidence', ref => ref.where('ref_event.id', '==', idEvent));
+      this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          data.id = a.payload.doc.id;
+          return data;
+        });
+      }));
+
+    }
+
     // console.log(this.evidence)
     return this.evidence;
   }
