@@ -9,6 +9,18 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 import * as jsPDF from 'jspdf'
 declare var $: any;
+interface ubication {
+  lat : number,
+  lng : number
+}
+
+interface image {
+ src : string;
+ created_at : string,
+ type : string,
+ ubication : ubication
+
+}
 
 @Component({
   selector: 'app-evidence',
@@ -25,7 +37,7 @@ export class EvidenceComponent implements OnInit {
 
 
   @ViewChild('content') content: ElementRef;
-  public src: string;
+  public image = {} as image;
   items: GalleryItem[];
   evidenceCollection: any[];
   eventsCollection: any[];
@@ -35,6 +47,10 @@ export class EvidenceComponent implements OnInit {
 
   constructor(public gallery: Gallery, public evidenceService: EvidenceService,
     public eventsService: EventsService, public usersService : UsersService) {
+      this.image.ubication = {
+        lat : 0,
+        lng : 0
+      }
   }
 
   ngOnInit() {
@@ -100,10 +116,12 @@ export class EvidenceComponent implements OnInit {
     this.myPanels.closeAll();
   }
 
-  showImage(event) {
-    this.src = event.target.src;
+  showImage(evidence, index) {
+
+    this.image = evidence.multimedia[index];
+    // this.src = event.target.src;
     $('#showimage').modal('show');
-    console.log(this.src)
+    console.log(this.image)
   }
 
   getColor(type) {
