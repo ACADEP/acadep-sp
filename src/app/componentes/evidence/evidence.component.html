@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="col-md-4">
-                  <button mat-raised-button color="warn" (click)="pdf()">Exportar a PDF
+                  <button mat-raised-button color="warn">Exportar a PDF
                   </button>
 
                 </div>
@@ -120,7 +120,7 @@
                     <mat-panel-description>
 
                       <span *ngIf="evidence.percentage">
-                        {{evidence.percentage}}%
+                        {{evidence.total.number}} {{evidence.total.unit}}
                       </span>
 
                     </mat-panel-description>
@@ -130,6 +130,8 @@
                       <div class="col-md-12">
                         <!-- <h4>Texto</h4> -->
                         <p style="padding:20px">{{evidence.description}}</p>
+                      <button mat-raised-button color="warn" (click)="export(evidence)">Exportar a PDF</button>
+
                       </div>
                       <div class="col-md-12">
                         <h4>Imágenes</h4>
@@ -225,6 +227,6 @@
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ipsa sit, sunt quasi aspernatur assumenda magnam ex
     ipsum odit laboriosam, laborum id tempora perspiciatis veritatis illo dignissimos ab natus placeat?</p>
 
-
+<img id src="" alt="">
 
 </div>

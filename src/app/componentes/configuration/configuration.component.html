@@ -1,64 +1,196 @@
 <header class="main-heading shadow-2dp">
-    <!-- begin dashhead -->
-    <div class="dashhead bg-white">
-      <div class="dashhead-titles">
-        <h6 class="dashhead-subtitle">
-          ACADEP
-        </h6>
-        <h3 class="dashhead-title">Inicio</h3>
-      </div>
-  
-      <div class="dashhead-toolbar">
-        <div class="dashhead-toolbar-item">
-          <a>App</a>
-          / Inicio
-        </div>
+  <!-- begin dashhead -->
+  <div class="dashhead bg-white">
+    <div class="dashhead-titles">
+      <h6 class="dashhead-subtitle">
+        ACADEP
+      </h6>
+      <h3 class="dashhead-title">Inicio</h3>
+    </div>
+
+    <div class="dashhead-toolbar">
+      <div class="dashhead-toolbar-item">
+        <a>App</a>
+        / Inicio
       </div>
     </div>
-    <!-- END: dashhead -->
-  </header>
-  <!-- END: .main-heading -->
-  
-  
-  <!-- begin .main-content -->
-  <div class="main-content bg-clouds">
-  
-    <!-- begin .container-fluid -->
-    <div class="container-fluid p-t-15">
-  
-  
-  
-  
-      <div class="row" style="height:-webkit-fill-available">
-  
-       
-  
-        
-        <div class="col-sm-12" >
-          <div class="box">
+  </div>
+  <!-- END: dashhead -->
+</header>
+<!-- END: .main-heading -->
+
+
+<!-- begin .main-content -->
+<div class="main-content bg-clouds">
+
+  <!-- begin .container-fluid -->
+  <div class="container-fluid p-t-15">
+
+
+
+    <form class="form-horizontal" (submit)="saveChanges(form)" #form="ngForm">
+    <div class="row" style="height:-webkit-fill-available">
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- BEGIN: flatpickr -->
+          <div class="row">
+
+            <div class="col-xs-12">
+              <div class="box bg-white">
+                <div class="box-heading">
+                  <div class="box-title">
+                    <header class="box-heading bg-wet-asphalt text-white">
+
+                      <h3>Fotos de evidencia</h3>
+                    </header>
+                  </div>
+
+                </div>
+                <div class="box-body">
+                  <div class="form-group">
+                    <label for="min" class="col-sm-2 control-label"
+                    [ngClass]="{'errortxt':configuration.min_photos > 1000 || configuration.min_photos < 1 || configuration.min_photos > configuration.max_photos}" 
+                    >Mínimo</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" 
+                      id="min" name="min"  
+                      placeholder="cantidad mínima de fotos"
+                      [ngClass]="{'error':configuration.min_photos > 1000 || configuration.min_photos < 1 || configuration.min_photos > configuration.max_photos}" 
+                      [value]="configuration.min_photos" name="min" 
+                      [(ngModel)]="configuration.min_photos" required minlength="1" maxlength="1000">
+                      <small class="errortxt" *ngIf="configuration.min_photos > 1000 || configuration.min_photos < 1">
+                        Ingrese un número entre 1 y 1000
+                      </small>
+                    </div>
+                  </div>
+                  <hr class="b-s-dashed">
+
+                  <div class="form-group">
+                    <label for="max" class="col-sm-2 control-label"
+                    [ngClass]="{'errortxt':configuration.max_photos > 1000 || configuration.max_photos < 1 || configuration.min_photos > configuration.max_photos}" 
+                    >Máximo</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" 
+                      id="max" name="max" 
+                      placeholder="cantidad máxima de fotos"
+                      [ngClass]="{'error':configuration.max_photos > 1000 || configuration.max_photos < 1 || configuration.min_photos > configuration.max_photos}" 
+                      [(ngModel)]="configuration.max_photos" required minlength="1" maxlength="1000">
+                      <small class="errortxt" *ngIf="configuration.max_photos > 1000 || configuration.max_photos < 1">
+                        Ingrese un número entre 1 y 1000
+                      </small>
+                    </div>
+                  </div>
+                  <hr class="b-s-dashed">
+
+                  <h4 class="text-center errortxt" *ngIf="configuration.min_photos > configuration.max_photos"><i class="fa fa-exclamation-circle"></i> el minimo no puede ser mayor al maximo</h4>
+
+                
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END: flatpickr -->
+
+        </div>
+
+        <div class="col-md-6">
+          <!-- BEGIN: flatpickr -->
+          <div class="row">
+
+            <div class="col-xs-12">
+              <div class="box bg-white">
+                <div class="box-heading">
+                  <div class="box-title">
+                    <header class="box-heading bg-wet-asphalt text-white">
+
+                      <h3>Tema</h3>
+                    </header>
+                  </div>
+
+                </div>
+                <div class="box-body">
+                  <input class="form-control" data-plugin="flatpickr" data-date-format="d-m-Y" placeholder="European Format ('d-m-Y')">
+                  <hr class="dashed">
+
+                  <input class="form-control" data-plugin="flatpickr" data-date-format="m/d/Y" placeholder="American Format ('m/d/Y')">
+                  <hr class="dashed">
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END: flatpickr -->
+          
+        </div>
+            <div class="col-md-12 text-center" >
+              <button type="submit" class="btn btn-success">Guardar cambios</button>
+            </div>
+      </div>
+
+
+      <!-- <div class="col-sm-12" >
+            <div class="box">
+                <header class="box-heading bg-wet-asphalt text-white">
+                  <h4>Fotos por evidencia</h4> -->
+      <!-- begin box-tools -->
+      <!-- <div class="box-tools">
+                    <a class="fa fa-fw fa-minus" href="#" data-box="collapse"></a>
+                    <a class="fa fa-fw fa-square-o" href="#" data-fullscreen="box"></a>
+                    <a class="fa fa-fw fa-refresh" href="#" data-box="refresh"></a>
+                    <a class="fa fa-fw fa-times" href="#" data-box="close"></a>
+                  </div> -->
+      <!-- END: box-tools -->
+      <!-- </header> -->
+
+
+      <!-- <div class="box-body collapse in">
+                  <form class="" (submit)="saveChanges(photos)" #photos="ngForm">
+                    <div class="form-group">
+                      <label for="exampleInputName2">Mínimo de fotos</label>&nbsp;
+                      <input type="number" class="form-control" minlength="1" maxlength="1000" [value]="configuration.min_photos" name="min" 
+                      [(ngModel)]="configuration.min_photos" required>
+                    </div>
+                    &nbsp;
+                    <div class="form-group">
+                      <label for="exampleInputEmail2" [ngClass]="{'errortxt':configuration.max_photos > 1000 || configuration.max_photos < 1}">Máximo de fotos</label>&nbsp;
+                      <input type="number" class="form-control" minlength="1" maxlength="1000" 
+                      [ngClass]="{'error':configuration.max_photos > 1000 || configuration.max_photos < 1}" [value]="configuration.max_photos" name="max" 
+                      [(ngModel)]="configuration.max_photos" required>
+                      <p>hola</p>
+                    </div>
+                    <button type="submit" style="margin-left:10px" class="btn btn-success">Guardar Cambios</button>
+                  </form>
+                </div> -->
+      <!-- </div> -->
+      <!-- <div class="box"> -->
+      <!-- <button type="submit" class="btn btn-info">Send invitation</button> -->
+
+      <!-- </div> -->
+      <!-- <div class="box">
             <div class="box-body">
-              
                 <form (submit)="saveChanges()" class="example-form">
                     <mat-form-field class="example-full-width">
                       <input matInput placeholder="Número de fotos" type="number" name="num_photos" [(ngModel)]="num_photos">
                     </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="" type="number" name="num_photos" [(ngModel)]="num_photos">
+                    </mat-form-field>
                     <br>
                     <button mat-raised-button type="submit" color="Accent">Guardar</button>
-
                   </form>
-
             </div>
-          </div>
-        </div>
-      </div>
-  
-     
-      <!-- END: modal -->
-  
+          </div> -->
+      <!-- </div> -->
     </div>
-    <!-- END: .container-fluid -->
-  
-  </div>
-  
+  </form>
 
-  
+    <!-- END: modal -->
+
+  </div>
+  <!-- END: .container-fluid -->
+
+</div>

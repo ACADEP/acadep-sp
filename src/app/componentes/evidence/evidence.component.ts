@@ -10,15 +10,15 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
 import * as jsPDF from 'jspdf'
 declare var $: any;
 interface ubication {
-  lat : number,
-  lng : number
+  lat: number,
+  lng: number
 }
 
 interface image {
- src : string;
- created_at : string,
- type : string,
- ubication : ubication
+  src: string;
+  created_at: string,
+  type: string,
+  ubication: ubication
 
 }
 
@@ -32,8 +32,8 @@ interface image {
 export class EvidenceComponent implements OnInit {
 
 
-  idEvent="";
-  idUser="";
+  idEvent = "";
+  idUser = "";
 
 
   @ViewChild('content') content: ElementRef;
@@ -46,11 +46,11 @@ export class EvidenceComponent implements OnInit {
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
   constructor(public gallery: Gallery, public evidenceService: EvidenceService,
-    public eventsService: EventsService, public usersService : UsersService) {
-      this.image.ubication = {
-        lat : 0,
-        lng : 0
-      }
+    public eventsService: EventsService, public usersService: UsersService) {
+    this.image.ubication = {
+      lat: 0,
+      lng: 0
+    }
   }
 
   ngOnInit() {
@@ -70,23 +70,57 @@ export class EvidenceComponent implements OnInit {
 
   }
 
+  // getUnit(id){
+  //   this.eventsService.getEventById(id).then( (res : any) => {
+  //     return res.total.unit
+  //   })
+  // }
+
 
 
   UpdateEvidence() {
 
-    if (this.idEvent != "" || this.idUser != "" ) {
+    if (this.idEvent != "" || this.idUser != "") {
 
-          this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
-            this.evidenceCollection = newEvidence
-          })
+      this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
+        this.evidenceCollection = newEvidence
+      })
 
-    }else{
+    } else {
       this.evidenceService.getEvidence().subscribe(evidence => {
         this.evidenceCollection = evidence;
       })
     }
 
 
+  }
+
+  async export(evidence) {
+    console.log(evidence)
+
+    let doc = new jsPDF();
+
+    doc.setFont('courier')
+    doc.setFontType('normal')
+    doc.text(20, 30, evidence.description)
+
+    const imgData = await this.getBase64Image(document.getElementById('imagentest'));
+
+    doc.addImage(imgData, 'JPEG', 15, 40, 180, 160);
+
+    doc.save('test.pdf');
+
+  }
+
+
+  getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
 
   pdf() {
@@ -125,9 +159,9 @@ export class EvidenceComponent implements OnInit {
   }
 
   getColor(type) {
-   type = type.toLowerCase();
+    type = type.toLowerCase();
 
-    switch (type ) {
+    switch (type) {
       case 'pdf':
         return '#f43636'
 
@@ -140,7 +174,7 @@ export class EvidenceComponent implements OnInit {
   }
 
   getClass(type) {
-   type = type.toLowerCase();
+    type = type.toLowerCase();
     switch (type) {
       case 'pdf':
         return 'fa fa-file-pdf fa-2x'

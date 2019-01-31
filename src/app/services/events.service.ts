@@ -47,7 +47,8 @@ export class EventsService {
         staff: event.staff,
         deleted: false,
         status: 1,
-        percentage : 0
+        advanced : 0,
+        total : event.total
         // observation : {
         //   before : {
         //     active : true,
@@ -110,6 +111,16 @@ export class EventsService {
         status: 1
       }).then((res: any) => resolve(res), err => reject(err));
     })
+  }
+
+
+  getEventById(id){
+
+    return new Promise((resolve, reject) => {
+      this.db.collection('events').doc(id).ref.get()
+        .then(res => resolve(res.data()),
+          err => reject(err));
+    });
   }
 
 }

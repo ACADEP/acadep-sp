@@ -1,14 +1,16 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+// tslint:disable-next-line:quotemark
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
-import { ActivitiesService } from "../../services/activities.service";
-import { Event } from "../../models/event";
-import { activity } from "../../models/activity";
-import { UsersService } from "../../services/users.service";
-import { User } from "../../models/user";
-import { tool } from "../../models/tool";
+import { ActivitiesService } from '../../services/activities.service';
+import { Event } from '../../models/event';
+import { activity } from '../../models/activity';
+import { UsersService } from '../../services/users.service';
+import { User } from '../../models/user';
+import { tool } from '../../models/tool';
 // import { datetime } from "../../models/dateTime"
+import { total } from "../../models/event";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
 
 
@@ -33,10 +35,10 @@ export class EventsComponent implements OnInit {
   private readonly notifier: NotifierService;
   types = [
     'auditoria',
-    // 'servicio',
     'supervision',
     'revision'
   ];
+
 
   eventsCollection: Event[];
   usersCollection: User[];
@@ -49,7 +51,7 @@ export class EventsComponent implements OnInit {
 
   person = {} as tool;
   personEdit = {} as tool;
-  EventSee:any = { observation: { before: { evidence: [] }, during: { evidence: [] }, after: { evidence: [] } } };
+  // EventSee: any = { observation: { before: { evidence: [] }, during: { evidence: [] }, after: { evidence: [] } } };
 
 
 
@@ -58,6 +60,7 @@ export class EventsComponent implements OnInit {
     notifierService: NotifierService, public activitiesService: ActivitiesService
     , public dialog: MatDialog) {
 
+    this.eventDoc.total = {} as total;
     this.notifier = notifierService;
     this.eventDoc.start = new Date().toJSON();
     this.eventDoc.end = new Date().toJSON();
@@ -65,26 +68,27 @@ export class EventsComponent implements OnInit {
     this.eventDocEdit.start = new Date().toJSON();
     this.eventDocEdit.end = new Date().toJSON();
 
+    // tslint:disable-next-line:semicolon
     console.log(this.eventDoc.start)
     this.emptyForm();
-    this.eventSeeNull();
+    // this.eventSeeNull();
   }
 
   ngOnInit() {
     this.eventsService.getEvents().subscribe(events => {
       this.eventsCollection = events;
       // console.log(this.eventsCollection);
-    })
+    });
 
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      console.log(this.usersCollection)
-    })
+      console.log(this.usersCollection);
+    });
 
     this.activitiesService.getActivities().subscribe(items => {
       this.activitiesCollection = items;
-    })
+    });
 
   }
 
@@ -101,43 +105,35 @@ export class EventsComponent implements OnInit {
 
     this.tool.name = '';
     this.tool.quantity = null;
+
+    // this.eventDoc.advanced = null;
+    this.eventDoc.total.number = 0;
+    this.eventDoc.total.unit = '';
   }
 
-  eventSeeNull(): void {
-    this.EventSee = {
-      observation: {
-        before: {
-          evidence: []
-        },
-        during: {
-          evidence: []
-        },
-        after: {
-          evidence: []
-        }
-      }
-    }
-  }
+  // eventSeeNull(): void {
+  //   this.EventSee = {
+  //     observation: {
+  //       before: {
+  //         evidence: []
+  //       },
+  //       during: {
+  //         evidence: []
+  //       },
+  //       after: {
+  //         evidence: []
+  //       }
+  //     }
+  //   };
+  // }
 
-   openAll(){
+  openAll() {
     this.myPanels.openAll();
   }
 
-  closeAll(){
+  closeAll() {
     this.myPanels.closeAll();
   }
-
-  // toogleEvents() {
-  //   if ($('#btncolapse').hasClass('fa-plus-circle')) {
-  //     $('#btncolapse').removeClass('fa-plus-circle');
-  //     $('#btncolapse').addClass('fa-minus-circle');
-  //   } else {
-  //     $('#btncolapse').removeClass('fa-minus-circle');
-  //     $('#btncolapse').addClass('fa-plus-circle');
-  //   }
-  //   $('.fa-chevron-down').trigger('click');
-  // }
-
 
   addEvent(form: NgForm) {
     // console.log(this.eventDoc)
@@ -149,96 +145,96 @@ export class EventsComponent implements OnInit {
         this.emptyForm();
       }).catch(err => {
         this.notifier.notify('error', 'Algo salio mal...');
-      })
+      });
     } else {
       this.notifier.notify('error', 'Completa los campos obligatorios');
 
       if (form.controls.name.invalid) {
-        $('#name').addClass('error')
-        $('#labelname').addClass('errortxt')
+        $('#name').addClass('error');
+        $('#labelname').addClass('errortxt');
       } else {
-        $('#name').removeClass('error')
-        $('#labelname').removeClass('errortxt')
+        $('#name').removeClass('error');
+        $('#labelname').removeClass('errortxt');
       }
       if (form.controls.type.invalid) {
-        $('#type').addClass('error')
-        $('#labeltype').addClass('errortxt')
+        $('#type').addClass('error');
+        $('#labeltype').addClass('errortxt');
       } else {
-        $('#type').removeClass('error')
-        $('#labeltype').removeClass('errortxt')
+        $('#type').removeClass('error');
+        $('#labeltype').removeClass('errortxt');
       }
 
       if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
-        $('#starttime').addClass('error')
-        $('#startdate').addClass('error')
-        $('#labelstart').addClass('errortxt')
+        $('#starttime').addClass('error');
+        $('#startdate').addClass('error');
+        $('#labelstart').addClass('errortxt');
       } else {
-        $('#startdate').removeClass('error')
-        $('#starttime').removeClass('error')
-        $('#labelstart').removeClass('errortxt')
+        $('#startdate').removeClass('error');
+        $('#starttime').removeClass('error');
+        $('#labelstart').removeClass('errortxt');
       }
       if (form.controls.enddate.invalid) {
-        $('#enddate').addClass('error')
-        $('#labelend').addClass('errortxt')
+        $('#enddate').addClass('error');
+        $('#labelend').addClass('errortxt');
       } else {
-        $('#enddate').removeClass('error')
-        $('#labelend').removeClass('errortxt')
+        $('#enddate').removeClass('error');
+        $('#labelend').removeClass('errortxt');
       }
       if (form.controls.endtime.invalid) {
-        $('#endtime').addClass('error')
-        $('#labelend').addClass('errortxt')
+        $('#endtime').addClass('error');
+        $('#labelend').addClass('errortxt');
       } else {
-        $('#endtime').removeClass('error')
+        $('#endtime').removeClass('error');
         if (form.controls.enddate.valid) {
-          $('#labelend').removeClass('errortxt')
+          $('#labelend').removeClass('errortxt');
         }
       }
 
       if (form.controls.startdate.invalid) {
-        $('#startdate').addClass('error')
-        $('#labelstart').addClass('errortxt')
+        $('#startdate').addClass('error');
+        $('#labelstart').addClass('errortxt');
       } else {
-        $('#startdate').removeClass('error')
-        $('#labelstart').removeClass('errortxt')
+        $('#startdate').removeClass('error');
+        $('#labelstart').removeClass('errortxt');
       }
       if (form.controls.starttime.invalid) {
-        $('#starttime').addClass('error')
-        $('#labelstart').addClass('errortxt')
+        $('#starttime').addClass('error');
+        $('#labelstart').addClass('errortxt');
       } else {
-        $('#starttime').removeClass('error')
+        $('#starttime').removeClass('error');
         if (form.controls.startdate.valid) {
-          $('#labelstart').removeClass('errortxt')
+          $('#labelstart').removeClass('errortxt');
         }
       }
 
 
       if (form.controls.user.invalid) {
-        $('#user').addClass('error')
-        $('#labeluser').addClass('errortxt')
+        $('#user').addClass('error');
+        $('#labeluser').addClass('errortxt');
       } else {
-        $('#user').removeClass('error')
-        $('#labeluser').removeClass('errortxt')
+        $('#user').removeClass('error');
+        $('#labeluser').removeClass('errortxt');
       }
       if (form.controls.activity.invalid) {
-        $('#activity').addClass('error')
-        $('#labelactivity').addClass('errortxt')
+        $('#activity').addClass('error');
+        $('#labelactivity').addClass('errortxt');
       } else {
-        $('#activity').removeClass('error')
-        $('#labelactivity').removeClass('errortxt')
+        $('#activity').removeClass('error');
+        $('#labelactivity').removeClass('errortxt');
       }
     }
 
   }
 
   updateEvent(form: NgForm) {
-    console.log(this.eventDocEdit)
+    console.log(this.eventDocEdit);
     this.eventsService.updateEvent(this.eventDocEdit).then(res => {
       this.notifier.notify('success', 'Evento actualizdo');
       $('#modalEdit').modal('hide');
     }).catch(err => {
       this.notifier.notify('error', 'Algo salio mal...');
       console.log(err);
-    })
+    });
   }
 
   editEvent(event) {
@@ -252,10 +248,11 @@ export class EventsComponent implements OnInit {
 
   pushTool(form: NgForm) {
     if (form.valid) {
+      // tslint:disable-next-line:no-shadowed-variable
       const tool: tool = {
         name: form.controls.toolname.value,
         quantity: form.controls.toolquant.value
-      }
+      };
       this.eventDoc.tools.push(tool);
       this.tool.name = '';
       this.tool.quantity = null;
@@ -267,12 +264,12 @@ export class EventsComponent implements OnInit {
   }
 
   pushToolEdit(form: NgForm) {
-    console.log(form)
+    console.log(form);
     if (form.valid) {
       const tool: tool = {
         name: form.controls.toolname.value,
         quantity: form.controls.toolquant.value
-      }
+      };
       this.eventDocEdit.tools.push(tool);
       this.toolEdit.name = '';
       this.toolEdit.quantity = null;
@@ -289,7 +286,7 @@ export class EventsComponent implements OnInit {
       const person: tool = {
         name: form.controls.personname.value,
         quantity: form.controls.personquant.value
-      }
+      };
       this.eventDoc.staff.push(person);
       this.person.name = '';
       this.person.quantity = null;
@@ -306,7 +303,7 @@ export class EventsComponent implements OnInit {
       const person: tool = {
         name: form.controls.personname.value,
         quantity: form.controls.personquant.value
-      }
+      };
       this.eventDocEdit.staff.push(person);
       this.personEdit.name = '';
       this.personEdit.quantity = null;
@@ -340,12 +337,12 @@ export class EventsComponent implements OnInit {
     $('select').removeClass('error');
   }
 
-  seeEvent(event) {
-    
-      this.EventSee = event;
-      $('#seeevent').modal('show');
+  // seeEvent(event) {
 
-  
-  }
+  //   this.EventSee = event;
+  //   $('#seeevent').modal('show');
+
+
+  // }
 
 }
