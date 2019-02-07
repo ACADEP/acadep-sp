@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProjectsService } from "../../../services/projects.service";
+import { ActivitiesService } from "../../../services/activities.service";
+import { EventsService } from "../../../services/events.service";
 import { UsersService } from "../../../services/users.service";
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, combineLatest } from "rxjs";
@@ -11,7 +13,29 @@ import { User } from 'src/app/models/user';
 // import { datetime } from 'src/app/models/dateTime';
 import { marker } from "../../../models/marker";
 
+import * as XLSX from 'xlsx';
+import { isNullOrUndefined } from 'util';
+type AOA = any[][];
+
 declare var $: any;
+
+interface projExcel {
+  name: string,
+ 
+  activities: actExcel[]
+}
+interface actExcel {
+  name: string,
+  events: eventExcel[],
+  //  project_id : string
+}
+interface eventExcel {
+  name: string,
+  description: string,
+  unit : string,
+  number : number,
+  // activiy_id : string
+}
 
 @Component({
   selector: 'app-create-proyect',
@@ -23,9 +47,10 @@ export class CreateProyectComponent implements OnInit {
   private readonly notifier: NotifierService;
   // marker: marker = {} as marker;
 
- 
-  public sub : boolean = false;
-  public subproject : string;
+  objectExcel = {} as projExcel;
+
+  public sub: boolean = false;
+  public subproject: string;
 
 
   searchterm: string;
@@ -45,13 +70,15 @@ export class CreateProyectComponent implements OnInit {
 
   constructor(
     public projectsService: ProjectsService,
-     notifierService: NotifierService,
-    public userservice: UsersService, 
-    private afs: AngularFirestore) {
+    notifierService: NotifierService,
+    public userservice: UsersService,
+    private afs: AngularFirestore,
+    public activitiesService: ActivitiesService,
+    public eventsService: EventsService) {
 
     // this.marker.label = 'myPosition';
     this.notifier = notifierService;
-   
+
     this.projectDoc.start = new Date().toJSON();
     this.projectDoc.end = new Date().toJSON();
     // this.editProjectDoc.start = {} as datetime;
@@ -60,6 +87,9 @@ export class CreateProyectComponent implements OnInit {
     this.projectDoc.ubication = {} as marker;
     this.editProjectDoc.ubication = {} as marker;
     this.projectDoc.subprojects = [];
+    this.objectExcel.activities = [];
+
+
   }
 
   ngOnInit() {
@@ -83,15 +113,15 @@ export class CreateProyectComponent implements OnInit {
   }
 
 
-  checkSub(){
+  checkSub() {
     if (this.sub == false) {
       this.sub = true;
     } else {
       this.sub = false;
-      
+
     }
   }
-  async PushSubproject(){
+  async PushSubproject() {
     await this.projectDoc.subprojects.push(this.subproject);
     this.subproject = '';
   }
@@ -123,19 +153,19 @@ export class CreateProyectComponent implements OnInit {
   addProject() {
 
     if (this.sub == false) {
-    this.projectDoc.subprojects = []
+      this.projectDoc.subprojects = []
     }
 
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
 
-    this.projectDoc.name = "";
-    this.projectDoc.administrators = [];
-    this.projectDoc.description = "";
-    this.projectDoc.start = new Date().toJSON();
-    this.projectDoc.end = new Date().toJSON();
-    this.projectDoc.subprojects = [];
-    this.sub = false;
+      this.projectDoc.name = "";
+      this.projectDoc.administrators = [];
+      this.projectDoc.description = "";
+      this.projectDoc.start = new Date().toJSON();
+      this.projectDoc.end = new Date().toJSON();
+      this.projectDoc.subprojects = [];
+      this.sub = false;
 
     }).catch((err) => {
       this.notifier.notify('error', 'Opps! algo salío mal');
@@ -150,7 +180,7 @@ export class CreateProyectComponent implements OnInit {
       $('#btncolapse').removeClass('fa-minus-circle');
       $('#btncolapse').addClass('fa-plus-circle');
     }
-    
+
     $('.fa-chevron-down').trigger('click');
   }
 
@@ -203,9 +233,154 @@ export class CreateProyectComponent implements OnInit {
     return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
   }
 
-  clearForm()
-  {
-   
+  /*
+  **
+  importar excel
+  
+  */
+
+  data: AOA = [];
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+  fileName: string = 'SheetJS.xlsx';
+
+  onFileChange(evt: any) {
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(evt.target);
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      //  console.log(wb)
+
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      //  console.log(wb);
+
+      /* save data */
+      const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+
+      this.constructObject(array);
+    };
+    reader.readAsBinaryString(target.files[0]);
   }
+
+
+  export(): void {
+    /* generate worksheet */
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.data);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
+
+
+  jsonToFirebase(json: any) {
+    console.log(json.name)
+
+    this.projectsService.importProject(json.name).then((project:any) => {
+      json.activities.forEach(activity => {
+          this.activitiesService.ImportActivity(activity.name, project.id).then( (res:any) => {
+            activity.events.forEach(event => {
+              this.eventsService.ImportEvent(event.name, event.description, event.unit, event.number, res.id)
+            });
+          })
+      });
+    }).then(res => {
+      this.notifier.notify('success', 'Exportación exitosa!');
+      
+    }).catch(err => {
+      this.notifier.notify('error', 'Algo salio mal por favor verifique el formato de documento!');
+
+    })
+
+    //  do {
+
+    //  } while (condition);
+    // let arrayProject = array[2];
+    // let projectName = arrayProject[1];
+    // var cont = 0;
+    // console.log(projectName)
+
+    // this.projectsService.importProject(projectName).then((project: any) => {
+    //   console.log(project)
+    //   array.forEach(element => {
+    //     cont = cont + 1;
+    //     if (cont > 3 && isNullOrUndefined(element[5])) {
+
+    //       this.activitiesService.ImportActivity(element[1], project.id).then(res => {
+
+
+    //       }).catch(err => console.log(err))
+    //     }
+
+    //   });
+
+    // })
+
+
+  }
+
+
+  constructObject(array) {
+
+    var doc = {} as projExcel;
+    doc.name = array[2][1];
+
+    doc.activities = [];
+    // var act = {} as actExcel;
+   var indexAct = 0;
+
+    array.forEach(function (element, index) {
+      if (index > 2 && isNullOrUndefined(element[5])) {
+        
+        if(index != 0){
+          indexAct = indexAct + 1;
+        }
+
+        const activity = {
+          name: element[1],
+          events: []
+        }
+        // activity.events = [];
+        // console.log(activity)
+
+        doc.activities.push(activity);
+        // this..activities.push(act);
+
+        // console.log('actividad: '+ element[1])
+      } else if (index > 2 && !isNullOrUndefined(element[2]) && !isNullOrUndefined(element[3])) {
+        
+        const event : eventExcel = {
+          name : element[0],
+          description : element[1],
+          unit : element[2],
+          number : element[3]
+
+        }
+        // console.log(indexAct)
+
+      // console.log(doc.activities[indexAct-1])
+
+        doc.activities[indexAct-1].events.push(event);
+
+      }
+
+      // console.log(index, array.length)
+      if (index + 1 == array.length) {
+      
+      }
+    });
+
+      this.jsonToFirebase(doc);
+
+  }
+
 
 }

@@ -54,12 +54,12 @@
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                     <div class="row">
                       <div class="col-md-6">
-                        <b>Nombre:</b> {{activity.name}} <br>
+                        <b>Nombre:</b> {{activity.title}} <br>
                         <b>Tipo:</b> {{activity.type}} <br>
                         <b>proyecto:</b> {{activity.project_id}} <br>
                         <b>Descripción:</b> {{activity.description}} <br>
-                        <b>Inicio:</b> {{activity.start}}<br>
-                        <b>Final:</b> {{activity.end}}
+                        <b>Inicio:</b> {{activity.start | date:'short'}}<br>
+                        <b>Final:</b> {{activity.end | date:'short'}}
                       </div>
                       <div class="col-md-6">
                         <b>Insumos necesarios:</b><br>

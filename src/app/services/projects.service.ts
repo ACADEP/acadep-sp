@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { project } from "../models/project";
 import { resolve, reject } from 'q';
+import { database } from 'firebase';
 
 
 
@@ -109,6 +110,43 @@ export class ProjectsService {
         deleted : new Date(),
       }).then((res: any) => resolve(res), err => reject(err));
     })
+  }
+
+  importProject(name: string){
+
+   
+    // return new Promise((resolve, reject) => {
+    //   this.db.collection('projects').add({
+    //     title: name,
+    //     description: '',
+    //     ubication: {
+    //       lat : 0,
+    //       lng : 0
+    //     },
+    //     start: new Date().toJSON(),
+    //     end: new Date().toJSON,
+    //     administrators: 'daniel',
+    //     deleted : false,
+    //     subprojects : []
+    //   }).then((res: any) => resolve(res), err => reject(err));
+    // })
+   
+    return new Promise((resolve, reject) => {
+      this.db.collection('projects').add({
+        title: name,
+        description: '',
+        ubication: {
+          lat : 0,
+          lng : 0
+        },
+        start: new Date().toJSON(),
+        end: new Date().toJSON(),
+        administrators: ['daniel'],
+        deleted : false,
+        subprojects : []
+      }).then((res: any) => resolve(res), err => reject(err));
+    })
+
   }
 
     // saveproject()

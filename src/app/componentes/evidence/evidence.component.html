@@ -73,7 +73,8 @@
                 </div>
 
                 <div class="col-md-4">
-                  <button mat-raised-button color="warn">Exportar a PDF
+                  <button mat-raised-button color="warn" 
+                  (click)="getBase64FromImageUrl('https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pruebas%2FImg82e1aa84-8035-4c2d-bace-baab9d1f466a?alt=media&token=326d54fc-db23-45d3-9201-51c23e933cc6')">Exportar a PDF
                   </button>
 
                 </div>
@@ -137,8 +138,8 @@
                         <h4>Imágenes</h4>
                         <div>
                           <div class="row">
-                            <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as i">
-                              <img class="galery" [src]="item.src" style="border: #ccc 1px solid" (click)="showImage(evidence, i)">
+                            <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as a">
+                              <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid" (click)="showImage(evidence, i)">
                             </div>
                           </div>
                         </div>

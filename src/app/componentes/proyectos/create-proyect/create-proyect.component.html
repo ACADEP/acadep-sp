@@ -7,7 +7,6 @@
       </h6>
       <h3 class="dashhead-title">Proyectos</h3>
     </div>
-
     <div class="dashhead-toolbar">
       <div class="dashhead-toolbar-item">
         <a>App</a>
@@ -25,6 +24,21 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
+
+        <div class="col-md-12">
+            <div class="box">
+    <div><input type="file" (change)="onFileChange($event)" multiple="false" /></div> <br>
+    <table class="table">
+        <tr *ngFor="let row of data">
+          <td *ngFor="let val of row">
+            {{val}}
+          </td>
+        </tr>
+      </table>
+              
+            </div>
+          </div>
+
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
@@ -72,7 +86,6 @@
                       <ul>
                         <li *ngFor="let admin of objectValues(project.administrators)" >{{admin}}</li>
                       </ul>
-
                       <b>Ubicación:</b> <br>
                           <agm-map [zoom]="14" [latitude]="project.ubication.lat" [longitude]="project.ubication.lng">
                             <agm-marker 
