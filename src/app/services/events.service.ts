@@ -47,44 +47,30 @@ export class EventsService {
         staff: event.staff,
         deleted: false,
         status: 1,
-        percentage : 0
-        // observation : {
-        //   before : {
-        //     active : true,
-        //     evidence : []
-        //   },
-        //   during : {
-        //     active : true,
-        //     evidence : []
-        //   },
-        //   after : {
-        //     active : true,
-        //     evidence : []
-        //   },
-        // }
-
+        advanced : 0,
+        total : event.total
       }).then((res: any) => {
         this.db.collection('events').doc(res.id).update({
           id: res.id
         }).then(async res => {
           //notificacion push
-          $.ajax({
-            data: {
-              "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
-              "included_segments": ["All"],
-              "headings": { "es": "📆 Nuevo evento", "en": "📆 Nuevo evento" },
-              "contents": { "es": this.nameEvent, "en": this.nameEvent }
-            },
-            url: 'https://onesignal.com/api/v1/notifications',
-            type: 'post',
-            beforeSend: function (xhr) {
-              xhr.setRequestHeader("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
-              // xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-            },
-            success: function (res) {
-              console.log(res);
-            }
-          })
+          // $.ajax({
+          //   data: {
+          //     "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
+          //     "included_segments": ["All"],
+          //     "headings": { "es": "📆 Nuevo evento", "en": "📆 Nuevo evento" },
+          //     "contents": { "es": this.nameEvent, "en": this.nameEvent }
+          //   },
+          //   url: 'https://onesignal.com/api/v1/notifications',
+          //   type: 'post',
+          //   beforeSend: function (xhr) {
+          //     xhr.setRequestHeader("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
+          //     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+          //   },
+          //   success: function (res) {
+          //     console.log(res);
+          //   }
+          // })
         })
         resolve(res)
       }, err => reject(err));
@@ -109,6 +95,48 @@ export class EventsService {
         staff: event.staff,
         status: 1
       }).then((res: any) => resolve(res), err => reject(err));
+    })
+  }
+
+
+  getEventById(id){
+
+    return new Promise((resolve, reject) => {
+      this.db.collection('events').doc(id).ref.get()
+        .then(res => resolve(res.data()),
+          err => reject(err));
+    });
+  }
+
+  ImportEvent(name: string, description:string, unit:string, number:number, id_act : string) {
+
+    return new Promise((resolve, reject) => {
+      this.db.collection('events').add({
+        active: true,
+        activity_id: id_act,
+        user_id: 'undefined',
+        type_activity: 'default',
+        title: name,
+        description: description,
+        start: new Date().toJSON(),
+        end: new Date().toJSON(),
+        tools: [],
+        staff: [],
+        deleted: false,
+        status: 1,
+        advanced : 0,
+        total : {
+          unit: unit,
+          number : number
+        }
+      }).then((res: any) => {
+        this.db.collection('events').doc(res.id).update({
+          id: res.id
+        }).then(updated => {
+
+          resolve(res)
+        })
+      }, err => reject(err));
     })
   }
 

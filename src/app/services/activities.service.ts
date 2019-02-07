@@ -62,6 +62,23 @@ export class ActivitiesService {
 
   }
 
+  ImportActivity(name:string, project_id:string) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('activities').add({
+        title: name,
+        description: '',
+        subproject: '',
+        project_id : project_id,
+        start: new Date().toJSON(),
+        end: new Date().toJSON(),
+        insumos : [],
+        users : [],
+        deleted : false,
+      }).then((res: any) => resolve(res), err => reject(err));
+    })
+
+  }
+
 
 
   updateActivity(activity: activity)

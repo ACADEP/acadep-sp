@@ -8,17 +8,18 @@ import { MatAccordion } from '@angular/material';
 import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 import * as jsPDF from 'jspdf'
+import { element } from '@angular/core/src/render3';
 declare var $: any;
 interface ubication {
-  lat : number,
-  lng : number
+  lat: number,
+  lng: number
 }
 
 interface image {
- src : string;
- created_at : string,
- type : string,
- ubication : ubication
+  src: string;
+  created_at: string,
+  type: string,
+  ubication: ubication
 
 }
 
@@ -32,8 +33,8 @@ interface image {
 export class EvidenceComponent implements OnInit {
 
 
-  idEvent="";
-  idUser="";
+  idEvent = "";
+  idUser = "";
 
 
   @ViewChild('content') content: ElementRef;
@@ -46,11 +47,11 @@ export class EvidenceComponent implements OnInit {
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
   constructor(public gallery: Gallery, public evidenceService: EvidenceService,
-    public eventsService: EventsService, public usersService : UsersService) {
-      this.image.ubication = {
-        lat : 0,
-        lng : 0
-      }
+    public eventsService: EventsService, public usersService: UsersService) {
+    this.image.ubication = {
+      lat: 0,
+      lng: 0
+    }
   }
 
   ngOnInit() {
@@ -70,17 +71,23 @@ export class EvidenceComponent implements OnInit {
 
   }
 
+  // getUnit(id){
+  //   this.eventsService.getEventById(id).then( (res : any) => {
+  //     return res.total.unit
+  //   })
+  // }
+
 
 
   UpdateEvidence() {
 
-    if (this.idEvent != "" || this.idUser != "" ) {
+    if (this.idEvent != "" || this.idUser != "") {
 
-          this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
-            this.evidenceCollection = newEvidence
-          })
+      this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
+        this.evidenceCollection = newEvidence
+      })
 
-    }else{
+    } else {
       this.evidenceService.getEvidence().subscribe(evidence => {
         this.evidenceCollection = evidence;
       })
@@ -88,6 +95,117 @@ export class EvidenceComponent implements OnInit {
 
 
   }
+
+  async export(evidence) {
+
+// var images = [];
+    // console.log(evidence)
+    var cont = 1;
+    // var arraylenght = evidence.multimedia.length;
+    let doc = new jsPDF();
+  var tam = evidence.multimedia.length;
+
+
+// console.log(evidence.multimedia[0].src)
+
+        doc.setFont('courier')
+         doc.setFontType('normal')
+         doc.text(20, 30, evidence.description)
+        //  doc.addImage(image, "JPG", 10, (50), 100, 80);
+
+
+// img.width = 300;
+// img.height = 300;
+
+evidence.multimedia.forEach(imagen => {
+  var image;
+  var img = new Image();
+  img.setAttribute('crossOrigin', 'anonymous');
+  img.src =  imagen.src;
+  img.onload = function () {
+
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    console.log(img.width, img.height)
+
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    var dataURL = canvas.toDataURL("image/png");
+   
+    if(cont > 3){
+      doc.addPage();
+      cont=1
+      console.log('se añadio pagina')
+       
+     }
+     image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+       
+     
+     doc.addImage(image, "JPG", 50, (cont*60), 100, 50);
+     cont = cont + 1;
+    
+   
+    };
+
+    });
+    
+  
+  
+
+    setTimeout(() => {
+      doc.save('Test.pdf');
+      
+    }, tam * 1500);
+
+  
+  }
+
+
+async getBase64FromImageUrl(URL) {
+
+  new Promise(function(resolve, reject) { 
+
+    var image;
+    var img = new Image();
+    img.setAttribute('crossOrigin', 'anonymous');
+    img.src = URL;
+   img.onload = function () {
+
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      var dataURL = canvas.toDataURL("image/png");
+
+       image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+       console.log(image)
+    };
+
+
+   });
+
+
+
+   
+  
+  }
+
+  // getBase64Image(img) {
+  //   var canvas = document.createElement("canvas");
+  //   console.log(img);
+  //   canvas.width = img.width;
+  //   canvas.height = img.height;
+  //   var ctx = canvas.getContext("2d");
+  //   ctx.drawImage(img, 0, 0);
+  //   var dataURL = canvas.toDataURL("image/png");
+  //   return dataURL;
+  // }
 
   pdf() {
 
@@ -97,7 +215,7 @@ export class EvidenceComponent implements OnInit {
         return true
       }
     };
-    let image = 'data:image/gif;base64,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';
+    let image = 'base64'
 
     let content = this.content.nativeElement;
     doc.fromHTML(content.innerHTML, 15, 15, {
@@ -125,9 +243,9 @@ export class EvidenceComponent implements OnInit {
   }
 
   getColor(type) {
-   type = type.toLowerCase();
+    type = type.toLowerCase();
 
-    switch (type ) {
+    switch (type) {
       case 'pdf':
         return '#f43636'
 
@@ -140,7 +258,7 @@ export class EvidenceComponent implements OnInit {
   }
 
   getClass(type) {
-   type = type.toLowerCase();
+    type = type.toLowerCase();
     switch (type) {
       case 'pdf':
         return 'fa fa-file-pdf fa-2x'

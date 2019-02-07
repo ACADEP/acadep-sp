@@ -47,7 +47,7 @@
                       <h4>{{event.title}} </h4>
                     </mat-panel-title>
                     <mat-panel-description>
-                      {{event.percentage}}%
+                      {{(100*event.advanced)/event.total.number}}%
                       <mat-icon class="delete" (click)="deleteEvent(event)"> delete</mat-icon>
                       <!-- <mat-icon> create</mat-icon> -->
                     </mat-panel-description>
@@ -169,6 +169,28 @@
 
                   <hr class="b-s-dashed">
 
+                  <label for="atext3">Total a realizar <span class="required">*</span></label>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <p>Cantidad</p>
+                        <input id="toolquant" type="number" min="1" size="2px" name="number" [(ngModel)]="eventDoc.total.number"
+                          class="form-control" placeholder="unidad" required>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <p>Unidad</p>
+                        <div >
+                          <input type="text" class="form-control input-sm p-r-80" name="unit" placeholder="nombre..."
+                            [(ngModel)]="eventDoc.total.unit" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="b-s-dashed">
+
                   <div class="form-group">
                     <label id="labeltype">Tipo <span class="required">*</span></label>
                     <select id="type" class="form-control" [(ngModel)]="eventDoc.type" name="type" required>
@@ -269,6 +291,9 @@
                   </div>
 
                   <hr class="b-s-dashed">
+
+          
+      
 
                   <!-- Inicio de Herramientas -->
                   <label for="atext3">Herramientas</label>
@@ -520,78 +545,3 @@
 <!-- moda para ver evidencia -->
 
 <!-- Modal -->
-<div class="modal fade" id="seeevent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" style="color:red" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h3>{{EventSee.name | titlecase}}</h3>
-      </div>
-      <div class="modal-body">
-
-        <mat-tab-group animationDuration="2000ms" class="col-centered">
-          <mat-tab>
-            <ng-template active mat-tab-label>
-              <mat-icon class="example-tab-icon">arrow_back</mat-icon>
-              Antes
-            </ng-template>
-            <div *ngFor="let msg of EventSee.observation.before.evidence">
-              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
-                *ngIf="msg.type == 'image'">
-                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
-                <mat-card-content>
-                </mat-card-content>
-              </mat-card>
-              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
-                {{msg.src}}
-              </mat-card>
-            </div>
-          </mat-tab>
-
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="example-tab-icon">arrow_downward</mat-icon>
-              Durante
-            </ng-template>
-            <div *ngFor="let msg of EventSee.observation.during.evidence">
-              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
-                *ngIf="msg.type == 'image'">
-                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
-                <mat-card-content>
-                </mat-card-content>
-              </mat-card>
-              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
-                {{msg.src}}
-              </mat-card>
-            </div>
-          </mat-tab>
-
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="example-tab-icon">arrow_forward
-              </mat-icon>
-              Despues
-            </ng-template>
-            <div *ngFor="let msg of EventSee.observation.after.evidence">
-              <mat-card class="example-card" style=" border-radius:12px" [ngStyle]="{'background': 'transparent' }"
-                *ngIf="msg.type == 'image'">
-                <img width="500px" src="{{msg.src}}" alt="Photo of a Shiba Inu">
-                <mat-card-content>
-                </mat-card-content>
-              </mat-card>
-              <mat-card *ngIf="msg.type == 'text'" [ngStyle]="{'background': '#ceeddb', 'font-size': '16px' }">
-                {{msg.src}}
-              </mat-card>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
-    </div>
-  </div>
-</div>

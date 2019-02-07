@@ -1,6 +1,10 @@
 
 import { tool } from "./tool";
 // import { datetime } from "./dateTime";
+export interface total {
+    number : number,
+    unit : string
+}
 
 
 export interface Event {
@@ -17,4 +21,6 @@ export interface Event {
     tools : tool [];
     staff : tool [];
     active : boolean;
+    advanced : number;
+    total : total
 }
