@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 interface configuration {
   min_photos: number,
-  max_photos: number
+  max_photos: number,
 }
 export interface configPdf {
   img_header1: any,
@@ -23,6 +23,10 @@ export interface configPdf {
   styleUrls: ['./configuration.component.css']
 })
 export class ConfigurationComponent implements OnInit {
+
+  public activities:any;
+
+  nameAct : string;
 
   public configGlobal = {} as configuration;
 
@@ -46,10 +50,11 @@ export class ConfigurationComponent implements OnInit {
 
     this.db.collection('configuration').doc('global').ref.get().then(doc => {
       this.configGlobal = doc.data() as configuration;
-      // console.log(this.configGlobal)
+     this.activities = doc.data().activitys_types;
     }).catch(err => {
       console.log('error inesperado: ' + err)
     })
+    
     this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
       this.configPdf = doc.data() as configPdf;
       console.log(this.configPdf)
@@ -57,6 +62,19 @@ export class ConfigurationComponent implements OnInit {
       console.log('error inesperado: ' + err)
     })
 
+  }
+
+  addType(){
+
+    this.activities.push(this.nameAct).then(res=>{
+
+      this.db.collection('configuration').doc('global').update({
+        activitys_types : this.activities
+      })
+    })
+    
+
+    
   }
 
 

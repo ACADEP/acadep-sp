@@ -49,9 +49,11 @@
                   </div>
                   <div class="box-body">
                     <div class="form-group">
-                      <label for="min" class="col-sm-2 control-label" [ngClass]="{'errortxt':configGlobal.min_photos > 1000 || configGlobal.min_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}">Mínimo</label>
+                      <label for="min" class="col-sm-2 control-label"
+                        [ngClass]="{'errortxt':configGlobal.min_photos > 1000 || configGlobal.min_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}">Mínimo</label>
                       <div class="col-sm-10">
-                        <input type="number" class="form-control" id="min" name="min" placeholder="cantidad mínima de fotos"
+                        <input type="number" class="form-control" id="min" name="min"
+                          placeholder="cantidad mínima de fotos"
                           [ngClass]="{'error':configGlobal.min_photos > 1000 || configGlobal.min_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}"
                           [value]="configGlobal.min_photos" name="min" [(ngModel)]="configGlobal.min_photos" required
                           minlength="1" maxlength="1000">
@@ -63,9 +65,11 @@
                     <hr class="b-s-dashed">
 
                     <div class="form-group">
-                      <label for="max" class="col-sm-2 control-label" [ngClass]="{'errortxt':configGlobal.max_photos > 1000 || configGlobal.max_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}">Máximo</label>
+                      <label for="max" class="col-sm-2 control-label"
+                        [ngClass]="{'errortxt':configGlobal.max_photos > 1000 || configGlobal.max_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}">Máximo</label>
                       <div class="col-sm-10">
-                        <input type="number" class="form-control" id="max" name="max" placeholder="cantidad máxima de fotos"
+                        <input type="number" class="form-control" id="max" name="max"
+                          placeholder="cantidad máxima de fotos"
                           [ngClass]="{'error':configGlobal.max_photos > 1000 || configGlobal.max_photos < 1 || configGlobal.min_photos > configGlobal.max_photos}"
                           [(ngModel)]="configGlobal.max_photos" required minlength="1" maxlength="1000">
                         <small class="errortxt" *ngIf="configGlobal.max_photos > 1000 || configGlobal.max_photos < 1">
@@ -83,6 +87,51 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-xs-12">
+                <div class="box bg-white">
+                  <div class="box-heading">
+                    <div class="box-title">
+                      <header class="box-heading bg-wet-asphalt text-white">
+
+                        <h3>Tipos de evento</h3>
+                      </header>
+                    </div>
+
+                  </div>
+                  <div class="box-body">
+
+                      <form class="form-inline" style="margin-left:15px; margin-bottom: 10px" (submit)="addType()">
+                          
+                          <div class="form-group mx-sm-3 mb-2">
+                            <!-- <label for="inputPassword2" class="sr-only">Nombre</label> -->
+                            <input type="text" class="form-control" [(ngModel)]="nameAct" placeholder="Nombre">
+                          </div>
+                          <button type="submit" class="btn btn-primary mb-2">Agregar</button>
+                        </form>
+
+
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let act of activities">{{act.activity_name}} <div
+                          class="pull-right">
+                          <input [checked]="act.before" name="before" type="checkbox" class="form-check-input">
+                          <label class="form-check-label" > Antes</label>&nbsp;
+                          <input [checked]="act.during" name="during" type="checkbox" class="form-check-input">
+                          <label class="form-check-label" > Durante</label>&nbsp;
+                          <input [checked]="act.after" name="after" type="checkbox" class="form-check-input" >
+                          <label class="form-check-label" > Despues</label>
+                        </div>
+                      </li>
+
+                    </ul>
+
+
+
+                  </div>
+                </div>
+              </div>
+
+
             </div>
             <!-- END: flatpickr -->
 
@@ -108,41 +157,41 @@
                     <div class="form-group">
                       <label class="col-sm-2 control-label">Text Header</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" [(ngModel)]="configPdf.text_header" name="header" [value]="configPdf.text_header" >
+                        <input type="text" class="form-control" [(ngModel)]="configPdf.text_header" name="header"
+                          [value]="configPdf.text_header">
                       </div>
                     </div>
                     <hr class="dashed">
                     <div class="form-group">
                       <label class="col-sm-2 control-label">Text Footer</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" [(ngModel)]="configPdf.text_footer" name="footer" [value]="configPdf.text_footer">
+                        <input type="text" class="form-control" [(ngModel)]="configPdf.text_footer" name="footer"
+                          [value]="configPdf.text_footer">
                       </div>
                     </div>
                     <hr class="dashed">
 
                     <div class="form-group">
-                      <img class="img-icon" [src]="configPdf.img_header1" *ngIf="!loading"
-                        alt="">
-                        <!-- <div > -->
+                      <img class="img-icon" [src]="configPdf.img_header1" *ngIf="!loading" alt="">
+                      <!-- <div > -->
 
-                          <mat-spinner class="img-icon" *ngIf="loading"></mat-spinner>
-                        <!-- </div> -->
+                      <mat-spinner class="img-icon" *ngIf="loading"></mat-spinner>
+                      <!-- </div> -->
 
                       <label for="min" class="col-sm-2 control-label">Header 1</label>
                       <div class="col-sm-10">
-                        <input  type="file" class="form-control" (change)="uploadImage($event, 1)">
+                        <input type="file" class="form-control" (change)="uploadImage($event, 1)">
                       </div>
                     </div>
                     <hr class="dashed">
 
                     <div class="form-group">
-                      <img class="img-icon" [src]="configPdf.img_header2" *ngIf="!loading2"
-                        alt="">
-                        <mat-spinner class="img-icon" *ngIf="loading2"></mat-spinner>
+                      <img class="img-icon" [src]="configPdf.img_header2" *ngIf="!loading2" alt="">
+                      <mat-spinner class="img-icon" *ngIf="loading2"></mat-spinner>
 
                       <label for="min" class="col-sm-2 control-label">Header 1</label>
                       <div class="col-sm-10">
-                        <input  type="file" class="form-control" (change)="uploadImage($event, 2)">
+                        <input type="file" class="form-control" (change)="uploadImage($event, 2)">
                       </div>
                     </div>
                     <!-- <input class="form-control" type="file" data-plugin="flatpickr"> -->
@@ -155,7 +204,7 @@
             <!-- END: flatpickr -->
 
           </div>
-          <div class="col-md-12 text-center" >
+          <div class="col-md-12 text-center">
             <button style="margin-bottom:20px" type="submit" class="btn btn-success">Guardar cambios</button>
           </div>
         </div>
