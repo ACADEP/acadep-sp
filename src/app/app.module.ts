@@ -9,14 +9,14 @@ import { AsideComponent } from './componentes/aside/aside.component';
 import { TopbarComponent } from './componentes/topbar/topbar.component';
 
 import { FormsModule }   from '@angular/forms';
+//firebase
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { FullCalendarModule } from 'ng-fullcalendar';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
-
+import { FullCalendarModule } from 'ng-fullcalendar';
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';

@@ -5,7 +5,7 @@
       <h6 class="dashhead-subtitle">
         App / Evidencia
       </h6>
-      <h3 class="dashhead-title">Evidencia</h3>
+      <h3 class="dashhead-title" #content>Evidencia</h3>
 
     </div>
 
@@ -120,7 +120,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
 
-                      <span *ngIf="evidence.percentage">
+                      <span *ngIf="evidence.total">
                         {{evidence.total.number}} {{evidence.total.unit}}
                       </span>
 
@@ -131,7 +131,7 @@
                       <div class="col-md-12">
                         <!-- <h4>Texto</h4> -->
                         <p style="padding:20px">{{evidence.description}}</p>
-                      <button mat-raised-button color="warn" (click)="export(evidence)">Exportar a PDF</button>
+                      <button mat-raised-button color="warn" (click)="export(evidence, $event)">Exportar a PDF</button>
 
                       </div>
                       <div class="col-md-12">
@@ -139,7 +139,7 @@
                         <div>
                           <div class="row">
                             <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as a">
-                              <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid" (click)="showImage(evidence, i)">
+                              <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid" (click)="showImage(evidence, a)">
                             </div>
                           </div>
                         </div>
