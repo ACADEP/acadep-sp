@@ -204,7 +204,7 @@ export class CreateProyectComponent implements OnInit {
   }
 
   onDeleteProject(project) {
-    if (confirm("Está seguro que desea eliminar " + project.name)) {
+    if (confirm("Está seguro que desea eliminar " + project.title)) {
       this.projectsService.deleteProject(project.id).then((result) => {
         this.notifier.notify('success', 'Proyecto eliminado!');
       }).catch((err) => {
@@ -300,31 +300,6 @@ export class CreateProyectComponent implements OnInit {
 
     })
 
-    //  do {
-
-    //  } while (condition);
-    // let arrayProject = array[2];
-    // let projectName = arrayProject[1];
-    // var cont = 0;
-    // console.log(projectName)
-
-    // this.projectsService.importProject(projectName).then((project: any) => {
-    //   console.log(project)
-    //   array.forEach(element => {
-    //     cont = cont + 1;
-    //     if (cont > 3 && isNullOrUndefined(element[5])) {
-
-    //       this.activitiesService.ImportActivity(element[1], project.id).then(res => {
-
-
-    //       }).catch(err => console.log(err))
-    //     }
-
-    //   });
-
-    // })
-
-
   }
 
 
@@ -343,7 +318,6 @@ export class CreateProyectComponent implements OnInit {
         if(index != 0){
           indexAct = indexAct + 1;
         }
-
         const activity = {
           name: element[1],
           events: []
@@ -373,9 +347,7 @@ export class CreateProyectComponent implements OnInit {
       }
 
       // console.log(index, array.length)
-      if (index + 1 == array.length) {
       
-      }
     });
 
       this.jsonToFirebase(doc);

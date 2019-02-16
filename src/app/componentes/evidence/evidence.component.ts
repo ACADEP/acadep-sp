@@ -18,7 +18,7 @@ interface ubication {
 }
 
 interface image {
-  src: string;
+  src: string,
   created_at: string,
   type: string,
   ubication: ubication

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../servicios/auth.service';
+import { EventsService } from "../../services/events.service";
 declare var $: any;
 @Component({
   selector: 'app-topbar',
@@ -13,15 +14,22 @@ export class TopbarComponent implements OnInit {
     email : ''
   }
 
-  constructor(public authService: AuthService) { }
+  public notifications : any;
+  public numNotifications : number;
+
+  constructor(public authService: AuthService, public eventsService:EventsService) { }
 
   ngOnInit() {
     this.authService.getAuth().subscribe( auth => {
-     
       this.authUser.email = auth.email;
       this.authUser.name = auth.displayName;
-      
     });
+
+    this.eventsService.getEventsUndefined().subscribe( events => {
+      this.notifications = events;
+      console.log(this.notifications)
+      this.numNotifications = events.length;
+    })
   }
 
   onClickLogout(){

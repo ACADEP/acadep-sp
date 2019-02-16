@@ -83,7 +83,7 @@ export class EventsComponent implements OnInit {
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      console.log(this.usersCollection);
+      // console.log(this.usersCollection);
     });
 
     this.activitiesService.getActivities().subscribe(items => {
@@ -106,26 +106,9 @@ export class EventsComponent implements OnInit {
     this.tool.name = '';
     this.tool.quantity = null;
 
-    // this.eventDoc.advanced = null;
     this.eventDoc.total.number = 0;
     this.eventDoc.total.unit = '';
   }
-
-  // eventSeeNull(): void {
-  //   this.EventSee = {
-  //     observation: {
-  //       before: {
-  //         evidence: []
-  //       },
-  //       during: {
-  //         evidence: []
-  //       },
-  //       after: {
-  //         evidence: []
-  //       }
-  //     }
-  //   };
-  // }
 
   openAll() {
     this.myPanels.openAll();
@@ -136,11 +119,9 @@ export class EventsComponent implements OnInit {
   }
 
   addEvent(form: NgForm) {
-    // console.log(this.eventDoc)
     if (form.valid) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
-        // console.log(res);
         this.removeErrors();
         this.emptyForm();
       }).catch(err => {
@@ -248,7 +229,6 @@ export class EventsComponent implements OnInit {
 
   pushTool(form: NgForm) {
     if (form.valid) {
-      // tslint:disable-next-line:no-shadowed-variable
       const tool: tool = {
         name: form.controls.toolname.value,
         quantity: form.controls.toolquant.value
@@ -330,19 +310,21 @@ export class EventsComponent implements OnInit {
     this.eventDocEdit.staff.splice(item, 1);
   }
 
+  deleteEvent(event) {
+    if (confirm("Está seguro que desea eliminar " + event.title)) {
+      this.eventsService.deleteEvent(event.id).then(() => {
+        this.notifier.notify('success', 'Evento eliminado');
+      }).catch(() => {
+        this.notifier.notify('error', 'Algo salío mal, intente mas tarde');
+      })
+    }
+  }
+
 
   removeErrors() {
     $('input').removeClass('error');
     $('label').removeClass('errortxt');
     $('select').removeClass('error');
   }
-
-  // seeEvent(event) {
-
-  //   this.EventSee = event;
-  //   $('#seeevent').modal('show');
-
-
-  // }
 
 }

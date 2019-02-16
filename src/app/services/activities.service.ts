@@ -23,7 +23,7 @@ export class ActivitiesService {
 
   getActivities() {
 
-    this.activitiesCollection = this.db.collection('activities', ref => ref.where('deleted', '==', false));
+    this.activitiesCollection = this.db.collection('activities', ref => ref.where('deleted', '==', ''));
     this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as activity;
@@ -56,7 +56,7 @@ export class ActivitiesService {
         end: activity.end,
         insumos : activity.insumos,
         users : activity.users,
-        deleted : false,
+        deleted : '',
       }).then((res: any) => resolve(res), err => reject(err));
     })
 
@@ -69,11 +69,11 @@ export class ActivitiesService {
         description: '',
         subproject: '',
         project_id : project_id,
-        start: new Date().toJSON(),
-        end: new Date().toJSON(),
+        start: new Date().toJSON().substr(0, 16),
+        end: new Date().toJSON().substr(0, 16),
         insumos : [],
         users : [],
-        deleted : false,
+        deleted : '',
       }).then((res: any) => resolve(res), err => reject(err));
     })
 

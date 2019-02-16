@@ -29,7 +29,7 @@ export class ProjectsService {
 
   getProjects() {
 
-    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', ''));
 
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
@@ -71,7 +71,7 @@ export class ProjectsService {
 
   searchProjects(name:string)
   {
-    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', false));
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', ''));
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
@@ -94,7 +94,7 @@ export class ProjectsService {
         start: project.start,
         end: project.end,
         administrators: project.administrators,
-        deleted : false,
+        deleted : '',
         subprojects : project.subprojects
       }).then((res: any) => resolve(res), err => reject(err));
     })
@@ -142,7 +142,7 @@ export class ProjectsService {
         start: new Date().toJSON(),
         end: new Date().toJSON(),
         administrators: ['daniel'],
-        deleted : false,
+        deleted : '',
         subprojects : []
       }).then((res: any) => resolve(res), err => reject(err));
     })

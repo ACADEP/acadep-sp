@@ -69,9 +69,9 @@
 
             <span class="b-wisteria fa fa-fw fa-envelope-o u-posRelative"></span>
 
-            <span class="label label-primary b-orange">8
+            <!-- <span class="label label-primary b-orange">10
               <span class="waves"></span>
-            </span>
+            </span> -->
           </a>
           <ul class="dropdown-menu animated fadeInDown w-sm pull-right" style="left: -167px;">
             <li class="b-b">
@@ -119,35 +119,60 @@
         </li>
         <li class="dropdown b-l">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-fw fa-bell"></i>
-            <span class="point bg-carrot b-peter-river">
+            <!-- <i class="fa fa-fw fa-bell"></i> -->
+
+            <span class="b-wisteria fa fa-fw fa-bell u-posRelative"></span>
+
+            <span class="label label-danger b-orange">{{numNotifications}}
               <span class="waves"></span>
             </span>
-          </a>
-          <ul class="dropdown-menu pull-right w-sm animated fadeInUp" style="left: -215px;">
+            
 
-            <li class="p-a-15">
-              <a href="app-mail-inbox.html">
-                <div class="clearfix">
-                  <span class="pull-right text-muted small">4 minutes ago</span>
-                  <i class="fa fa-envelope fa-fw"></i>
-                  <small>12 messages</small>
+          
+          </a> 
+          <!-- -------- -->
+          <ul class="dropdown-menu animated fadeInUp w-sm pull-right" style="left: -167px;">
+
+            <li class="b-b" *ngFor="let item of notifications">
+              <div class="media">
+                <div class="media-left">
+                  <a class="profile-pic" href="#">
+                    <img class="media-object" src="../assets/img/warn.png" alt="...">
+                  </a>
                 </div>
-              </a>
-            </li>
-            <li class="p-a-15">
-              <a href="app-mail-inbox.html">
-                <div class="clearfix">
-                  <span class="pull-right text-muted small">3 minutes ago</span>
-                  <i class="fa fa-twitter fa-fw"></i>
-                  <small>4 follower</small>
+                <div class="media-body">
+                  <h5 class="media-heading">
+                    <small class="pull-right">12 hours ago</small>
+                    <b>{{item.title}}</b>
+                  </h5>
+                  Evento 
+                  <strong>incompleto </strong>
+                  <p class="text-muted">Asigne un usuario</p>
                 </div>
-              </a>
+              </div>
             </li>
-            <li role="separator" class="divider"></li>
-            <li class="text-right">
-              <a class="text-wisteria" href="#">
-                See all notification
+
+            <!-- <li class="b-b">
+              <div class="media">
+                <div class="media-left">
+                  <a class="profile-pic" href="#">
+                    <img class="media-object" src="../assets/img/m2.jpg" alt="...">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <h5 class="media-heading">
+                    <small class="pull-right">12 hours ago</small>
+                    <b>Leanne Graham</b>
+                  </h5>
+                  started following
+                  <strong>Ervin Howell </strong>
+                  <p class="text-muted">3 days ago at 7:12 pm - 10.12.2016</p>
+                </div>
+              </div>
+            </li> -->
+            <li>
+              <a class="text-center u-block text-asbestos" href="app-mail-inbox.html">
+                <i class="fa fa-envelope"></i> Read All Messages
               </a>
             </li>
           </ul>

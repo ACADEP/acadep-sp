@@ -4,7 +4,9 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Event } from '../models/event';
-import { Action } from 'rxjs/internal/scheduler/Action';
+// import { Action } from 'rxjs/internal/scheduler/Action';
+
+import * as moment from 'moment';
 
 declare var $: any;
 
@@ -20,7 +22,7 @@ export class EventsService {
   constructor(public db: AngularFirestore) { }
 
   getEvents() {
-    this.eventsCollection = this.db.collection('events', ref => ref.where('deleted', '==', false));
+    this.eventsCollection = this.db.collection('events', ref => ref.where('deleted', '==', '').orderBy("start", "desc"));
     this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as Event;
@@ -45,7 +47,7 @@ export class EventsService {
         end: event.end,
         tools: event.tools,
         staff: event.staff,
-        deleted: false,
+        deleted: '',
         status: 1,
         advanced : 0,
         total : event.total
@@ -79,6 +81,13 @@ export class EventsService {
 
   deleteEvent(key: string) {
 
+    return new Promise((resolve, reject) => {
+    
+      this.db.collection('events').doc(key).update({
+        deleted : new Date().toJSON().substr(0, 16)
+      }).then((res:any) => resolve(res)).catch(err => reject(err))
+    })
+
   }
 
   updateEvent(event: Event) {
@@ -93,7 +102,7 @@ export class EventsService {
         end: event.end,
         tools: event.tools,
         staff: event.staff,
-        status: 1
+        status: event.status
       }).then((res: any) => resolve(res), err => reject(err));
     })
   }
@@ -110,6 +119,8 @@ export class EventsService {
 
   ImportEvent(name: string, description:string, unit:string, number:number, id_act : string) {
 
+    let start = moment().format('Y-MM-DDThh:mm');
+    let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
@@ -118,11 +129,11 @@ export class EventsService {
         type_activity: 'default',
         title: name,
         description: description,
-        start: new Date().toJSON(),
-        end: new Date().toJSON(),
+        start: start,
+        end: end,
         tools: [],
         staff: [],
-        deleted: false,
+        deleted: '',
         status: 1,
         advanced : 0,
         total : {
@@ -138,6 +149,21 @@ export class EventsService {
         })
       }, err => reject(err));
     })
+  }
+
+  getEventsUndefined(){
+    this.eventsCollection = this.db.collection('events', ref => ref
+    .where('deleted', '==', '')
+    .where('user_id', '==', 'undefined'));
+
+    this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Event;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    return this.events;
   }
 
 }

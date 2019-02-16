@@ -48,7 +48,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       {{(100*event.advanced)/event.total.number}}%
-                      <mat-icon class="delete" (click)="deleteEvent(event)"> delete</mat-icon>
+                      <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
                       <!-- <mat-icon> create</mat-icon> -->
                     </mat-panel-description>
                   </mat-expansion-panel-header>
@@ -57,8 +57,8 @@
                       <div class="col-md-6">
                         <b>Descripción:</b> {{event.description}} <br>
                         <b>Tipo de actividad:</b> {{event.actividad}} <br>
-                        <b>Inicio:</b> {{event.start}} <br>
-                        <b>Final:</b> {{event.end}}<br>
+                        <b>Inicio:</b> {{event.start | date:'medium'}} <br>
+                        <b>Final:</b> {{event.end | date:'medium'}}<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
                         <b>Usuario que lo realizará:</b> {{event.user_id}}
                       </div>
@@ -458,7 +458,7 @@
             <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
               <option value="">Seleccione una opción </option>
               <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.name | titlecase}}</option>
+                [value]="activity.id">{{activity.title | titlecase}}</option>
             </select>
           </div>
           <hr class="b-s-dashed">
