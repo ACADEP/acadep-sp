@@ -9,6 +9,7 @@ import { EventsService } from "../../services/events.service";
 // import { Moment } from 'moment';
 // import moment = require('moment');
 import * as moment from 'moment';
+import { Event } from "../../models/event";
 
 // 
 
@@ -32,7 +33,7 @@ export class CalendarEventsComponent implements OnInit {
 
   public events: any[];
   public eventShow:any;
-  eventsCollection: import("c:/Users/Desarrollo 2/Desktop/acadep-sp/src/app/models/event").Event[];
+  eventsCollection: Event[];
   constructor(
     public eventsService: EventsService
   ) {
