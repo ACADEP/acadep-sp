@@ -236,13 +236,11 @@ export class CreateProyectComponent implements OnInit {
   /*
   **
   importar excel
-  
   */
 
   data: AOA = [];
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'SheetJS.xlsx';
-
   onFileChange(evt: any) {
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>(evt.target);
@@ -258,8 +256,6 @@ export class CreateProyectComponent implements OnInit {
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
       //  console.log(wb);
-
-      /* save data */
       const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
 
       this.constructObject(array);

@@ -98,7 +98,7 @@ export class CalendarEventsComponent implements OnInit {
 
 
       this.calendarOptions = {
-        timeFormat: 'hh:mm',
+        // timeFormat: 'hh:mm',
         editable: true,
         eventLimit: true,
         eventStartEditable:true,
