@@ -117,7 +117,7 @@ export class EventsService {
     });
   }
 
-  ImportEvent(name: string, description:string, unit:string, number:number, id_act : string) {
+  ImportEvent(name: string, unit:string, number:number, id_act : string, user_mail:string) {
 
     let start = moment().format('Y-MM-DDThh:mm');
     let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
@@ -128,8 +128,9 @@ export class EventsService {
         user_id: 'undefined',
         type_activity: 'default',
         title: name,
-        description: description,
+        description: '',
         start: start,
+        user_mail : user_mail,
         end: end,
         tools: [],
         staff: [],

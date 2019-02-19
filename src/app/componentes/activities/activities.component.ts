@@ -80,6 +80,8 @@ public subprojects: string[] = [];
       this.activities = items;
     })
 
+    
+
     //proyectos
     this.projectsService.getProjects().subscribe(items => {
       this.projects = items;
@@ -91,6 +93,10 @@ public subprojects: string[] = [];
       // console.log(this.users)
     })
 
+  }
+
+  onDeleteActivity(){
+    console.log('en proceso')
   }
 
   addActivity(form: NgForm) {
@@ -236,7 +242,7 @@ public subprojects: string[] = [];
     this.start = activity.start;
     this.end = activity.end;
 
-    this.activityDoc.name = this.name;
+    this.activityDoc.title = this.name;
     // this.activityDoc.type = this.type;
     this.activityDoc.description = this.description;
     this.activityDoc.insumos = this.insumos;
@@ -299,7 +305,7 @@ public subprojects: string[] = [];
   }
 
   emptyForm() {
-    this.activityDoc.name = '';
+    this.activityDoc.title = '';
     this.activityDoc.subproject = '';
     this.activityDoc.description = '';
     this.activityDoc.insumos = [];

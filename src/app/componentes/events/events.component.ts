@@ -119,7 +119,9 @@ export class EventsComponent implements OnInit {
   }
 
   addEvent(form: NgForm) {
-    if (form.valid) {
+
+    
+    if (form.valid && form.controls.number.value >= 0) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
         this.removeErrors();
@@ -128,81 +130,72 @@ export class EventsComponent implements OnInit {
         this.notifier.notify('error', 'Algo salio mal...');
       });
     } else {
+      console.log(form);
       this.notifier.notify('error', 'Completa los campos obligatorios');
 
-      if (form.controls.name.invalid) {
-        $('#name').addClass('error');
-        $('#labelname').addClass('errortxt');
-      } else {
-        $('#name').removeClass('error');
-        $('#labelname').removeClass('errortxt');
-      }
-      if (form.controls.type.invalid) {
-        $('#type').addClass('error');
-        $('#labeltype').addClass('errortxt');
-      } else {
-        $('#type').removeClass('error');
-        $('#labeltype').removeClass('errortxt');
-      }
+       if (form.controls.name.invalid) {
+         $('#name').addClass('error');
+         $('#labelname').addClass('errortxt');
+       } else {
+         $('#name').removeClass('error');
+         $('#labelname').removeClass('errortxt');
+       }
+       if (form.controls.type.invalid) {
+         $('#type').addClass('error');
+         $('#labeltype').addClass('errortxt');
+       } else {
+         $('#type').removeClass('error');
+         $('#labeltype').removeClass('errortxt');
+       }
 
-      if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
-        $('#starttime').addClass('error');
-        $('#startdate').addClass('error');
-        $('#labelstart').addClass('errortxt');
-      } else {
-        $('#startdate').removeClass('error');
-        $('#starttime').removeClass('error');
-        $('#labelstart').removeClass('errortxt');
-      }
-      if (form.controls.enddate.invalid) {
-        $('#enddate').addClass('error');
-        $('#labelend').addClass('errortxt');
-      } else {
-        $('#enddate').removeClass('error');
-        $('#labelend').removeClass('errortxt');
-      }
-      if (form.controls.endtime.invalid) {
-        $('#endtime').addClass('error');
-        $('#labelend').addClass('errortxt');
-      } else {
-        $('#endtime').removeClass('error');
-        if (form.controls.enddate.valid) {
-          $('#labelend').removeClass('errortxt');
-        }
-      }
+       if (form.controls.unit.invalid) {
+         $('#unit').addClass('error');
+         $('#total').addClass('errortxt');
+       } else {
+         $('#unit').removeClass('error');
+         $('#total').removeClass('errortxt');
+       }
 
-      if (form.controls.startdate.invalid) {
-        $('#startdate').addClass('error');
-        $('#labelstart').addClass('errortxt');
-      } else {
-        $('#startdate').removeClass('error');
-        $('#labelstart').removeClass('errortxt');
-      }
-      if (form.controls.starttime.invalid) {
-        $('#starttime').addClass('error');
-        $('#labelstart').addClass('errortxt');
-      } else {
-        $('#starttime').removeClass('error');
-        if (form.controls.startdate.valid) {
-          $('#labelstart').removeClass('errortxt');
-        }
-      }
+       if (form.controls.number.value <= 0) {
+         $('#number').addClass('error');
+         $('#total').addClass('errortxt');
+       } else {
+         $('#number').removeClass('error');
+         $('#total').removeClass('errortxt');
+       }
+
+       if (form.controls.start.invalid) {
+        //  $('#startinput').addClass('error');
+         $('#start').addClass('errortxt');
+       } else {
+        //  $('#startinput').removeClass('error');
+         $('#start').removeClass('errortxt');
+       }
+       if (form.controls.end.invalid) {
+        //  $('#endinput').addClass('error');
+         $('#end').addClass('errortxt');
+       } else {
+        //  $('#endinput').removeClass('error');
+         $('#end').removeClass('errortxt');
+       }
+
+     
 
 
-      if (form.controls.user.invalid) {
-        $('#user').addClass('error');
-        $('#labeluser').addClass('errortxt');
-      } else {
-        $('#user').removeClass('error');
-        $('#labeluser').removeClass('errortxt');
-      }
-      if (form.controls.activity.invalid) {
-        $('#activity').addClass('error');
-        $('#labelactivity').addClass('errortxt');
-      } else {
-        $('#activity').removeClass('error');
-        $('#labelactivity').removeClass('errortxt');
-      }
+       if (form.controls.user.invalid) {
+         $('#user').addClass('error');
+         $('#labeluser').addClass('errortxt');
+       } else {
+         $('#user').removeClass('error');
+         $('#labeluser').removeClass('errortxt');
+       }
+       if (form.controls.activity.invalid) {
+         $('#activity').addClass('error');
+         $('#labelactivity').addClass('errortxt');
+       } else {
+         $('#activity').removeClass('error');
+         $('#labelactivity').removeClass('errortxt');
+       }
     }
 
   }

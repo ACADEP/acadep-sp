@@ -15,6 +15,7 @@ import { marker } from "../../../models/marker";
 
 import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
+import { element } from '@angular/core/src/render3';
 type AOA = any[][];
 
 declare var $: any;
@@ -23,9 +24,11 @@ interface projExcel {
   name: string,
  
   activities: actExcel[]
+  subprojects: string[]
 }
 interface actExcel {
   name: string,
+  subproject: string,
   events: eventExcel[],
   //  project_id : string
 }
@@ -34,6 +37,7 @@ interface eventExcel {
   description: string,
   unit : string,
   number : number,
+  user_mail : string
   // activiy_id : string
 }
 
@@ -159,7 +163,7 @@ export class CreateProyectComponent implements OnInit {
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
 
-      this.projectDoc.name = "";
+      this.projectDoc.title = "";
       this.projectDoc.administrators = [];
       this.projectDoc.description = "";
       this.projectDoc.start = new Date().toJSON();
@@ -260,9 +264,10 @@ export class CreateProyectComponent implements OnInit {
       //  console.log(wb);
 
       /* save data */
-      const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      const  array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
 
-      this.constructObject(array);
+       this.constructObject(array, wsname);
+      // console.log(array)
     };
     reader.readAsBinaryString(target.files[0]);
   }
@@ -281,78 +286,131 @@ export class CreateProyectComponent implements OnInit {
   }
 
 
+  
   jsonToFirebase(json: any) {
-    console.log(json.name)
+    //  console.log(json)
 
-    this.projectsService.importProject(json.name).then((project:any) => {
+    this.projectsService.importProject(json.name, json.subprojects).then((project:any) => {
       json.activities.forEach(activity => {
-          this.activitiesService.ImportActivity(activity.name, project.id).then( (res:any) => {
+          this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then( (res:any) => {
+
             activity.events.forEach(event => {
-              this.eventsService.ImportEvent(event.name, event.description, event.unit, event.number, res.id)
+              this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail).then(()=>{
+            //  console.log('evento creado')
+              }).catch(err1 => {
+                console.log(err1);
+                // break
+              })
             });
+          }).catch(err2 => {
+            console.log(err2);
+            // break
           })
       });
-    }).then(res => {
-      this.notifier.notify('success', 'Exportación exitosa!');
-      
-    }).catch(err => {
-      this.notifier.notify('error', 'Algo salio mal por favor verifique el formato de documento!');
-
+    }).catch(err3 => {
+      console.log(err3);
     })
 
   }
 
 
-  constructObject(array) {
+  async constructObject(array, name) {
 
-    var doc = {} as projExcel;
-    doc.name = array[2][1];
-
+    
+     var doc = {} as projExcel;
+    doc.name = name;
     doc.activities = [];
-    // var act = {} as actExcel;
-   var indexAct = 0;
+    doc.subprojects = [];
 
-    array.forEach(function (element, index) {
-      if (index > 2 && isNullOrUndefined(element[5])) {
-        
-        if(index != 0){
-          indexAct = indexAct + 1;
-        }
-        const activity = {
-          name: element[1],
-          events: []
-        }
-        // activity.events = [];
-        // console.log(activity)
+    var contSub = -1;
+    var contAct = -1;
 
-        doc.activities.push(activity);
-        // this..activities.push(act);
-
-        // console.log('actividad: '+ element[1])
-      } else if (index > 2 && !isNullOrUndefined(element[2]) && !isNullOrUndefined(element[3])) {
-        
-        const event : eventExcel = {
-          name : element[0],
-          description : element[1],
-          unit : element[2],
-          number : element[3]
-
-        }
-        // console.log(indexAct)
-
-      // console.log(doc.activities[indexAct-1])
-
-        doc.activities[indexAct-1].events.push(event);
-
+    const arr = await array.map(element => {
+      if( element[0] == 'subproyecto' || element[0] == 'Subproyecto' ){
+        doc.subprojects.push(element[1]);
+        contSub++
       }
 
-      // console.log(index, array.length)
+      if(element[0] == 'actividad' || element[0] == 'Actividad')
+      {
+        contAct++;
+         const act : actExcel = {
+           name : element[1],
+           subproject : doc.subprojects[contSub],
+           events: []
+         }
+
+         doc.activities.push(act)
+      }
+
+      if(element[0] == 'evento' || element[0] == 'Evento'){
+
+        const event : eventExcel = {
+          name: element[1],
+          description : '',
+          unit : element[5],
+          number : element[6],
+          user_mail : element[4]
+        }
+
+        doc.activities[contAct].events.push(event);
+      }
+
+    })
+
+   this.jsonToFirebase(doc);
+
+
+
+  //   var doc = {} as projExcel;
+  //   doc.name = array[2][1];
+
+  //   doc.activities = [];
+  //   // var act = {} as actExcel;
+  //  var indexAct = 0;
+
+  //   array.forEach(function (element, index) {
+  //     if (index > 2 && isNullOrUndefined(element[5])) {
+        
+  //       if(index != 0){
+  //         indexAct = indexAct + 1;
+  //       }
+  //       const activity = {
+  //         name: element[1],
+  //         events: []
+  //       }
+  //       // activity.events = [];
+  //       // console.log(activity)
+
+  //       doc.activities.push(activity);
+  //       // this..activities.push(act);
+
+  //       // console.log('actividad: '+ element[1])
+  //     } else if (index > 2 && !isNullOrUndefined(element[2]) && !isNullOrUndefined(element[3])) {
+        
+  //       const event : eventExcel = {
+  //         name : element[0],
+  //         description : element[1],
+  //         unit : element[2],
+  //         number : element[3]
+
+  //       }
+  //       // console.log(indexAct)
+
+  //     // console.log(doc.activities[indexAct-1])
+
+  //       doc.activities[indexAct-1].events.push(event);
+
+  //     }
+
+  //     // console.log(index, array.length)
       
-    });
+  //   });
 
-      this.jsonToFirebase(doc);
+  //     this.jsonToFirebase(doc);
 
-  }
+  // }
 
 
+}
 }

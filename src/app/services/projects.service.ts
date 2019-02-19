@@ -88,7 +88,7 @@ export class ProjectsService {
     return new Promise((resolve, reject) => {
       this.db.collection('projects').add({
     
-        title: project.name,
+        title: project.title,
         description: project.description,
         ubication: project.ubication,
         start: project.start,
@@ -112,7 +112,7 @@ export class ProjectsService {
     })
   }
 
-  importProject(name: string){
+  importProject(name: string, subprojects:string[]){
 
    
     // return new Promise((resolve, reject) => {
@@ -141,9 +141,9 @@ export class ProjectsService {
         },
         start: new Date().toJSON(),
         end: new Date().toJSON(),
-        administrators: ['daniel'],
+        administrators: [],
         deleted : '',
-        subprojects : []
+        subprojects : subprojects
       }).then((res: any) => resolve(res), err => reject(err));
     })
 
@@ -182,9 +182,10 @@ export class ProjectsService {
     // }
 
     updateProject(project: project ) {
+      console.log(project)
       return new Promise ((resolve, reject) => {
         this.db.collection('projects').doc(project.id).update({
-          name: project.name,
+          title: project.title,
           description: project.description,
           ubication: project.ubication,
           start: project.start,

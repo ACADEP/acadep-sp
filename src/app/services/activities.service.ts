@@ -48,7 +48,7 @@ export class ActivitiesService {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
 
-        title: activity.name,
+        title: activity.title,
         description: activity.description,
         subproject: activity.subproject,
         project_id : activity.project_id,
@@ -62,12 +62,12 @@ export class ActivitiesService {
 
   }
 
-  ImportActivity(name:string, project_id:string) {
+  ImportActivity(name:string, project_id:string, subproject: string) {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
         title: name,
         description: '',
-        subproject: '',
+        subproject: subproject,
         project_id : project_id,
         start: new Date().toJSON().substr(0, 16),
         end: new Date().toJSON().substr(0, 16),
@@ -85,7 +85,7 @@ export class ActivitiesService {
   {
     return new Promise ((resolve, reject) => {
       this.db.collection('activities').doc(activity.id).update({
-        name: activity.name,
+        title: activity.title,
         description: activity.description,
         subproject: activity.subproject,
         project_id : activity.project_id,

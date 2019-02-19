@@ -27,7 +27,7 @@ export class TopbarComponent implements OnInit {
 
     this.eventsService.getEventsUndefined().subscribe( events => {
       this.notifications = events;
-      console.log(this.notifications)
+      // console.log(this.notifications)
       this.numNotifications = events.length;
     })
   }

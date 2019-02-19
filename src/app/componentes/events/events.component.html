@@ -169,12 +169,12 @@
 
                   <hr class="b-s-dashed">
 
-                  <label for="atext3">Total a realizar <span class="required">*</span></label>
+                  <label id="total">Total a realizar <span class="required">*</span></label>
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
                         <p>Cantidad</p>
-                        <input id="toolquant" type="number" min="1" size="2px" name="number" [(ngModel)]="eventDoc.total.number"
+                        <input id="number" type="number" min="1" size="2px" name="number" [(ngModel)]="eventDoc.total.number"
                           class="form-control" placeholder="unidad" required>
                       </div>
                     </div>
@@ -182,7 +182,7 @@
                       <div class="form-group">
                         <p>Unidad</p>
                         <div >
-                          <input type="text" class="form-control input-sm p-r-80" name="unit" placeholder="nombre..."
+                          <input id="unit" type="text" class="form-control input-sm p-r-80" name="unit" placeholder="nombre..."
                             [(ngModel)]="eventDoc.total.unit" required>
                         </div>
                       </div>
@@ -214,9 +214,9 @@
                         <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end"> -->
 
                   <div class="form-group">
-                    <label for="itext">Fecha de inicio <span class="required">*</span></label>
+                    <label id="start">Fecha de inicio <span class="required">*</span></label>
                     <div class="panel-body">
-                      <input class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="eventDoc.start"
+                      <input id="startinput" class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="eventDoc.start"
                         [altInput]="true" name="start" [convertModelValue]="false" placeholder="dd/mm/yyyy"
                         [enableTime]="true" dateFormat="Y-m-dTH:i" required>
                     </div>
@@ -225,9 +225,9 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Fecha de término <span class="required">*</span></label>
+                    <label id="end">Fecha de término <span class="required">*</span></label>
                     <div class="panel-body">
-                      <input class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="eventDoc.end"
+                      <input id="endinput" class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="eventDoc.end"
                         [altInput]="true" name="end" placeholder="dd/mm/yyyy" [convertModelValue]="false" [enableTime]="true"
                         dateFormat="Y-m-dTH:i" required>
                     </div>
