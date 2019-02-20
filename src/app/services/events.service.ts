@@ -152,6 +152,22 @@ export class EventsService {
     })
   }
 
+  getEventsUndefined2(){
+    this.eventsCollection = this.db.collection('events', ref => ref
+    .where('deleted', '==', '')
+    .where('user_id', '==', 'undefined')
+    .limit(10));
+
+    this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Event;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    return this.events;
+  }
+
   getEventsUndefined(){
     this.eventsCollection = this.db.collection('events', ref => ref
     .where('deleted', '==', '')

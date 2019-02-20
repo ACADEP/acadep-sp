@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-// tslint:disable-next-line:quotemark
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from '../../services/activities.service';
@@ -9,10 +8,13 @@ import { activity } from '../../models/activity';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user';
 import { tool } from '../../models/tool';
-// import { datetime } from "../../models/dateTime"
 import { total } from "../../models/event";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
 
+
+import { AfireService } from "../../services/afire.service";
+import {map} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 declare var $: any;
 
@@ -29,6 +31,13 @@ export interface DialogData {
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent implements OnInit {
+
+  todos: Array<any> = [];
+  batch: number = 40;
+  last: any = '2018-01-01';
+  empty: boolean = false;
+  loading: boolean = false;
+
 
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
@@ -58,7 +67,7 @@ export class EventsComponent implements OnInit {
 
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService
-    , public dialog: MatDialog) {
+    , public dialog: MatDialog,public aFireService: AfireService) {
 
     this.eventDoc.total = {} as total;
     this.notifier = notifierService;
@@ -75,6 +84,9 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.fetchTodosPaginated();
+
     this.eventsService.getEvents().subscribe(events => {
       this.eventsCollection = events;
       // console.log(this.eventsCollection);
@@ -90,6 +102,40 @@ export class EventsComponent implements OnInit {
       this.activitiesCollection = items;
     });
 
+  }
+
+  scrollHandler(e){
+
+    if (e == 'bottom' && this.empty == false) {
+      this.onScroll()
+    }
+  }
+
+  onScroll() {
+    // console.log('bottom')
+    this.loading = true;
+    setTimeout(() => {
+      this.fetchTodosPaginated();
+      this.loading = false;
+    }, 1500);
+  }
+
+  fetchTodosPaginated () {
+    this.aFireService.paginate(this.batch, this.last).pipe(
+      map(data => {
+        if ( !data.length) {
+          this.empty = true;
+        }
+        let last = _.last(data);
+        if (last) {
+          this.last = last.payload.doc.data().start;
+          data.map(todoSnap => {
+            // console.log(todoSnap.payload.doc.data())
+            this.todos.push(todoSnap.payload.doc.data());
+          })
+        }
+      })
+    ).subscribe();
   }
 
   emptyForm() {

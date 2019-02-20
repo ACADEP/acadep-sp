@@ -80,6 +80,7 @@ import { EvidenceComponent } from './componentes/evidence/evidence.component';
 import { GalleryModule } from '@ngx-gallery/core';
 import { LightboxModule } from '@ngx-gallery/lightbox';
 import { ConfigurationComponent } from './componentes/configuration/configuration.component';
+import { ScrollableDirective } from './directives/scrollable.directive';
 
 
 
@@ -143,7 +144,8 @@ const customNotifierOptions: NotifierOptions = {
     GmapComponent,
     CalendarEventsComponent,
     EvidenceComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    ScrollableDirective
 
   ],
   imports: [

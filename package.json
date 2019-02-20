@@ -40,6 +40,7 @@
     "jspdf": "^1.5.3",
     "ng-fullcalendar": "^1.7.1",
     "ng-tags-input": "^3.2.0",
+    "ngx-infinite-scroll": "^7.0.1",
     "rxjs": "~6.3.3",
     "xlsx": "^0.14.1",
     "zone.js": "~0.8.26"
