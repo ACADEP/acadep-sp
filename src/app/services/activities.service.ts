@@ -23,7 +23,25 @@ export class ActivitiesService {
 
   getActivities() {
 
-    this.activitiesCollection = this.db.collection('activities', ref => ref.where('deleted', '==', ''));
+    this.activitiesCollection = this.db.collection('activities', ref => ref.where('deleted', '==', '').limit(20));
+    this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as activity;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+
+    return this.activities;
+
+  }
+
+  getActivitiesBySub(subproject:string) {
+
+    this.activitiesCollection = this.db.collection('activities', ref => 
+    ref
+    .where('deleted', '==', '')
+    .where('subproject', '==', subproject));
     this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as activity;
@@ -94,9 +112,6 @@ export class ActivitiesService {
         insumos : activity.insumos,
       }).then((res:any) => resolve(res), err => reject(err));
     })
-
-
-    
   }
 
   // deleteActivity(key:string)

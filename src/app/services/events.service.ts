@@ -33,6 +33,20 @@ export class EventsService {
     return this.events;
   }
 
+  getEventsByActivity(activity_id) {
+    this.eventsCollection = this.db.collection('events', ref => ref
+    .where('deleted', '==', '')
+    .where('activity_id', '==', activity_id));
+    this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Event;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    return this.events;
+  }
+
   addEvent(event: Event) {
     this.nameEvent = event.title;
     return new Promise((resolve, reject) => {

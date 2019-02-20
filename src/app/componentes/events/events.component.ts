@@ -10,11 +10,12 @@ import { User } from '../../models/user';
 import { tool } from '../../models/tool';
 import { total } from "../../models/event";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
-
+import { ProjectsService } from "../../services/projects.service";
 
 import { AfireService } from "../../services/afire.service";
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { project } from 'src/app/models/project';
 
 declare var $: any;
 
@@ -44,14 +45,16 @@ export class EventsComponent implements OnInit {
   private readonly notifier: NotifierService;
   types = [
     'auditoria',
-    'supervision',
-    'revision'
+    'supervision'
   ];
 
+  public subprojects: string[] = [];
+  public acts: activity[] = [];
 
   eventsCollection: Event[];
   usersCollection: User[];
   activitiesCollection: activity[];
+  projectsCollection: project[];
   eventDoc = {} as Event;
   eventDocEdit = {} as Event;
 
@@ -66,8 +69,9 @@ export class EventsComponent implements OnInit {
 
 
   constructor(public users: UsersService, public eventsService: EventsService,
-    notifierService: NotifierService, public activitiesService: ActivitiesService
-    , public dialog: MatDialog,public aFireService: AfireService) {
+    notifierService: NotifierService, public activitiesService: ActivitiesService,
+    public dialog: MatDialog, public aFireService: AfireService,
+    public projectsService: ProjectsService) {
 
     this.eventDoc.total = {} as total;
     this.notifier = notifierService;
@@ -76,37 +80,70 @@ export class EventsComponent implements OnInit {
 
     this.eventDocEdit.start = new Date().toJSON();
     this.eventDocEdit.end = new Date().toJSON();
-
-    // tslint:disable-next-line:semicolon
-    console.log(this.eventDoc.start)
     this.emptyForm();
-    // this.eventSeeNull();
   }
 
   ngOnInit() {
 
-    this.fetchTodosPaginated();
+    // this.fetchTodosPaginated();
 
-    this.eventsService.getEvents().subscribe(events => {
-      this.eventsCollection = events;
-      // console.log(this.eventsCollection);
-    });
+    // this.eventsService.getEvents().subscribe(events => {
+    //   this.eventsCollection = events;
+    // });
 
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      // console.log(this.usersCollection);
     });
 
     this.activitiesService.getActivities().subscribe(items => {
       this.activitiesCollection = items;
+      console.log()
     });
+
+    this.projectsService.getProjects().subscribe(projects => {
+      this.projectsCollection = projects;
+      console.log(projects)
+    })
 
   }
 
-  scrollHandler(e){
+  changeProject(project) {
+    if (project.target.value) {
+      this.projectsService.getProject(project.target.value).then((project: any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) => (console.log(err)));
+    }
+    else {
+      this.subprojects = []
+    }
+  }
+  changeActivity(event) {
+    if (event.target.value) {
+      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+        this.acts = activities;
+      })
+    }
+    else {
+      this.acts = []
+    }
+  }
 
-    if (e == 'bottom' && this.empty == false) {
+  loadingEvents(event){
+    console.log(event)
+
+    if (event.target.value) {
+     this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
+       this.eventsCollection = events;
+     })
+    }
+    else { this.acts = [] }
+  }
+
+  scrollHandler(e) {
+
+    if (e == 'bottom') {
       this.onScroll()
     }
   }
@@ -120,10 +157,10 @@ export class EventsComponent implements OnInit {
     }, 1500);
   }
 
-  fetchTodosPaginated () {
+  fetchTodosPaginated() {
     this.aFireService.paginate(this.batch, this.last).pipe(
       map(data => {
-        if ( !data.length) {
+        if (!data.length) {
           this.empty = true;
         }
         let last = _.last(data);
@@ -166,7 +203,7 @@ export class EventsComponent implements OnInit {
 
   addEvent(form: NgForm) {
 
-    
+
     if (form.valid && form.controls.number.value >= 0) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
@@ -179,69 +216,69 @@ export class EventsComponent implements OnInit {
       console.log(form);
       this.notifier.notify('error', 'Completa los campos obligatorios');
 
-       if (form.controls.name.invalid) {
-         $('#name').addClass('error');
-         $('#labelname').addClass('errortxt');
-       } else {
-         $('#name').removeClass('error');
-         $('#labelname').removeClass('errortxt');
-       }
-       if (form.controls.type.invalid) {
-         $('#type').addClass('error');
-         $('#labeltype').addClass('errortxt');
-       } else {
-         $('#type').removeClass('error');
-         $('#labeltype').removeClass('errortxt');
-       }
+      if (form.controls.name.invalid) {
+        $('#name').addClass('error');
+        $('#labelname').addClass('errortxt');
+      } else {
+        $('#name').removeClass('error');
+        $('#labelname').removeClass('errortxt');
+      }
+      if (form.controls.type.invalid) {
+        $('#type').addClass('error');
+        $('#labeltype').addClass('errortxt');
+      } else {
+        $('#type').removeClass('error');
+        $('#labeltype').removeClass('errortxt');
+      }
 
-       if (form.controls.unit.invalid) {
-         $('#unit').addClass('error');
-         $('#total').addClass('errortxt');
-       } else {
-         $('#unit').removeClass('error');
-         $('#total').removeClass('errortxt');
-       }
+      if (form.controls.unit.invalid) {
+        $('#unit').addClass('error');
+        $('#total').addClass('errortxt');
+      } else {
+        $('#unit').removeClass('error');
+        $('#total').removeClass('errortxt');
+      }
 
-       if (form.controls.number.value <= 0) {
-         $('#number').addClass('error');
-         $('#total').addClass('errortxt');
-       } else {
-         $('#number').removeClass('error');
-         $('#total').removeClass('errortxt');
-       }
+      if (form.controls.number.value <= 0) {
+        $('#number').addClass('error');
+        $('#total').addClass('errortxt');
+      } else {
+        $('#number').removeClass('error');
+        $('#total').removeClass('errortxt');
+      }
 
-       if (form.controls.start.invalid) {
+      if (form.controls.start.invalid) {
         //  $('#startinput').addClass('error');
-         $('#start').addClass('errortxt');
-       } else {
+        $('#start').addClass('errortxt');
+      } else {
         //  $('#startinput').removeClass('error');
-         $('#start').removeClass('errortxt');
-       }
-       if (form.controls.end.invalid) {
+        $('#start').removeClass('errortxt');
+      }
+      if (form.controls.end.invalid) {
         //  $('#endinput').addClass('error');
-         $('#end').addClass('errortxt');
-       } else {
+        $('#end').addClass('errortxt');
+      } else {
         //  $('#endinput').removeClass('error');
-         $('#end').removeClass('errortxt');
-       }
-
-     
+        $('#end').removeClass('errortxt');
+      }
 
 
-       if (form.controls.user.invalid) {
-         $('#user').addClass('error');
-         $('#labeluser').addClass('errortxt');
-       } else {
-         $('#user').removeClass('error');
-         $('#labeluser').removeClass('errortxt');
-       }
-       if (form.controls.activity.invalid) {
-         $('#activity').addClass('error');
-         $('#labelactivity').addClass('errortxt');
-       } else {
-         $('#activity').removeClass('error');
-         $('#labelactivity').removeClass('errortxt');
-       }
+
+
+      if (form.controls.user.invalid) {
+        $('#user').addClass('error');
+        $('#labeluser').addClass('errortxt');
+      } else {
+        $('#user').removeClass('error');
+        $('#labeluser').removeClass('errortxt');
+      }
+      if (form.controls.activity.invalid) {
+        $('#activity').addClass('error');
+        $('#labelactivity').addClass('errortxt');
+      } else {
+        $('#activity').removeClass('error');
+        $('#labelactivity').removeClass('errortxt');
+      }
     }
 
   }
