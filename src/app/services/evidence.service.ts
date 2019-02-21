@@ -24,7 +24,8 @@ export class EvidenceService {
   constructor(public db: AngularFirestore) { }
 
   getEvidence() {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('test', '==', true));
+    // this.evidenceCollection = this.db.collection('evidence', ref => ref.where('test', '==', true));
+    this.evidenceCollection = this.db.collection('evidence');
     // this.evidenceCollection = this.db.collection('evidence');
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {

@@ -76,9 +76,10 @@ public subprojects: string[] = [];
 
   ngOnInit() {
     //actividades
-    this.activitiesService.getActivities().subscribe(items => {
-      this.activities = items;
-    })
+
+    // this.activitiesService.getActivities().subscribe(items => {
+    //   this.activities = items;
+    // })
 
     
 
@@ -352,6 +353,29 @@ public subprojects: string[] = [];
 
     $('.fa-chevron-down').trigger('click');
     
+  }
+
+  selectProject(project) {
+    if (project.target.value) {
+      this.projectsService.getProject(project.target.value).then((project: any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) => (console.log(err)));
+    }
+    else {
+      this.subprojects = []
+    }
+  }
+  
+  changeActivity(event) {
+    if (event.target.value) {
+      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+        this.activities = activities;
+      })
+    }
+    else {
+      this.activities = []
+    }
   }
 
 }

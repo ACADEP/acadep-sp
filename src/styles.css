@@ -20,3 +20,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .pointer:active{
     color: #96a3b1 !important;
 }
+
+.input-succes{
+    border: rgb(60, 204, 60) 1px solid;
+}

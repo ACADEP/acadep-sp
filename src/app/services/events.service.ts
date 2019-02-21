@@ -35,8 +35,8 @@ export class EventsService {
 
   getEventsByActivity(activity_id) {
     this.eventsCollection = this.db.collection('events', ref => ref
-    .where('deleted', '==', '')
-    .where('activity_id', '==', activity_id));
+      .where('deleted', '==', '')
+      .where('activity_id', '==', activity_id));
     this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as Event;
@@ -63,30 +63,40 @@ export class EventsService {
         staff: event.staff,
         deleted: '',
         status: 1,
-        advanced : 0,
-        total : event.total
+        advanced: 0,
+        total: event.total
       }).then((res: any) => {
+
+
+
+        this.db.collection('users').doc(event.user_id).ref.get().then(user => {
+
+
+          var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://fcm.googleapis.com/fcm/send",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
+            },
+            "processData": false,
+            "data": "{\n   \"notification\": {\n     \"title\": \"lalo donde esta lalona\",\n        \"body\": \"nos vemos mañanin\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+          }
+
+          $.ajax(settings).done(function (response) {
+            console.log(response);
+          });
+
+
+        })
+
+
         this.db.collection('events').doc(res.id).update({
           id: res.id
-        }).then(async res => {
-          //notificacion push
-          // $.ajax({
-          //   data: {
-          //     "app_id": "d7d8b147-ad7c-48f6-be54-a1b9c423d4c5",
-          //     "included_segments": ["All"],
-          //     "headings": { "es": "📆 Nuevo evento", "en": "📆 Nuevo evento" },
-          //     "contents": { "es": this.nameEvent, "en": this.nameEvent }
-          //   },
-          //   url: 'https://onesignal.com/api/v1/notifications',
-          //   type: 'post',
-          //   beforeSend: function (xhr) {
-          //     xhr.setRequestHeader("Authorization", "Basic NTc5YzY4MWItMmU2ZC00MzhjLWI2MzQtM2RlMmUxMTM3ZTYz");
-          //     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-          //   },
-          //   success: function (res) {
-          //     console.log(res);
-          //   }
-          // })
+        }).then(() => {
+          // notificacion push
         })
         resolve(res)
       }, err => reject(err));
@@ -96,10 +106,10 @@ export class EventsService {
   deleteEvent(key: string) {
 
     return new Promise((resolve, reject) => {
-    
+
       this.db.collection('events').doc(key).update({
-        deleted : new Date().toJSON().substr(0, 16)
-      }).then((res:any) => resolve(res)).catch(err => reject(err))
+        deleted: new Date().toJSON().substr(0, 16)
+      }).then((res: any) => resolve(res)).catch(err => reject(err))
     })
 
   }
@@ -122,7 +132,7 @@ export class EventsService {
   }
 
 
-  getEventById(id){
+  getEventById(id) {
 
     return new Promise((resolve, reject) => {
       this.db.collection('events').doc(id).ref.get()
@@ -131,7 +141,7 @@ export class EventsService {
     });
   }
 
-  ImportEvent(name: string, unit:string, number:number, id_act : string, user_mail:string) {
+  ImportEvent(name: string, unit: string, number: number, id_act: string, user_mail: string) {
 
     let start = moment().format('Y-MM-DDThh:mm');
     let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
@@ -140,20 +150,20 @@ export class EventsService {
         active: true,
         activity_id: id_act,
         user_id: 'undefined',
-        type_activity: 'default',
+        type_activity: 'supervision',
         title: name,
         description: '',
         start: start,
-        user_mail : user_mail,
+        user_mail: user_mail,
         end: end,
         tools: [],
         staff: [],
         deleted: '',
         status: 1,
-        advanced : 0,
-        total : {
+        advanced: 0,
+        total: {
           unit: unit,
-          number : number
+          number: number
         }
       }).then((res: any) => {
         this.db.collection('events').doc(res.id).update({
@@ -166,11 +176,11 @@ export class EventsService {
     })
   }
 
-  getEventsUndefined2(){
+  getEventsUndefined2() {
     this.eventsCollection = this.db.collection('events', ref => ref
-    .where('deleted', '==', '')
-    .where('user_id', '==', 'undefined')
-    .limit(10));
+      .where('deleted', '==', '')
+      .where('user_id', '==', 'undefined')
+      .limit(10));
 
     this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
@@ -182,10 +192,10 @@ export class EventsService {
     return this.events;
   }
 
-  getEventsUndefined(){
+  getEventsUndefined() {
     this.eventsCollection = this.db.collection('events', ref => ref
-    .where('deleted', '==', '')
-    .where('user_id', '==', 'undefined'));
+      .where('deleted', '==', '')
+      .where('user_id', '==', 'undefined'));
 
     this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {

@@ -124,6 +124,9 @@
                         {{evidence.total.number}} {{evidence.total.unit}}
                       </span>
 
+                      <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
+
+
                     </mat-panel-description>
                   </mat-expansion-panel-header>
                   <div class="row">

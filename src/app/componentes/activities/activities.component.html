@@ -25,6 +25,73 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
+
+        <div class="col-md-12">
+            <div class="box">
+              <!-- <h2 class="text-center">hola</h2> -->
+              <form action="">
+    
+                <form style="margin-top:10px; margin-left:15px">
+                  <div class="row">
+    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label id="labeltype">Proyecto<span class="required">*</span></label>
+                            <select id="type" class="form-control" name="type" required (change)="changeProject($event)" >
+                              <option value="">Seleccione un proyecto</option>
+                        <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>                              
+                            </select>
+                          </div>
+                    </div>
+    
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label id="labeltype">Subroyecto<span class="required">*</span></label>
+                        <select id="type" class="form-control" name="type" required (change)="changeActivity($event)">
+                          <option value="">Seleccione</option>
+                          <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
+                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                        </select>
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-2">
+                      <div class="form-group">
+                        <label id="labeltype">Actividad<span class="required">*</span></label>
+                        <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
+                          <option value="">Seleccione</option>
+                        
+                          <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
+                        </select>
+                      </div>
+                    </div> -->
+                    <!-- <div class="col-md-2" style="text-align:right">
+                      <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                          <span class="vertical-super">Actividades</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-2" style="text-align:left">
+                      <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" checked name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                          <span class="vertical-super">Eventos</span>
+                        </label>
+                      </div>
+                    </div> -->
+    
+                  </div>
+                </form>
+    
+    
+    
+              </form>
+            </div>
+          </div>
+
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">

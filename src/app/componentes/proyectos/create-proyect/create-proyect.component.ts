@@ -288,30 +288,30 @@ export class CreateProyectComponent implements OnInit {
 
 
   jsonToFirebase(json: any, total: number) {
-    // //  console.log(json)
-    var cont = 1;
-    this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
-      cont++;
-      console.log(cont + '/' + total)
-      json.activities.forEach(activity => {
-        this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
-          cont++;
-          console.log(cont + '/' + total)
-          activity.events.forEach(event => {
-            this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail).then(() => {
-              cont++;
-              console.log(cont + '/' + total)
-            }).catch(err1 => {
-              console.log(err1);
-            })
-          });
-        }).catch(err2 => {
-          console.log(err2);
-        })
-      });
-    }).catch(err3 => {
-      console.log(err3);
-    })
+     console.log(json)
+    // var cont = 1;
+    // this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
+    //   cont++;
+    //   console.log(cont + '/' + total)
+    //   json.activities.forEach(activity => {
+    //     this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
+    //       cont++;
+    //       console.log(cont + '/' + total)
+    //       activity.events.forEach(event => {
+    //         this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail).then(() => {
+    //           cont++;
+    //           console.log(cont + '/' + total)
+    //         }).catch(err1 => {
+    //           console.log(err1);
+    //         })
+    //       });
+    //     }).catch(err2 => {
+    //       console.log(err2);
+    //     })
+    //   });
+    // }).catch(err3 => {
+    //   console.log(err3);
+    // })
 
   }
 
