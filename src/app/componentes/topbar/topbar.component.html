@@ -45,7 +45,7 @@
           <i class="fa fa-fw fa-bars"></i>
         </a>
 
-        <form class="navbar-form hidden-xs b-r">
+        <!-- <form class="navbar-form hidden-xs b-r">
           <div class="icon-after-input">
             <input type="text" class="form-control" placeholder="Buscar">
             <div class="icon">
@@ -54,24 +54,24 @@
               </a>
             </div>
           </div>
-        </form>
+        </form> -->
 
       </nav>
 
       <ul class="nav navbar-header-nav m-l-a">
-        <li class="visible-xs b-l">
+        <!-- buscador -->
+        <!-- <li class="visible-xs b-l">
           <a href="#top-search" data-toggle="canvas">
             <i class="fa fa-fw fa-search"></i>
           </a>
-        </li>
-        <li class="dropdown b-l">
+        </li> -->
+        <!-- mensajes -->
+        <!-- <li class="dropdown b-l">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-
             <span class="b-wisteria fa fa-fw fa-envelope-o u-posRelative"></span>
-
-            <!-- <span class="label label-primary b-orange">10
+            <span class="label label-primary b-orange">10
               <span class="waves"></span>
-            </span> -->
+            </span>
           </a>
           <ul class="dropdown-menu animated fadeInDown w-sm pull-right" style="left: -167px;">
             <li class="b-b">
@@ -116,14 +116,14 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
         <li class="dropdown b-l">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <!-- <i class="fa fa-fw fa-bell"></i> -->
 
             <span class="b-wisteria fa fa-fw fa-bell u-posRelative"></span>
 
-            <span class="label label-danger b-orange">!
+            <span class="label label-danger b-orange" *ngIf="notifications.length">{{notifications.length}}
               <span class="waves"></span>
             </span>
             
@@ -133,24 +133,51 @@
           <!-- -------- -->
           <ul class="dropdown-menu animated fadeInUp w-sm pull-right" style="left: -167px;">
 
-            <li class="b-b" *ngFor="let item of notifications">
+
+          <ng-template #zeroNotifications>
+            <li class="b-b" >
               <div class="media">
                 <div class="media-left">
                   <a class="profile-pic" href="#">
-                    <img class="media-object" src="../assets/img/warn.png" alt="...">
+                    <img class="media-object" src="../assets/img/success.png" alt="...">
                   </a>
                 </div>
                 <div class="media-body">
-                  <h5 class="media-heading">
-                    <small class="pull-right">12 hours ago</small>
-                    <b>{{item.title}}</b>
+                  <h5 class="text-center">
+                    <!-- <small class="pull-right">12 hours ago</small> -->
+                    Ninguna notificación pendiente
                   </h5>
-                  Evento 
+                  <!-- Evento 
                   <strong>incompleto </strong>
-                  <p class="text-muted">Asigne un usuario</p>
+                  <p class="text-muted">Asigne un usuario</p> -->
                 </div>
               </div>
             </li>
+          </ng-template>
+
+          <span *ngIf="notifications.length; else zeroNotifications">
+            <a routerLink="/evidence" *ngFor="let notification of notifications">
+                <li class="b-b" >
+                    <div class="media">
+                      <div class="media-left">
+                        <span class="profile-pic">
+                          <img class="media-object" src="../assets/img/notification.png" alt="...">
+                        </span>
+                      </div>
+                      <div class="media-body">
+                        <h5 class="media-heading">
+                          <small class="pull-right">{{notification.created_at | date:'short'}}</small>
+                          <b>Nueva Evidencia!</b>
+                        </h5>
+                        <strong> </strong>
+                        <p class="text-muted">{{notification.ref_event.name}}</p>
+                      </div>
+                    </div>
+                  </li>
+            </a>
+            
+          </span>
+            
 
             <!-- <li class="b-b">
               <div class="media">
@@ -203,7 +230,7 @@
           </ul>
         </li>
         <!-- begin mega-menu -->
-        <li class="dropdown u-posStatic hidden-xs b-l">
+        <!-- <li class="dropdown u-posStatic hidden-xs b-l">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mega
             <span class="caret"></span>
           </a>
@@ -236,7 +263,7 @@
               </div>
             </li>
           </ul>
-        </li>
+        </li> -->
         <!-- END: mega-menu -->
       </ul>
     </div>

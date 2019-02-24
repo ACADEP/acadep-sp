@@ -111,7 +111,8 @@
                   <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x pointer" (click)="closeAll()"></i>
                 </div>
               </header>
-              <div appScrollable style="height:1300px; overflow-y: scroll;" (scrollPosition)="scrollHandler($event)" >
+              <div style="height:1300px; overflow-y: scroll;" >
+              <!-- <div appScrollable style="height:1300px; overflow-y: scroll;" (scrollPosition)="scrollHandler($event)" > -->
               <mat-accordion  class="example-headers-align" #myaccordion="matAccordion" multi="true">
 
                 <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">

@@ -44,7 +44,9 @@ export class EvidenceComponent implements OnInit {
 
   idEvent = "";
   idUser = "";
+  loading: boolean = true;
 
+  indexExpanded: number = -1;
 
   @ViewChild('content') content: ElementRef;
   public image = {} as image;
@@ -77,17 +79,50 @@ export class EvidenceComponent implements OnInit {
 
     this.evidenceService.getEvidence().subscribe(evidence => {
       this.evidenceCollection = evidence;
+      this.loading = false;
     })
 
-    this.eventsService.getEvents().subscribe(events => {
-      this.eventsCollection = events
-    })
+    // this.eventsService.getEvents().subscribe(events => {
+    //   this.eventsCollection = events
+    // })
 
     this.usersService.getUsers().subscribe(users => {
       this.usersCollection = users
     })
 
 
+  }
+
+  getEtapa(etapa) {
+
+    switch (etapa) {
+      case 'before':
+        return 'Antes'
+        break;
+      case 'during':
+        return 'Durante'
+        break;
+      case 'after':
+        return 'Después'
+        break;
+
+      default:
+        return ''
+        break;
+    }
+  }
+
+
+
+  readEvidence(event, index: number){
+    this.indexExpanded = index == this.indexExpanded ? -1 : index;
+    if(!event.read){
+      this.evidenceService.readNotification(event.id).then(res =>{
+
+      }).catch(err => console.log(err))
+
+    }
+   
   }
 
   // getUnit(id){
@@ -114,7 +149,7 @@ export class EvidenceComponent implements OnInit {
   async export(evidence, e) {
 
     let doc = new jsPDF();
-    let content = '<p>'+evidence.description+'</p>';
+    let content = '<p>' + evidence.description + '</p>';
     console.log(e)
     let specialElementhandlers = {
       '#editor': function (element, renderer) {
@@ -122,7 +157,7 @@ export class EvidenceComponent implements OnInit {
       }
     };
 
-    
+
     // doc.setFont('courier')
     doc.setFontType('bold')
     doc.text(70, 20, this.configPdf.text_header)
@@ -130,7 +165,7 @@ export class EvidenceComponent implements OnInit {
 
     doc.setFontType('normal')
     doc.setFontSize(14)
-    doc.text(10, 40, ('Fecha : '+new Date().toDateString()));
+    doc.text(10, 40, ('Fecha : ' + new Date().toDateString()));
     doc.text(10, 50, ('Descripción : '));
     doc.fromHTML(content, 10, 50, {
       width: 190,
@@ -138,11 +173,11 @@ export class EvidenceComponent implements OnInit {
     });
 
 
-   /*
-    *
-    * header 1
-
-    */
+    /*
+     *
+     * header 1
+ 
+     */
 
     var img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');
@@ -160,12 +195,12 @@ export class EvidenceComponent implements OnInit {
 
     }
 
- /*
-  *
-  *
-  * header 2
-
-  */
+    /*
+     *
+     *
+     * header 2
+   
+     */
 
     var img2 = new Image();
     img2.setAttribute('crossOrigin', 'anonymous');

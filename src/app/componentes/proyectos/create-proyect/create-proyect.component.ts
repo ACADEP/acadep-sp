@@ -33,6 +33,7 @@ interface actExcel {
   //  project_id : string
 }
 interface eventExcel {
+  fecha_inicio: string
   name: string,
   description: string,
   unit: string,
@@ -289,14 +290,11 @@ export class CreateProyectComponent implements OnInit {
 
   jsonToFirebase(json: any, total: number) {
      console.log(json)
+    //  console.log(total)
     // var cont = 1;
     // this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
-    //   cont++;
-    //   console.log(cont + '/' + total)
     //   json.activities.forEach(activity => {
     //     this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
-    //       cont++;
-    //       console.log(cont + '/' + total)
     //       activity.events.forEach(event => {
     //         this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail).then(() => {
     //           cont++;
@@ -326,6 +324,7 @@ export class CreateProyectComponent implements OnInit {
 
     var contSub = -1;
     var contAct = -1;
+    var contEvent = 0;
 
     const arr = await array.map(element => {
       if (element[0] == 'subproyecto' || element[0] == 'Subproyecto') {
@@ -346,12 +345,14 @@ export class CreateProyectComponent implements OnInit {
 
       if (element[0] == 'evento' || element[0] == 'Evento') {
 
+        contEvent++;
         const event: eventExcel = {
           name: element[1],
           description: '',
           unit: element[5],
           number: element[6],
-          user_mail: element[4]
+          user_mail: element[4],
+          fecha_inicio : element[2].toString()
         }
 
         doc.activities[contAct].events.push(event);
@@ -359,7 +360,7 @@ export class CreateProyectComponent implements OnInit {
 
     })
 
-    this.jsonToFirebase(doc, arr.length);
+    this.jsonToFirebase(doc, contEvent);
 
 
 

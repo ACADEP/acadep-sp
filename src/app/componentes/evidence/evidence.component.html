@@ -2,19 +2,20 @@
   <!-- begin dashhead -->
   <div class="dashhead bg-white">
     <div class="dashhead-titles">
-      <h6 class="dashhead-subtitle">
-        App / Evidencia
+      <h6 class="dashhead-subtitle" style="margin-top:10px">
+        Inicio / Evidencia
       </h6>
-      <h3 class="dashhead-title" #content>Evidencia</h3>
+
+      <!-- <h3 class="dashhead-title" #content>Evidencia</h3> -->
 
     </div>
 
-    <div class="dashhead-toolbar">
+    <!-- <div class="dashhead-toolbar">
       <div class="dashhead-toolbar-item">
         <a>App</a>
         / Evidencia
       </div>
-    </div>
+    </div> -->
   </div>
   <!-- END: dashhead -->
 </header>
@@ -73,9 +74,7 @@
                 </div>
 
                 <div class="col-md-4">
-                  <button mat-raised-button color="warn" 
-                  (click)="getBase64FromImageUrl('https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pruebas%2FImg82e1aa84-8035-4c2d-bace-baab9d1f466a?alt=media&token=326d54fc-db23-45d3-9201-51c23e933cc6')">Exportar a PDF
-                  </button>
+                  
 
                 </div>
 
@@ -90,13 +89,13 @@
       </div>
 
 
-      <div class="col-md-12" style="height:-webkit-fill-available">
+      <div class="col-md-12" >
         <!-- BEGIN: clave.js -->
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
               <header>
-                <h3>Evidencia de eventos</h3>
+                <h3>Resultados de la búsqueda</h3>
                 <div class="box-tools">
                   <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x" (click)="openAll()"></i>
                   <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x"
@@ -106,65 +105,69 @@
 
 
 
-              <mat-spinner *ngIf="!eventsCollection"></mat-spinner>
+              <mat-spinner *ngIf="loading"></mat-spinner>
 
+              <div style="height:800px; overflow-y: scroll;" >
+                  <mat-accordion   class="example-headers-align" #myaccordion="matAccordion" multi="true">
 
-              <mat-accordion #myaccordion="matAccordion" multi="true">
+                      <mat-expansion-panel [ngClass]="{'read': !evidence.read}"  [expanded]="indexExpanded == i"  *ngFor="let evidence of evidenceCollection; index as i" (click)="readEvidence(evidence, i)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.ref_event.name.substring(0,75)}}</mat-checkbox>
+      
+                            <!-- <h4> </h4>  -->
+                          </mat-panel-title>
+                          <mat-panel-description>
+      
+                            <span *ngIf="evidence.total">
+                              {{evidence.total.number}} / 10 {{evidence.total.unit}}
+                            </span>
+                            <span>{{evidence.created_at | date:'dd/MM/y'}} {{evidence.created_at |date:'shortTime'}}</span>
 
-                <mat-expansion-panel *ngFor="let evidence of evidenceCollection; index as i">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.ref_event.name}}</mat-checkbox>
-
-                      <!-- <h4> </h4>  -->
-                    </mat-panel-title>
-                    <mat-panel-description>
-
-                      <span *ngIf="evidence.total">
-                        {{evidence.total.number}} {{evidence.total.unit}}
-                      </span>
-
-                      <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
-
-
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  <div class="row">
-                    <div class="col-md-9">
-                      <div class="col-md-12">
-                        <!-- <h4>Texto</h4> -->
-                        <p style="padding:20px">{{evidence.description}}</p>
-                      <button mat-raised-button color="warn" (click)="export(evidence, $event)">Exportar a PDF</button>
-
-                      </div>
-                      <div class="col-md-12">
-                        <h4>Imágenes</h4>
-                        <div>
-                          <div class="row">
-                            <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as a">
-                              <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid" (click)="showImage(evidence, a)">
+                            <span>Etapa: {{getEtapa(evidence.header)}}</span>
+                            <mat-icon style="color:#f44336" class="delete" (click)="$event.stopPropagation(); export(evidence, $event)">picture_as_pdf</mat-icon>
+      
+      
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                          <div class="col-md-9">
+                            <div class="col-md-12">
+                              <h4>Descripción</h4>
+                              <p style="padding:20px">{{evidence.description}}</p>
+                            <!-- <button mat-raised-button color="warn" (click)="">Exportar a PDF</button> -->
+      
+                            </div>
+                            <div class="col-md-12">
+                              <h4>Imágenes</h4>
+                              <div>
+                                <div class="row">
+                                  <div class="col-md-2 col-sm-4 col-xs-6" *ngFor="let item of evidence.multimedia; index as a">
+                                    <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid" (click)="showImage(evidence, a)">
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
+                          <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
+                            <h4>Documentos</h4>
+                            <div *ngIf="evidence.files.length; else no_files">
+                              <div *ngFor="let item of evidence.files">
+                                <a target="_blank" [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
+                                    [style.color]="getColor(item.type)"></i>
+                                  {{item.name}} </a>
+                              </div>
+                              <br>
+                            </div>
+                            <ng-template #no_files>
+                              <p><i>Ningún archivo adjunto</i></p>
+                            </ng-template>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
-                      <h4>Documentos</h4>
-                      <div *ngIf="evidence.files.length; else no_files">
-                        <div *ngFor="let item of evidence.files">
-                          <a target="_blank" [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
-                              [style.color]="getColor(item.type)"></i>
-                            {{item.name}} </a>
-                        </div>
-                        <br>
-                      </div>
-                      <ng-template #no_files>
-                        <p><i>Ningún archivo adjunto</i></p>
-                      </ng-template>
-                    </div>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+              </div>
+             
             </div>
           </div>
         </div>

@@ -40,41 +40,36 @@
               <div class="row">
 
                 <div class="col-md-3">
-                  <div class="form-group">
-                    <!-- <label for="itext">Buscar Proyecto</label> -->
-                    <div class="icon-after-input">
-                      <input type="text" class="form-control input-sm p-r-80" id="atext3" name="search" placeholder="Buscar...">
-                      <div class="icon">
-                        <button class="btn btn-info btn-sm btn-rect" style="background: #337ab7; border: #337ab7" type="button"><i
-                            class="fa fa-search fa-lg"></i></button>
+                    <div class="form-group">
+                        <label id="labeltype">Proyecto<span class="required">*</span></label>
+                        <select id="type" class="form-control" name="type" required (change)="changeProject($event)">
+                          <option value="">Seleccione un proyecto</option>
+                          <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                        </select>
                       </div>
-                    </div>
-                  </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <div class="form-group">
-                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                    <select id="type" class="form-control" name="type" required>
-                      <option value="">Proyectos</option>
-                      <option value="">proyecto 1 </option>
-                      <option value="">proyecto 2 </option>
+                    <label id="labeltype">Subroyecto<span class="required">*</span></label>
+                    <select id="type" class="form-control" name="type" required (change)="changeActivity($event)">
+                      <option value="">Seleccione</option>
+                      <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
                       <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
                     </select>
                   </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <div class="form-group">
-                    <!-- <label id="labeltype">Proyecto<span class="required">*</span></label> -->
-                    <select id="type" class="form-control" name="type" required>
-                      <option value="">Asignaciones</option>
-                      <option value="">jhon doe</option>
-                      <option value="">jane doe</option>
-                      <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                    <label id="labeltype">Actividad<span class="required">*</span></label>
+                    <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
+                      <option value="">Seleccione</option>
+                    
+                      <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
                     </select>
                   </div>
                 </div>
-                <div class="col-md-2" style="text-align:right">
+                <!-- <div class="col-md-2" style="text-align:right">
                   <div class="radio">
                     <label class="">
                       <input class="hidden" type="radio" name="optionsRadios">
@@ -91,7 +86,7 @@
                       <span class="vertical-super">Eventos</span>
                     </label>
                   </div>
-                </div>
+                </div> -->
 
               </div>
             </form>

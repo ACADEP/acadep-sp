@@ -82,7 +82,7 @@ export class EventsService {
               "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
             },
             "processData": false,
-            "data": "{\n   \"notification\": {\n     \"title\": \"lalo donde esta lalona\",\n        \"body\": \"nos vemos mañanin\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \""+event.title+"\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
           }
 
           $.ajax(settings).done(function (response) {
@@ -127,7 +127,29 @@ export class EventsService {
         tools: event.tools,
         staff: event.staff,
         status: event.status
-      }).then((res: any) => resolve(res), err => reject(err));
+      }).then((res: any) => {
+        
+        this.db.collection('users').doc(event.user_id).ref.get().then(user => {
+          var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://fcm.googleapis.com/fcm/send",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
+            },
+            "processData": false,
+            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \""+event.title+"\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+          }
+
+          $.ajax(settings).done(function (response) {
+            console.log(response);
+          });
+        })
+        resolve(res)
+      
+      }, err => reject(err));
     })
   }
 

@@ -95,16 +95,16 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.email, this.password)
       .then((res :any) => {
 
-        this.router.navigate(['/'])
+        // this.router.navigate(['/'])
         
-        // this.authService.getAdmin(res.user.uid).then( res => {
-        //   if (res == true) {
-        //     this.router.navigate(['/'])
-        //   } else {
-        //     this.notifier.notify('error', 'No tienes permiso para entrar');
-        //     this.authService.logout();
-        //   }
-        // });       
+        this.authService.getAdmin(res.user.uid).then( res => {
+          if (res == true) {
+            this.router.navigate(['/'])
+          } else {
+            this.notifier.notify('error', 'No tienes permiso para entrar');
+            this.authService.logout();
+          }
+        });       
        
       }).catch((err) => {
         console.log(err);
