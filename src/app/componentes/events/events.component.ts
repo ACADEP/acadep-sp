@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-// tslint:disable-next-line:quotemark
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
 import { ActivitiesService } from '../../services/activities.service';
@@ -9,10 +8,14 @@ import { activity } from '../../models/activity';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user';
 import { tool } from '../../models/tool';
-// import { datetime } from "../../models/dateTime"
 import { total } from "../../models/event";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
+import { ProjectsService } from "../../services/projects.service";
 
+import { AfireService } from "../../services/afire.service";
+import { map } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { project } from 'src/app/models/project';
 
 declare var $: any;
 
@@ -30,19 +33,28 @@ export interface DialogData {
 })
 export class EventsComponent implements OnInit {
 
+  todos: Array<any> = [];
+  batch: number = 40;
+  last: any = '2018-01-01';
+  empty: boolean = false;
+  loading: boolean = false;
+
+
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
   private readonly notifier: NotifierService;
   types = [
     'auditoria',
-    'supervision',
-    'revision'
+    'supervision'
   ];
 
+  public subprojects: string[] = [];
+  public acts: activity[] = [];
 
   eventsCollection: Event[];
   usersCollection: User[];
   activitiesCollection: activity[];
+  projectsCollection: project[];
   eventDoc = {} as Event;
   eventDocEdit = {} as Event;
 
@@ -57,8 +69,9 @@ export class EventsComponent implements OnInit {
 
 
   constructor(public users: UsersService, public eventsService: EventsService,
-    notifierService: NotifierService, public activitiesService: ActivitiesService
-    , public dialog: MatDialog) {
+    notifierService: NotifierService, public activitiesService: ActivitiesService,
+    public dialog: MatDialog, public aFireService: AfireService,
+    public projectsService: ProjectsService) {
 
     this.eventDoc.total = {} as total;
     this.notifier = notifierService;
@@ -67,29 +80,101 @@ export class EventsComponent implements OnInit {
 
     this.eventDocEdit.start = new Date().toJSON();
     this.eventDocEdit.end = new Date().toJSON();
-
-    // tslint:disable-next-line:semicolon
-    console.log(this.eventDoc.start)
     this.emptyForm();
-    // this.eventSeeNull();
   }
 
   ngOnInit() {
-    this.eventsService.getEvents().subscribe(events => {
-      this.eventsCollection = events;
-      // console.log(this.eventsCollection);
-    });
+
+    // this.fetchTodosPaginated();
+
+    // this.eventsService.getEvents().subscribe(events => {
+    //   this.eventsCollection = events;
+    // });
 
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
-      console.log(this.usersCollection);
     });
 
-    this.activitiesService.getActivities().subscribe(items => {
-      this.activitiesCollection = items;
-    });
+    // this.activitiesService.getActivities().subscribe(items => {
+    //   this.activitiesCollection = items;
+    //   console.log()
+    // });
 
+    this.projectsService.getProjects().subscribe(projects => {
+      this.projectsCollection = projects;
+      console.log(projects)
+    })
+
+  }
+
+  changeProject(project) {
+    if (project.target.value) {
+      this.projectsService.getProject(project.target.value).then((project: any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) => (console.log(err)));
+    }
+    else {
+      this.subprojects = []
+    }
+  }
+  changeActivity(event) {
+    if (event.target.value) {
+      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+        this.acts = activities;
+      })
+    }
+    else {
+      this.acts = []
+    }
+  }
+
+  loadingEvents(event){
+    console.log(event)
+
+    if (event.target.value) {
+      this.eventDoc.activity_id = event.target.value
+      
+     this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
+       this.eventsCollection = events;
+     })
+    }
+    else { this.acts = [] }
+  }
+
+  scrollHandler(e) {
+
+    if (e == 'bottom') {
+      this.onScroll()
+    }
+  }
+
+  onScroll() {
+    // console.log('bottom')
+    this.loading = true;
+    setTimeout(() => {
+      this.fetchTodosPaginated();
+      this.loading = false;
+    }, 1500);
+  }
+
+  fetchTodosPaginated() {
+    this.aFireService.paginate(this.batch, this.last).pipe(
+      map(data => {
+        if (!data.length) {
+          this.empty = true;
+        }
+        let last = _.last(data);
+        if (last) {
+          this.last = last.payload.doc.data().start;
+          data.map(todoSnap => {
+            // console.log(todoSnap.payload.doc.data())
+            this.todos.push(todoSnap.payload.doc.data());
+          })
+        }
+      })
+    ).subscribe();
   }
 
   emptyForm() {
@@ -106,26 +191,9 @@ export class EventsComponent implements OnInit {
     this.tool.name = '';
     this.tool.quantity = null;
 
-    // this.eventDoc.advanced = null;
     this.eventDoc.total.number = 0;
     this.eventDoc.total.unit = '';
   }
-
-  // eventSeeNull(): void {
-  //   this.EventSee = {
-  //     observation: {
-  //       before: {
-  //         evidence: []
-  //       },
-  //       during: {
-  //         evidence: []
-  //       },
-  //       after: {
-  //         evidence: []
-  //       }
-  //     }
-  //   };
-  // }
 
   openAll() {
     this.myPanels.openAll();
@@ -136,17 +204,18 @@ export class EventsComponent implements OnInit {
   }
 
   addEvent(form: NgForm) {
-    // console.log(this.eventDoc)
-    if (form.valid) {
+
+
+    if (form.valid && form.controls.number.value >= 0) {
       this.eventsService.addEvent(this.eventDoc).then(res => {
         this.notifier.notify('success', 'Evento creado');
-        // console.log(res);
         this.removeErrors();
         this.emptyForm();
       }).catch(err => {
         this.notifier.notify('error', 'Algo salio mal...');
       });
     } else {
+      console.log(form);
       this.notifier.notify('error', 'Completa los campos obligatorios');
 
       if (form.controls.name.invalid) {
@@ -164,48 +233,38 @@ export class EventsComponent implements OnInit {
         $('#labeltype').removeClass('errortxt');
       }
 
-      if (form.controls.startdate.invalid || form.controls.starttime.invalid) {
-        $('#starttime').addClass('error');
-        $('#startdate').addClass('error');
-        $('#labelstart').addClass('errortxt');
+      if (form.controls.unit.invalid) {
+        $('#unit').addClass('error');
+        $('#total').addClass('errortxt');
       } else {
-        $('#startdate').removeClass('error');
-        $('#starttime').removeClass('error');
-        $('#labelstart').removeClass('errortxt');
-      }
-      if (form.controls.enddate.invalid) {
-        $('#enddate').addClass('error');
-        $('#labelend').addClass('errortxt');
-      } else {
-        $('#enddate').removeClass('error');
-        $('#labelend').removeClass('errortxt');
-      }
-      if (form.controls.endtime.invalid) {
-        $('#endtime').addClass('error');
-        $('#labelend').addClass('errortxt');
-      } else {
-        $('#endtime').removeClass('error');
-        if (form.controls.enddate.valid) {
-          $('#labelend').removeClass('errortxt');
-        }
+        $('#unit').removeClass('error');
+        $('#total').removeClass('errortxt');
       }
 
-      if (form.controls.startdate.invalid) {
-        $('#startdate').addClass('error');
-        $('#labelstart').addClass('errortxt');
+      if (form.controls.number.value <= 0) {
+        $('#number').addClass('error');
+        $('#total').addClass('errortxt');
       } else {
-        $('#startdate').removeClass('error');
-        $('#labelstart').removeClass('errortxt');
+        $('#number').removeClass('error');
+        $('#total').removeClass('errortxt');
       }
-      if (form.controls.starttime.invalid) {
-        $('#starttime').addClass('error');
-        $('#labelstart').addClass('errortxt');
+
+      if (form.controls.start.invalid) {
+        //  $('#startinput').addClass('error');
+        $('#start').addClass('errortxt');
       } else {
-        $('#starttime').removeClass('error');
-        if (form.controls.startdate.valid) {
-          $('#labelstart').removeClass('errortxt');
-        }
+        //  $('#startinput').removeClass('error');
+        $('#start').removeClass('errortxt');
       }
+      if (form.controls.end.invalid) {
+        //  $('#endinput').addClass('error');
+        $('#end').addClass('errortxt');
+      } else {
+        //  $('#endinput').removeClass('error');
+        $('#end').removeClass('errortxt');
+      }
+
+
 
 
       if (form.controls.user.invalid) {
@@ -248,7 +307,6 @@ export class EventsComponent implements OnInit {
 
   pushTool(form: NgForm) {
     if (form.valid) {
-      // tslint:disable-next-line:no-shadowed-variable
       const tool: tool = {
         name: form.controls.toolname.value,
         quantity: form.controls.toolquant.value
@@ -330,19 +388,21 @@ export class EventsComponent implements OnInit {
     this.eventDocEdit.staff.splice(item, 1);
   }
 
+  deleteEvent(event) {
+    if (confirm("Está seguro que desea eliminar " + event.title)) {
+      this.eventsService.deleteEvent(event.id).then(() => {
+        this.notifier.notify('success', 'Evento eliminado');
+      }).catch(() => {
+        this.notifier.notify('error', 'Algo salío mal, intente mas tarde');
+      })
+    }
+  }
+
 
   removeErrors() {
     $('input').removeClass('error');
     $('label').removeClass('errortxt');
     $('select').removeClass('error');
   }
-
-  // seeEvent(event) {
-
-  //   this.EventSee = event;
-  //   $('#seeevent').modal('show');
-
-
-  // }
 
 }

@@ -25,7 +25,79 @@
 
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
+
+    
+
+
     <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="box">
+              <!-- <h2 class="text-center">hola</h2> -->
+              <form action="">
+    
+                <form style="margin-top:10px; margin-left:15px">
+                  <div class="row">
+    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label id="labeltype">Proyecto<span class="required">*</span></label>
+                            <select id="type" class="form-control" name="type" required (change)="changeProject($event)">
+                              <option value="">Seleccione un proyecto</option>
+                              <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                            </select>
+                          </div>
+                    </div>
+    
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label id="labeltype">Subroyecto<span class="required">*</span></label>
+                        <select id="type" class="form-control" name="type" required (change)="changeActivity($event)">
+                          <option value="">Seleccione</option>
+                          <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
+                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label id="labeltype">Actividad<span class="required">*</span></label>
+                        <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
+                          <option value="">Seleccione</option>
+                        
+                          <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-2" style="text-align:right">
+                      <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                          <span class="vertical-super">Actividades</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-2" style="text-align:left">
+                      <div class="radio">
+                        <label class="">
+                          <input class="hidden" type="radio" checked name="optionsRadios">
+                          <i class="fa fa-2x text-info"></i>
+                          <span class="vertical-super">Eventos</span>
+                        </label>
+                      </div>
+                    </div> -->
+    
+                  </div>
+                </form>
+    
+    
+    
+              </form>
+            </div>
+          </div>
+
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
@@ -39,6 +111,8 @@
                   <i style="color:rgb(129, 120, 120); margin-left:11px" class="fa fa-minus-circle fa-2x pointer" (click)="closeAll()"></i>
                 </div>
               </header>
+              <div style="height:1300px; overflow-y: scroll;" >
+              <!-- <div appScrollable style="height:1300px; overflow-y: scroll;" (scrollPosition)="scrollHandler($event)" > -->
               <mat-accordion  class="example-headers-align" #myaccordion="matAccordion" multi="true">
 
                 <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">
@@ -48,7 +122,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       {{(100*event.advanced)/event.total.number}}%
-                      <mat-icon class="delete" (click)="deleteEvent(event)"> delete</mat-icon>
+                      <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
                       <!-- <mat-icon> create</mat-icon> -->
                     </mat-panel-description>
                   </mat-expansion-panel-header>
@@ -57,8 +131,8 @@
                       <div class="col-md-6">
                         <b>Descripción:</b> {{event.description}} <br>
                         <b>Tipo de actividad:</b> {{event.actividad}} <br>
-                        <b>Inicio:</b> {{event.start}} <br>
-                        <b>Final:</b> {{event.end}}<br>
+                        <b>Inicio:</b> {{event.start | date:'medium'}} <br>
+                        <b>Final:</b> {{event.end | date:'medium'}}<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
                         <b>Usuario que lo realizará:</b> {{event.user_id}}
                       </div>
@@ -82,9 +156,12 @@
                     </mat-action-row>
                 </mat-expansion-panel>
                 
+                <div *ngIf="loading" class="alert alert-warning d-block text-center position-absolute">Cargando datos...</div>
+
+                <div *ngIf="empty" class="alert alert-primary d-block text-center">Ya no hay más datos!</div>
 
               </mat-accordion>
-
+            </div>
               <!-- <div class="list-group filter-wrap">
 
                 <article class="list-group-item" *ngFor="let event of eventsCollection; let i = index" [ngStyle]="{'background':event.active === false ? 'rgb(237, 255, 237)' : 'inherit' }">
@@ -169,12 +246,12 @@
 
                   <hr class="b-s-dashed">
 
-                  <label for="atext3">Total a realizar <span class="required">*</span></label>
+                  <label id="total">Total a realizar <span class="required">*</span></label>
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
                         <p>Cantidad</p>
-                        <input id="toolquant" type="number" min="1" size="2px" name="number" [(ngModel)]="eventDoc.total.number"
+                        <input id="number" type="number" min="1" size="2px" name="number" [(ngModel)]="eventDoc.total.number"
                           class="form-control" placeholder="unidad" required>
                       </div>
                     </div>
@@ -182,7 +259,7 @@
                       <div class="form-group">
                         <p>Unidad</p>
                         <div >
-                          <input type="text" class="form-control input-sm p-r-80" name="unit" placeholder="nombre..."
+                          <input id="unit" type="text" class="form-control input-sm p-r-80" name="unit" placeholder="nombre..."
                             [(ngModel)]="eventDoc.total.unit" required>
                         </div>
                       </div>
@@ -214,9 +291,9 @@
                         <input type="datetime-local" name="end" [(ngModel)]="eventDoc.end"> -->
 
                   <div class="form-group">
-                    <label for="itext">Fecha de inicio <span class="required">*</span></label>
+                    <label id="start">Fecha de inicio <span class="required">*</span></label>
                     <div class="panel-body">
-                      <input class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="eventDoc.start"
+                      <input id="startinput" class="form-control" minDate="today" type="text" mwlFlatpickr [(ngModel)]="eventDoc.start"
                         [altInput]="true" name="start" [convertModelValue]="false" placeholder="dd/mm/yyyy"
                         [enableTime]="true" dateFormat="Y-m-dTH:i" required>
                     </div>
@@ -225,9 +302,9 @@
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
-                    <label for="itext">Fecha de término <span class="required">*</span></label>
+                    <label id="end">Fecha de término <span class="required">*</span></label>
                     <div class="panel-body">
-                      <input class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="eventDoc.end"
+                      <input id="endinput" class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="eventDoc.end"
                         [altInput]="true" name="end" placeholder="dd/mm/yyyy" [convertModelValue]="false" [enableTime]="true"
                         dateFormat="Y-m-dTH:i" required>
                     </div>
@@ -276,17 +353,17 @@
                     <select class="form-control" id="user" [(ngModel)]="eventDoc.user_id" name="user" required>
                       <option value="">Seleccione una opción </option>
                       <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id" [value]="user.id">{{user.name
-                        | titlecase}}</option>
+                        }}</option>
                     </select>
                   </div>
                   <hr class="b-s-dashed">
                   <div class="form-group">
                     <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
                     <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity"
-                      required>
+                      required >
                       <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
-                        [value]="activity.id">{{activity.title | titlecase}}</option>
+                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDoc.activity_id"
+                        [value]="activity.id">{{activity.title }}</option>
                     </select>
                   </div>
 
@@ -413,34 +490,21 @@
           </div>
           <hr class="b-s-dashed">
 
-          <!-- <div class="row text-center">
-            <div class="col-md-12">
-              <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+          <div class="row text-center">
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <div class="col-md-6">
-                  <p><small>Fecha:</small></p>
-                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start" required>
-                </div>
-                <div class="col-md-6">
-                  <p><small>Hora:</small></p>
-                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start" required>
-                </div>
+                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start" required>
               </div>
             </div>
-            <div class="col-md-12" style="margin-top:15px">
-              <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de término <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <div class="col-md-6">
-                  <p><small>Fecha:</small></p>
-                  <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
-                </div>
-                <div class="col-md-6">
-                  <p><small>Hora:</small></p>
-                  <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
-                </div>
+                <input type="datetime-local" id="dateend" name="dateend" [(ngModel)]="eventDocEdit.end" required>
               </div>
             </div>
-          </div> -->
+            
+          </div>
 
 
           <hr class="b-s-dashed">
@@ -449,18 +513,18 @@
             <select class="form-control" [(ngModel)]="eventDocEdit.user_id" name="user">
               <option value="">Seleccione una opción </option>
               <option *ngFor='let user of usersCollection' [selected]="user.id == eventDocEdit.user_id" [value]="user.id">{{user.name
-                | titlecase}}</option>
+                }}</option>
             </select>
           </div>
-          <hr class="b-s-dashed">
+          <!-- <hr class="b-s-dashed">
           <div class="form-group">
             <label>Actividad a la que pertenece <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
               <option value="">Seleccione una opción </option>
               <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.name | titlecase}}</option>
+                [value]="activity.id">{{activity.title }}</option>
             </select>
-          </div>
+          </div> -->
           <hr class="b-s-dashed">
 
 

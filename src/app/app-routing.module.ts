@@ -13,17 +13,18 @@ import { EvidenceComponent } from "./componentes/evidence/evidence.component";
 import { ConfigurationComponent } from "./componentes/configuration/configuration.component";
 
 const routes: Routes = [
-  { path: 'home', component:  CalendarEventsComponent },
-  { path: 'evidence', component:  EvidenceComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'evidence'},
+  { path: 'evidence', component: EvidenceComponent  },
+  { path: 'calendar', component:  CalendarEventsComponent },
   { path: 'configuration', component:  ConfigurationComponent },
   { path: 'map', component:  GmapComponent },
   { path: 'users', component:  RegisterUserComponent },
   { path: 'events', component:  EventsComponent },
   { path: 'activities', component:  ActivitiesComponent },
   { path: 'projects', component:  CreateProyectComponent },
-  { path: 'calendar', component:  InicioComponent },
+  // { path: 'calendar', component:  InicioComponent },
   // { path: 'aside', component:  AsideComponent },
-  { path: '**', pathMatch: 'full', redirectTo: 'home'}
+  { path: '**', pathMatch: 'full', redirectTo: 'evidence'}
 
 ];
 

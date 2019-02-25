@@ -1,77 +1,81 @@
-
-
 <!-- <app-aside></app-aside> -->
 
-<div class="app" >
-        <div class="app-login">
-          <div class="text-center box shadow-5 animated fadeInLeft b-r-4 p-a-20">
-            <h1 class="f-4 m-a-0">RSO</h1>
-          <h6>Registro y seguimiento de proyectos</h6>
-       <br>
-            <h4 style="font-weight:bold">Iniciar sesión</h4>
-            <form #formLogin="ngForm" (submit)="onSubmitLogin(formLogin)" >
+<div class="app">
+  <div class="app-login">
+    <div class="text-center box shadow-5 animated fadeInLeft b-r-4 p-a-20">
+      <h1 class="f-4 m-a-0">RSO</h1>
+      <h6>Registro y seguimiento de proyectos</h6>
+      <br>
+      <h4 style="font-weight:bold">Iniciar sesión</h4>
+      <form #formLogin="ngForm" (submit)="onSubmitLogin(formLogin)">
 
-              <div *ngIf="mail.touched && !mail.valid ">
-                <small style="color:red" *ngIf="mail.errors.required">Ingrese su correo electronico</small>
-              </div>
+        <div *ngIf="mail.touched && !mail.valid ">
+          <small style="color:red" *ngIf="mail.errors.required">Ingrese su correo electronico</small>
+        </div>
 
-                <div class="form-group has-feedback ">
-                <input class="form-control" placeholder="Correo electrónico" autocomplete="email" #mail="ngModel" id="mail" type="email" 
-                [(ngModel)]="email" name="mail" required>
-                <span class="form-control-feedback">
-                  <i class="fa fa-fw fa-envelope"></i>
-                </span>
-              </div>
-              
+        <div class="form-group has-feedback ">
+          <input class="form-control" placeholder="Correo electrónico" autocomplete="email" #mail="ngModel" id="mail"
+            type="email" [(ngModel)]="email" name="mail" required>
+          <span class="form-control-feedback">
+            <i class="fa fa-fw fa-envelope"></i>
+          </span>
+        </div>
 
-              <small style="color:red" *ngIf="pass.touched && !pass.valid">Ingrese la Contraseña</small>
 
-              <div class="form-group has-feedback">
-                <input class="form-control" id="pass" placeholder="Contraseña" type="password" autocomplete="current-password" #pass="ngModel" [(ngModel)]="password" name="pass" required>
-                <span class="form-control-feedback">
-                  <i class="fa fa-fw fa-key"></i>
-                </span>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block m-b-15">Acceder</button>
-              <a href="#">
-                <small>Olvidaste tu contraseña?</small>
-              </a>
-              <!-- <p class="text-muted text-right">
+        <small style="color:red" *ngIf="pass.touched && !pass.valid">Ingrese la Contraseña</small>
+
+        <div class="form-group has-feedback">
+          <input class="form-control" id="pass" placeholder="Contraseña" type="password" autocomplete="current-password"
+            #pass="ngModel" [(ngModel)]="password" name="pass" required>
+          <span class="form-control-feedback">
+            <i class="fa fa-fw fa-key"></i>
+          </span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block m-b-15">Acceder</button>
+        <a (click)="openReset()">
+          <small class="pointer">Olvidaste tu contraseña?</small>
+        </a>
+        <!-- <p class="text-muted text-right">
                 Do not have an account?
                 <a href="app-register.html">Create an account</a>
               </p> -->
-            </form>
-    
-          </div>
-        </div>
+      </form>
 
-    
-        <!-- Modal -->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="loginModalLabel">Terms</h4>
-              </div>
-              <div class="modal-body">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">I agree</button>
-              </div>
-            </div>
-          </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form (submit)="resetPass()" role="form" autocomplete="off">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="loginModalLabel">Reestablecer Contraseña</h4>
         </div>
-      </div>
-  
-  
-  
-    
+        <div class="modal-body">
+          <div class="card-body">
+            
+              <div class="form-group">
+                <label >Correo electrónico</label>
+                <input (focus)="removeError()" id="resetmail" [(ngModel)]="emailReset" name="resetemail" type="email" class="form-control" required>
+                <span  class="form-text small text-muted">
+                  Las instrucciones para restablecer la contraseña se enviarán a esta dirección de correo electrónico.
+                </span>
+              </div>
      
-  
-  
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Reestablecer</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>

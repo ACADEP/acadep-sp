@@ -17,6 +17,7 @@ export class AppComponent {
   ngOnInit() {
     this.authService.getAuth().subscribe( auth => {
       if (auth) {
+
       
         this.authService.getAdmin(auth.uid).then( pass => {
           // console.log(pass)

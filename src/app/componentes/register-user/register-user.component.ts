@@ -103,11 +103,16 @@ export class RegisterUserComponent implements OnInit {
           .then((res: any) => {
             this.userDoc.id = res.user.uid;
 
-            this.userService.saveUser(this.userDoc, this.role);
-            // delete this.userDoc;
-
-            this.notifier.notify('success', 'Usuario Guardado!');
-            this.emptyForm();
+            this.userService.saveUser(this.userDoc, this.role).then( () => {
+              this.notifier.notify('success', 'Usuario Guardado!');
+              this.emptyForm();
+              this.authService.getAuth().subscribe( auth => {
+                
+                  console.log(auth)
+                
+              });
+            })
+           
           }).catch((err) => {
 
             switch (err.code) {
@@ -123,7 +128,6 @@ export class RegisterUserComponent implements OnInit {
             }
             console.log(err);
           });
-
       }
       else {
         this.notifier.notify('error', 'Las contraseñas no coinciden ');
@@ -133,17 +137,11 @@ export class RegisterUserComponent implements OnInit {
 
         $('#confirm').addClass('error')
         $('#labelconfirm').addClass('errortxt')
-
-
       }
-
-
 
     } else {
       this.notifier.notify('error', 'Complete los campos obligatorios');
-
       this.validateForm(form);
-
     }
 
 
@@ -161,7 +159,7 @@ export class RegisterUserComponent implements OnInit {
       this.roleEdit = 'employee'
 
     }
-    console.log(user)
+    // console.log(user)
     $('#modalEdit').modal('show');
   }
 
@@ -179,20 +177,21 @@ export class RegisterUserComponent implements OnInit {
 
   onUpdateuser(e, form: NgForm) {
     e.preventDefault();
+    // console.log(form)
 
     if(form.valid){
-      if (form.value.roleedit == 'employee') { this.sendRoleEdit = false; }
-      else if (form.value.roleedit == 'administrator') { this.sendRoleEdit = true; }
+      if (this.roleEdit == 'employee') { this.sendRoleEdit = false; }
+      else if (this.roleEdit == 'administrator') { this.sendRoleEdit = true; }
   
-      // console.log(this.userDocEdit, this.sendRoleEdit)
+    //  console.log(this.userDocEdit, this.sendRoleEdit)
   
-      this.userService.updateUser(this.userDocEdit, this.sendRoleEdit).then(res => {
-        $('#modalEdit').modal('hide');
-        this.notifier.notify('success', 'Usuario Actualizado!');
-      }).catch(err => {
-        this.notifier.notify('error', 'Algo salio mal!');
+       this.userService.updateUser(this.userDocEdit, this.sendRoleEdit).then(res => {
+         $('#modalEdit').modal('hide');
+         this.notifier.notify('success', 'Usuario Actualizado!');
+       }).catch(err => {
+         this.notifier.notify('error', 'Algo salio mal!');
   
-      });
+       });
     }
     else{
       this.notifier.notify('error', 'Complete los campos obligatorios');

@@ -8,15 +8,15 @@ import { DashboardComponent } from './componentes/dashboard/dashboard.component'
 import { AsideComponent } from './componentes/aside/aside.component';
 import { TopbarComponent } from './componentes/topbar/topbar.component';
 
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+//firebase
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { FullCalendarModule } from 'ng-fullcalendar';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
-
+import { FullCalendarModule } from 'ng-fullcalendar';
 import { AuthService } from './servicios/auth.service';
 import { RegisterUserComponent } from './componentes/register-user/register-user.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
@@ -31,8 +31,8 @@ import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';
-import {  BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
@@ -68,18 +68,19 @@ import {
   MatTableModule,
   MatTooltipModule,
   MatTreeModule,
- } from "@angular/material";
- 
+} from "@angular/material";
 
- //faltpickr
+
+//faltpickr
 import { FlatpickrModule } from 'angularx-flatpickr';
 
- import { HttpClientModule } from '@angular/common/http';
-import { EvidenceComponent } from './componentes/evidence/evidence.component'; 
+import { HttpClientModule } from '@angular/common/http';
+import { EvidenceComponent } from './componentes/evidence/evidence.component';
 
-import { GalleryModule } from  '@ngx-gallery/core';
-import { LightboxModule } from  '@ngx-gallery/lightbox';
+import { GalleryModule } from '@ngx-gallery/core';
+import { LightboxModule } from '@ngx-gallery/lightbox';
 import { ConfigurationComponent } from './componentes/configuration/configuration.component';
+import { ScrollableDirective } from './directives/scrollable.directive';
 
 
 
@@ -87,16 +88,16 @@ import { ConfigurationComponent } from './componentes/configuration/configuratio
 
 const customNotifierOptions: NotifierOptions = {
   position: {
-		horizontal: {
-			position: 'right',
-			distance: 12
-		},
-		vertical: {
-			position: 'top',
-			distance: 200,
-			gap: 10
-		}
-	},
+    horizontal: {
+      position: 'right',
+      distance: 12
+    },
+    vertical: {
+      position: 'top',
+      distance: 200,
+      gap: 10
+    }
+  },
   theme: 'material',
   behaviour: {
     autoHide: 5000,
@@ -143,8 +144,9 @@ const customNotifierOptions: NotifierOptions = {
     GmapComponent,
     CalendarEventsComponent,
     EvidenceComponent,
-    ConfigurationComponent
-    
+    ConfigurationComponent,
+    ScrollableDirective
+
   ],
   imports: [
     GalleryModule,
@@ -152,36 +154,36 @@ const customNotifierOptions: NotifierOptions = {
     LightboxModule,
     FlatpickrModule.forRoot(
       {
-      // locale: 'Es'
+        // locale: 'Es'
       }
     ),
     MatChipsModule,
-  MatDatepickerModule,
-  MatDividerModule,
-  MatGridListModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatStepperModule,
-  MatTableModule,
-  MatTooltipModule,
-  MatTreeModule,
+    MatDatepickerModule,
+    MatDividerModule,
+    MatGridListModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatTreeModule,
     MatAutocompleteModule,
-  MatBadgeModule,
-  MatBottomSheetModule,
-  MatButtonModule,
-  MatButtonToggleModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
     BrowserModule,
     MatExpansionModule,
     HttpClientModule,
@@ -199,13 +201,19 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(
-       {
-        apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
-        authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
-        databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
-        projectId: "seguimiento-de-proyectos-4fa3c",
-        storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
-        messagingSenderId: "958208857248"
+      {
+    //     apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
+    // authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
+    // databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
+    // projectId: "seguimiento-de-proyectos-4fa3c",
+    // storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
+    // messagingSenderId: "958208857248"
+        apiKey: "AIzaSyBwtvT0MFyjxmLgfNdHwYPRQvlEAft9SMc",
+        authDomain: "soriana-49211.firebaseapp.com",
+        databaseURL: "https://soriana-49211.firebaseio.com",
+        projectId: "soriana-49211",
+        storageBucket: "soriana-49211.appspot.com",
+        messagingSenderId: "617618237761"
       }
     ),
     AngularFirestoreModule,

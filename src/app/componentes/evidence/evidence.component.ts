@@ -9,6 +9,8 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 import * as jsPDF from 'jspdf'
 import { element } from '@angular/core/src/render3';
+import { configPdf } from '../configuration/configuration.component';
+import { AngularFirestore } from '@angular/fire/firestore';
 declare var $: any;
 interface ubication {
   lat: number,
@@ -16,7 +18,7 @@ interface ubication {
 }
 
 interface image {
-  src: string;
+  src: string,
   created_at: string,
   type: string,
   ubication: ubication
@@ -32,10 +34,19 @@ interface image {
 })
 export class EvidenceComponent implements OnInit {
 
+  // @ViewChild('content') content: ElementRef;
+  // header_1 = 'https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pdf_configuration%2F1sf2wdkxh5m?alt=media&token=03f95f47-0c8b-4bd7-967d-4c9b970b9d2b'
+  // header_2 = 'https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pdf_configuration%2F1sf2wdkxh5m?alt=media&token=03f95f47-0c8b-4bd7-967d-4c9b970b9d2b'
+
+  // text_header = 'header lorem ipsum dolor at sit';
+  // text_footer = 'footer lorem ipsum dolor at sit';
+
 
   idEvent = "";
   idUser = "";
+  loading: boolean = true;
 
+  indexExpanded: number = -1;
 
   @ViewChild('content') content: ElementRef;
   public image = {} as image;
@@ -45,30 +56,73 @@ export class EvidenceComponent implements OnInit {
   usersCollection: any[];
 
   @ViewChild('myaccordion') myPanels: MatAccordion;
+  configPdf = {} as configPdf;
 
   constructor(public gallery: Gallery, public evidenceService: EvidenceService,
-    public eventsService: EventsService, public usersService: UsersService) {
+    public eventsService: EventsService, public usersService: UsersService,
+    public db: AngularFirestore) {
     this.image.ubication = {
       lat: 0,
       lng: 0
     }
   }
 
+
+
   ngOnInit() {
+
+    this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
+      this.configPdf = doc.data() as configPdf;
+    }).catch(err => {
+      console.log('error inesperado: ' + err)
+    })
 
     this.evidenceService.getEvidence().subscribe(evidence => {
       this.evidenceCollection = evidence;
+      this.loading = false;
     })
 
-    this.eventsService.getEvents().subscribe(events => {
-      this.eventsCollection = events
-    })
+    // this.eventsService.getEvents().subscribe(events => {
+    //   this.eventsCollection = events
+    // })
 
     this.usersService.getUsers().subscribe(users => {
       this.usersCollection = users
     })
 
 
+  }
+
+  getEtapa(etapa) {
+
+    switch (etapa) {
+      case 'before':
+        return 'Antes'
+        break;
+      case 'during':
+        return 'Durante'
+        break;
+      case 'after':
+        return 'Después'
+        break;
+
+      default:
+        return ''
+        break;
+    }
+  }
+
+
+
+  readEvidence(event, index: number){
+    this.indexExpanded = index == this.indexExpanded ? -1 : index;
+    if(!event.read){
+      this.evidenceService.readNotification(event.id).then(res =>{
+
+      }).catch(err => console.log(err))
+
+    }
+   
   }
 
   // getUnit(id){
@@ -82,133 +136,148 @@ export class EvidenceComponent implements OnInit {
   UpdateEvidence() {
 
     if (this.idEvent != "" || this.idUser != "") {
-
       this.evidenceService.searchEvidence(this.idEvent, this.idUser).subscribe(newEvidence => {
         this.evidenceCollection = newEvidence
       })
-
     } else {
       this.evidenceService.getEvidence().subscribe(evidence => {
         this.evidenceCollection = evidence;
       })
     }
-
-
   }
 
-  async export(evidence) {
+  async export(evidence, e) {
 
-// var images = [];
-    // console.log(evidence)
-    var cont = 1;
-    // var arraylenght = evidence.multimedia.length;
     let doc = new jsPDF();
-  var tam = evidence.multimedia.length;
-
-
-// console.log(evidence.multimedia[0].src)
-
-        doc.setFont('courier')
-         doc.setFontType('normal')
-         doc.text(20, 30, evidence.description)
-        //  doc.addImage(image, "JPG", 10, (50), 100, 80);
-
-
-// img.width = 300;
-// img.height = 300;
-
-evidence.multimedia.forEach(imagen => {
-  var image;
-  var img = new Image();
-  img.setAttribute('crossOrigin', 'anonymous');
-  img.src =  imagen.src;
-  img.onload = function () {
-
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    console.log(img.width, img.height)
-
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-
-    var dataURL = canvas.toDataURL("image/png");
-   
-    if(cont > 3){
-      doc.addPage();
-      cont=1
-      console.log('se añadio pagina')
-       
-     }
-     image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-       
-     
-     doc.addImage(image, "JPG", 50, (cont*60), 100, 50);
-     cont = cont + 1;
-    
-   
+    let content = '<p>' + evidence.description + '</p>';
+    console.log(e)
+    let specialElementhandlers = {
+      '#editor': function (element, renderer) {
+        return true
+      }
     };
 
+
+    // doc.setFont('courier')
+    doc.setFontType('bold')
+    doc.text(70, 20, this.configPdf.text_header)
+    doc.text(55, 280, this.configPdf.text_footer)
+
+    doc.setFontType('normal')
+    doc.setFontSize(14)
+    doc.text(10, 40, ('Fecha : ' + new Date().toDateString()));
+    doc.text(10, 50, ('Descripción : '));
+    doc.fromHTML(content, 10, 50, {
+      width: 190,
+      'elementHandlers': specialElementhandlers
     });
-    
-  
-  
-
-    setTimeout(() => {
-      doc.save('Test.pdf');
-      
-    }, tam * 1500);
-
-  
-  }
 
 
-async getBase64FromImageUrl(URL) {
+    /*
+     *
+     * header 1
+ 
+     */
 
-  new Promise(function(resolve, reject) { 
-
-    var image;
     var img = new Image();
     img.setAttribute('crossOrigin', 'anonymous');
-    img.src = URL;
-   img.onload = function () {
-
+    img.src = this.configPdf.img_header1;
+    img.onload = function () {
       var canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
-
       var ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-
       var dataURL = canvas.toDataURL("image/png");
+      let image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 
-       image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-       console.log(image)
-    };
+      doc.addImage(image, "JPG", 10, 10, 50, 10);
 
+    }
 
-   });
-
-
-
+    /*
+     *
+     *
+     * header 2
    
-  
+     */
+
+    var img2 = new Image();
+    img2.setAttribute('crossOrigin', 'anonymous');
+    img2.src = this.configPdf.img_header2;
+    img2.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = img2.width;
+      canvas.height = img2.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img2, 0, 0);
+      var dataURL = canvas.toDataURL("image/png");
+      let image2 = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+      doc.addImage(image2, "JPG", 140, 10, 50, 10);
+
+    }
+
+
+    var cont = 1;
+    var tam = evidence.multimedia.length;
+
+    evidence.multimedia.forEach(imagen => {
+      var image;
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.src = imagen.src;
+      img.onload = function () {
+
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        if (cont > 3) {
+          doc.addPage();
+          cont = 1
+          console.log('se añadio pagina')
+        }
+        image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
+        doc.addImage(image, "JPG", 50, (cont * 70), 100, 50);
+        cont = cont + 1;
+      };
+    });
+
+    setTimeout(() => {
+      doc.save('Test.pdf');
+    }, tam * 1500 + 2000);
+    //   setTimeout(() => {
+    //   doc.save('Test.pdf');
+    // }, 3000);
+
   }
 
-  // getBase64Image(img) {
-  //   var canvas = document.createElement("canvas");
-  //   console.log(img);
-  //   canvas.width = img.width;
-  //   canvas.height = img.height;
-  //   var ctx = canvas.getContext("2d");
-  //   ctx.drawImage(img, 0, 0);
-  //   var dataURL = canvas.toDataURL("image/png");
-  //   return dataURL;
-  // }
+
+  async getBase64FromImageUrl(URL) {
+
+    new Promise(function (resolve) {
+      var image;
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.src = URL;
+      img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        resolve(image);
+      };
+    });
+  }
 
   pdf() {
-
     let doc = new jsPDF();
     let specialElementhandlers = {
       '#editor': function (element, renderer) {
@@ -237,9 +306,11 @@ async getBase64FromImageUrl(URL) {
   showImage(evidence, index) {
 
     this.image = evidence.multimedia[index];
-    // this.src = event.target.src;
+
     $('#showimage').modal('show');
-    console.log(this.image)
+    console.log(index);
+    // console.log(this.image.src);
+
   }
 
   getColor(type) {

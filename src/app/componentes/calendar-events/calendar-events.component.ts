@@ -2,8 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 import { EventsService } from "../../services/events.service";
-import { reduce } from 'rxjs/operators';
-import { EventManager } from '@angular/platform-browser';
+import * as moment from 'moment';
+import { Event } from "../../models/event";
+import { ActivitiesService } from "../../services/activities.service";
+import { ProjectsService } from "../../services/projects.service";
+import { UsersService } from "../../services/users.service";
+import { User } from 'src/app/models/user';
+
+// 
 
 declare var $: any;
 
@@ -16,18 +22,25 @@ export class CalendarEventsComponent implements OnInit {
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  public data = {
+  public data = [{
     title: 'New event',
-    start: '2019-01-07',
-    end: '2019-01-10'
-  }
+    start: moment(),
+    end: moment().add(1, 'day'),
+  }]
 
   public events: any[];
   public eventShow:any;
+  eventsCollection: Event[];
+  subprojects: any[]= [];
+  acts : any[] = [];
+  projectsCollection : any[] = [];
+  users: User[];
   constructor(
-    public eventsService: EventsService
-  ) {
-
+    public eventsService: EventsService,
+    public projectsService : ProjectsService,
+    public activitiesService : ActivitiesService,
+    public userService : UsersService
+) {
     this.events = [];
     this.eventShow = {
       name: '',
@@ -45,91 +58,117 @@ export class CalendarEventsComponent implements OnInit {
       tools: [],
       staff: []
     }
-
   }
 
   ngOnInit() {
 
-    this.eventsService.getEvents().subscribe(async events => {
-
-      await events.forEach(event => {
-
-        var color: any;
-
-        switch (event.status) {
-          case 1:
-            color = '#1abc9c'
-            break;
-          case 2:
-            color = '#3498db'
-            break;
-          case 3:
-            color = '#9b59b6'
-            break;
-          case 4:
-            color = '#f1c40f'
-            break;
-
-          default:
-            color = '#ccc'
-            break;
-        }
-
-        const data = {
-          title: event.title,
-          start: event.start,
-          end: event.end,
-          color: color,
-          details: event
-        }
-        this.events.push(data);
-      });
-
-
-
-
-      this.calendarOptions = {
-        editable: true,
-        eventLimit: false,
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,agendaDay,listMonth'
-        },
-        buttonText: {
-            today:    'Hoy',
-            month:    'Mes',
-            week:     'Semana',
-            day:      'Día',
-            list:     'Lista',
-        },
-        selectable: true,
-        events: this.events,
-        locale: 'es',
-       
-      };
-      // console.log(this.events);
+    this.userService.getUsers().subscribe( users => {
+      this.users = users;
     })
 
-// console.log(this.events)
+    this.projectsService.getProjects().subscribe(projects => {
+    this.projectsCollection = projects;
+    })
 
+
+    this.calendarOptions = {
+      droppable : false,
+      editable: false,
+      eventLimit: true,
+      eventDurationEditable: true,
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listMonth'
+      },
+      buttonText: {
+          today:    'Hoy',
+          month:    'Mes',
+          week:     'Semana',
+          day:      'Día',
+          list:     'Lista',
+      },
+      events: this.eventsCollection,
+      locale: 'es',
+    };
+
+    // this.eventsService.getEvents().subscribe(async events => {
+    //   this.eventsCollection = events;
+    // })
   }
+
+  changeProject(project) {
+    if (project.target.value) {
+      this.projectsService.getProject(project.target.value).then((project: any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) => (console.log(err)));
+    }
+    else {
+      this.subprojects = []
+    }
+  }
+  changeActivity(event) {
+    if (event.target.value) {
+      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+        this.acts = activities;
+      })
+    }
+    else {
+      this.acts = []
+    }
+  }
+
+  loadingEvents(event){
+    console.log(event)
+
+    if (event.target.value) {
+     this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
+      this.events = events;
+
+      this.ucCalendar.renderEvents(this.events)
+
+     })
+    }
+    else { 
+      this.ucCalendar.renderEvents([])
+    }
+  }
+
   clearEvents() {
     this.events = [];
   }
 
-  eventClick(info) {
-    console.log(this.events)
-    this.eventShow = info.event.details;
-   
+  eventClick(event) {
+    console.log(event)
+    this.eventShow = event;
+    this.eventShow.start = event.start._i;
+    this.eventShow.end = event.end._i ;
     $('#details').modal('show');
   }
 
-  clickButton(event){
-    console.log(event) //nothing
+  
+
+  resizeEvent($event){
+
+console.log('resize ',$event)
+  }
+  dropEvent($event){
+
+console.log('drop ',$event)
   }
 
-  updateEvent($event){
-console.log($event)
+  updateDates(event){
+    
+    console.log(this.eventShow)
+    this.eventsService.updateEvent(this.eventShow).then((result) => {
+    // aqui va alerta de success
+      event.start = this.eventShow.start;
+      event.end = this.eventShow.end;
+     this.ucCalendar.updateEvent(this.eventShow);
+     $('#details').modal('hide');
+    }).catch((err) => {
+     
+    });
   }
 }

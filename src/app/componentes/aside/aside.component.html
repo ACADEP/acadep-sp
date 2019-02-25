@@ -46,60 +46,69 @@
         <li class="nav-header">Principal</li>
 
         <li>
-          <a routerLink="/home" [routerLinkActive]="['active']">
+          <a href="" routerLink="evidence" [routerLinkActive]="['active']">
             <span class="nav-icon">
-              <i class="fa fa-fw fa-calendar"></i>
+              <i class="fa fa-fw fa-cube"> </i>
             </span>
-            <span class="nav-title"> Inicio</span>
+            <span class="nav-title"> Evidencia</span>
           </a>
         </li>
+        
 
         <li class="nav-divider"></li>
         <li class="nav-header">Componentes</li>
         <!-- BEGIN: chart -->
+        <li>
+            <a routerLink="/calendar" [routerLinkActive]="['active']">
+              <span class="nav-icon">
+                <i class="fa fa-fw fa-calendar"></i>
+              </span>
+              <span class="nav-title"> Calendario</span>
+            </a>
+          </li>
 
         <li>
-            <a href="" routerLink="events" [routerLinkActive]="['active']">
-              <span class="nav-icon">
-                <i class="fa fa-fw fa-file"> </i>
-              </span>
-              <span class="nav-title"> Eventos</span>
-              <!-- <span class="nav-tools">
+          <a href="" routerLink="events" [routerLinkActive]="['active']">
+            <span class="nav-icon">
+              <i class="fa fa-fw fa-file"> </i>
+            </span>
+            <span class="nav-title"> Eventos</span>
+            <!-- <span class="nav-tools">
                       <i class="fa fa-fw arrow"></i>
                       <span class="label label-primary">4</span>
                     </span> -->
-            </a>
-            <!-- <ul class="nav nav-sub nav-stacked">
+          </a>
+          <!-- <ul class="nav nav-sub nav-stacked">
                     <li>
                       <a href="" routerLink="calendar">Eventos</a>
                     </li>
                   </ul> -->
-          </li>
-          <li>
-              <a href="" routerLink="activities" [routerLinkActive]="['active']">
-                <span class="nav-icon">
-                  <i class="fa fa-fw fa-folder-open"> </i>
-                </span>
-                <span class="nav-title"> Actividades</span>
-                <!-- <span class="nav-tools">
+        </li>
+        <li>
+          <a href="" routerLink="activities" [routerLinkActive]="['active']">
+            <span class="nav-icon">
+              <i class="fa fa-fw fa-folder-open"> </i>
+            </span>
+            <span class="nav-title"> Actividades</span>
+            <!-- <span class="nav-tools">
                         <i class="fa fa-fw arrow"></i>
                         <span class="label label-primary">4</span>
                       </span> -->
-              </a>
-              <!-- <ul class="nav nav-sub nav-stacked">
+          </a>
+          <!-- <ul class="nav nav-sub nav-stacked">
                       <li>
                         <a href="" routerLink="calendar">Eventos</a>
                       </li>
                     </ul> -->
-            </li>
-            <li>
-              <a href="" routerLink="projects" [routerLinkActive]="['active']">
-                <span class="nav-icon">
-                  <i class="fa fa-fw fa-archive"> </i>
-                </span>
-                <span class="nav-title"> Proyectos</span>
-              </a>
-            </li>
+        </li>
+        <li>
+          <a href="" routerLink="projects" [routerLinkActive]="['active']">
+            <span class="nav-icon">
+              <i class="fa fa-fw fa-archive"> </i>
+            </span>
+            <span class="nav-title"> Proyectos</span>
+          </a>
+        </li>
 
         <li>
           <a href="" routerLink="users" [routerLinkActive]="['active']">
@@ -109,16 +118,9 @@
             <span class="nav-title"> Usuarios</span>
           </a>
         </li>
-        <li>
-          <a href="" routerLink="evidence" [routerLinkActive]="['active']">
-            <span class="nav-icon">
-              <i class="fa fa-fw fa-cube"> </i>
-            </span>
-            <span class="nav-title"> Evidencia</span>
-          </a>
-        </li>
-       
-      
+
+
+
 
         <!-- <br><br><br><br><br><br><br><br>
         <br><br><br><br><br><br><br><br> -->

@@ -9,23 +9,13 @@ import { map } from 'rxjs/operators';
 })
 export class EvidenceService {
 
-  holi = [
-    'hola',
-    'hola',
-    'hola',
-    'hola',
-    'hola',
-    'hola',
-    'hola',
-  ]
   evidenceCollection: AngularFirestoreCollection<any>;
   evidence: Observable<any[]>;
   evidenceDoc: any;
   constructor(public db: AngularFirestore) { }
 
   getEvidence() {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('test', '==', true));
-    // this.evidenceCollection = this.db.collection('evidence');
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.orderBy('created_at', 'desc'));
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -33,8 +23,35 @@ export class EvidenceService {
         return data;
       });
     }));
-    // console.log(this.evidence)
     return this.evidence;
+  }
+
+
+  getNotifications() {
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('read', '==', false));
+    this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data();
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    return this.evidence;
+  }
+
+  readNotification(id:string){
+
+    return new Promise((resolve, reject) => {
+
+      this.db.collection('evidence').doc(id).update({
+        read : true
+      }).then( res => {
+        resolve('done')
+      }).catch(err => reject(err))
+
+      
+    })
+
   }
 
   getEvidenceByEvent(id) {

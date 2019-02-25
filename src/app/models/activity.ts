@@ -2,7 +2,7 @@ import { tool } from "./tool";
 
 export interface activity {
     id:string;
-    name: string;
+    title: string;
     description: string;
     insumos : tool[];
     project_id : string;

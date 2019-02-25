@@ -76,9 +76,12 @@ public subprojects: string[] = [];
 
   ngOnInit() {
     //actividades
-    this.activitiesService.getActivities().subscribe(items => {
-      this.activities = items;
-    })
+
+    // this.activitiesService.getActivities().subscribe(items => {
+    //   this.activities = items;
+    // })
+
+    
 
     //proyectos
     this.projectsService.getProjects().subscribe(items => {
@@ -91,6 +94,10 @@ public subprojects: string[] = [];
       // console.log(this.users)
     })
 
+  }
+
+  onDeleteActivity(){
+    console.log('en proceso')
   }
 
   addActivity(form: NgForm) {
@@ -236,7 +243,7 @@ public subprojects: string[] = [];
     this.start = activity.start;
     this.end = activity.end;
 
-    this.activityDoc.name = this.name;
+    this.activityDoc.title = this.name;
     // this.activityDoc.type = this.type;
     this.activityDoc.description = this.description;
     this.activityDoc.insumos = this.insumos;
@@ -299,7 +306,7 @@ public subprojects: string[] = [];
   }
 
   emptyForm() {
-    this.activityDoc.name = '';
+    this.activityDoc.title = '';
     this.activityDoc.subproject = '';
     this.activityDoc.description = '';
     this.activityDoc.insumos = [];
@@ -346,6 +353,29 @@ public subprojects: string[] = [];
 
     $('.fa-chevron-down').trigger('click');
     
+  }
+
+  selectProject(project) {
+    if (project.target.value) {
+      this.projectsService.getProject(project.target.value).then((project: any) => {
+        console.log(project)
+        this.subprojects = project.subprojects;
+      }).catch((err) => (console.log(err)));
+    }
+    else {
+      this.subprojects = []
+    }
+  }
+  
+  changeActivity(event) {
+    if (event.target.value) {
+      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+        this.activities = activities;
+      })
+    }
+    else {
+      this.activities = []
+    }
   }
 
 }

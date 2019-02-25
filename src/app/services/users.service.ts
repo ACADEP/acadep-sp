@@ -70,19 +70,24 @@ export class UsersService {
 
   saveUser( user : User, role : boolean) {
 
-    this.db.collection('users').doc(user.id).set({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: {
-        administrator :role
-      },
-    }).then(function (docRef) {
-      return docRef;
-    }).catch(function (error) {
-      console.log(error);
+    return new Promise((resolve, rejected) => {
 
+      this.db.collection('users').doc(user.id).set({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: {
+          administrator :role
+        },
+      }).then( (doc) => {
+        resolve('done')
+      }).catch((error) => {
+        rejected(error)
+  
+      })
     })
+
+   
 
   }
 
@@ -94,6 +99,9 @@ export class UsersService {
  
 
   updateUser(user: User, role: boolean) {
+
+  //  console.log(role)
+
     return new Promise ((resolve, reject) => {
       this.db.collection('users').doc(user.id).update({
        name : user.name,

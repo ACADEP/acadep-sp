@@ -6,5 +6,5 @@
 
   .error{
     color:rgb(161, 43, 43);
-    border: 1px solid #f00 ;
+    border: 1px solid #f00 !important;
   }

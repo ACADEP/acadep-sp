@@ -2,7 +2,7 @@
 
 export interface project {
 id?: string;
-name:string;
+title:string;
 description: string;
 ubication: {
     lat : number,

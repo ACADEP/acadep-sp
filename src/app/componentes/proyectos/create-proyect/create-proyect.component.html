@@ -78,8 +78,8 @@
                     <div class="row">
                       <div class="col-md-6">
                           <b>Descripción:</b> {{project.description}} <br>
-                          <b>Inicio:</b> {{project.start.date | date}}&nbsp;{{project.start.time }} hrs.<br>
-                          <b>Final:</b> {{project.end.date | date}}&nbsp;{{project.end.time}} hrs.<br>
+                          <b>Inicio:</b> {{project.start | date:"medium"}}<br>
+                          <b>Final:</b> {{project.end | date:"medium"}}<br>
                       </div>
                       <div class="col-md-6">
                         <b>Administradores:</b><br>
@@ -129,7 +129,7 @@
                   <div class="form-group">
                     <label for="itext">Nombre <span class="required">*</span></label>
                     <div class="icon-before-input">
-                      <input type="text" class="form-control" name="name" [(ngModel)]="projectDoc.name"  placeholder="Escriba un nombre para el proyecto ..." required>
+                      <input type="text" class="form-control" name="name" [(ngModel)]="projectDoc.title"  placeholder="Escriba un nombre para el proyecto ..." required>
                       <div class="icon">
                         <i class="fa fa-fw fa-pencil"></i>
                       </div>
@@ -290,7 +290,7 @@
                       <label class="col-sm-12 control-label">Administrador(es) <span class="required">*</span> </label>
                       <div class="col-sm-12">
                         <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="projectDoc.administrators" >
-                            <option *ngFor="let user of users" value="{{user.name}}">{{user.name}}</option>
+                            <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
                         </select>
                       </div>
                     </div>
@@ -350,7 +350,7 @@
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
-              <input type="text" class="form-control" name="name" [(ngModel)]="editProjectDoc.name"  placeholder="Escriba un nombre para el proyecto ..." required>
+              <input type="text" class="form-control" name="name" [(ngModel)]="editProjectDoc.title"  placeholder="Escriba un nombre para el proyecto ..." required>
               <div class="icon">
                 <i class="fa fa-fw fa-pencil"></i>
               </div>
@@ -431,8 +431,9 @@
               <label class="col-sm-12 control-label">Administrador<span class="required">*</span> </label>
               <div class="col-sm-12">
                 <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="editProjectDoc.administrators" >
-                    <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
+                    <option  *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
                 </select>
+
               </div>
             </div>
 
