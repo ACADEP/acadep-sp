@@ -221,10 +221,10 @@
 
       </div>
       <div class="modal-body">
-          <h5 class="text-center" style="color:rgb(143, 143, 143)">Editar fechas</h5><hr>
 
         <div class="row">
           <form class="" action="">
+            
             <div class="col-md-6">
               <label for="">Fecha inicio de evento</label>
               <input class="form-control" type="datetime-local" [(ngModel)]="eventShow.start" name="start" id="">
@@ -233,6 +233,16 @@
               <label for="">Fecha fin de evento</label>
               <input class="form-control" type="datetime-local" [(ngModel)]="eventShow.end" name="end" id="">
             </div>
+            <hr>
+            <div class="col-md-12">
+              <!-- <div class="form-group"> -->
+                  <label id="labeltype">Usuario Asignado<span class="required">*</span></label>
+                  <select id="type" class="form-control" [(ngModel)]="eventShow.user_id" name="type" required>
+                    <option value="undefined">Seleccione un Usuario</option>
+                    <option *ngFor='let user of users' [value]="user.id">{{user.name}}</option>
+                  </select>
+                <!-- </div> -->
+          </div>
           </form>
         </div>
       </div>

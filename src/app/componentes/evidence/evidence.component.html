@@ -120,7 +120,7 @@
                           <mat-panel-description>
       
                             <span *ngIf="evidence.total">
-                              {{evidence.total.number}} / 10 {{evidence.total.unit}}
+                              {{evidence.total.number}}{{evidence.total.unit}}
                             </span>
                             <span>{{evidence.created_at | date:'dd/MM/y'}} {{evidence.created_at |date:'shortTime'}}</span>
 

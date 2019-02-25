@@ -6,6 +6,8 @@ import * as moment from 'moment';
 import { Event } from "../../models/event";
 import { ActivitiesService } from "../../services/activities.service";
 import { ProjectsService } from "../../services/projects.service";
+import { UsersService } from "../../services/users.service";
+import { User } from 'src/app/models/user';
 
 // 
 
@@ -32,10 +34,12 @@ export class CalendarEventsComponent implements OnInit {
   subprojects: any[]= [];
   acts : any[] = [];
   projectsCollection : any[] = [];
+  users: User[];
   constructor(
     public eventsService: EventsService,
     public projectsService : ProjectsService,
-    public activitiesService : ActivitiesService
+    public activitiesService : ActivitiesService,
+    public userService : UsersService
 ) {
     this.events = [];
     this.eventShow = {
@@ -58,6 +62,9 @@ export class CalendarEventsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.userService.getUsers().subscribe( users => {
+      this.users = users;
+    })
 
     this.projectsService.getProjects().subscribe(projects => {
     this.projectsCollection = projects;
@@ -154,14 +161,14 @@ console.log('drop ',$event)
   updateDates(event){
     
     console.log(this.eventShow)
-   this.eventsService.updateEvent(this.eventShow).then((result) => {
-    //aqui va alerta de success
-     event.start = this.eventShow.start;
-     event.end = this.eventShow.end;
-    this.ucCalendar.updateEvent(this.eventShow);
-    $('#details').modal('hide');
-   }).catch((err) => {
+    this.eventsService.updateEvent(this.eventShow).then((result) => {
+    // aqui va alerta de success
+      event.start = this.eventShow.start;
+      event.end = this.eventShow.end;
+     this.ucCalendar.updateEvent(this.eventShow);
+     $('#details').modal('hide');
+    }).catch((err) => {
      
-   });
+    });
   }
 }

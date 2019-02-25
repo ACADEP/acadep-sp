@@ -360,9 +360,9 @@
                   <div class="form-group">
                     <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
                     <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity"
-                      required>
+                      required >
                       <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDoc.activity_id"
+                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDoc.activity_id"
                         [value]="activity.id">{{activity.title }}</option>
                     </select>
                   </div>
@@ -490,34 +490,21 @@
           </div>
           <hr class="b-s-dashed">
 
-          <!-- <div class="row text-center">
-            <div class="col-md-12">
-              <label id="labelstart" for="">Inicio de Actividad <span class="required">*</span></label>
+          <div class="row text-center">
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <div class="col-md-6">
-                  <p><small>Fecha:</small></p>
-                  <input type="date" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start" required>
-                </div>
-                <div class="col-md-6">
-                  <p><small>Hora:</small></p>
-                  <input type="time" id="starttime" name="editstarttime" [(ngModel)]="eventDocEdit.start" required>
-                </div>
+                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="eventDocEdit.start" required>
               </div>
             </div>
-            <div class="col-md-12" style="margin-top:15px">
-              <label id="labelend" for="">Fin de Actividad <span class="required">*</span></label>
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de término <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <div class="col-md-6">
-                  <p><small>Fecha:</small></p>
-                  <input type="date" id="enddate" name="editenddate" [(ngModel)]="eventDocEdit.end.date" required>
-                </div>
-                <div class="col-md-6">
-                  <p><small>Hora:</small></p>
-                  <input type="time" id="endtime" name="editendtime" [(ngModel)]="eventDocEdit.end.time" required>
-                </div>
+                <input type="datetime-local" id="dateend" name="dateend" [(ngModel)]="eventDocEdit.end" required>
               </div>
             </div>
-          </div> -->
+            
+          </div>
 
 
           <hr class="b-s-dashed">
@@ -529,7 +516,7 @@
                 }}</option>
             </select>
           </div>
-          <hr class="b-s-dashed">
+          <!-- <hr class="b-s-dashed">
           <div class="form-group">
             <label>Actividad a la que pertenece <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
@@ -537,7 +524,7 @@
               <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDocEdit.activity_id"
                 [value]="activity.id">{{activity.title }}</option>
             </select>
-          </div>
+          </div> -->
           <hr class="b-s-dashed">
 
 

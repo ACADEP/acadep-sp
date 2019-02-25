@@ -7,6 +7,7 @@ import { Event } from '../models/event';
 // import { Action } from 'rxjs/internal/scheduler/Action';
 
 import * as moment from 'moment';
+import { isNullOrUndefined } from 'util';
 
 declare var $: any;
 
@@ -36,7 +37,8 @@ export class EventsService {
   getEventsByActivity(activity_id) {
     this.eventsCollection = this.db.collection('events', ref => ref
       .where('deleted', '==', '')
-      .where('activity_id', '==', activity_id));
+      .where('activity_id', '==', activity_id)
+      .orderBy('title'));
     this.events = this.eventsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as Event;
@@ -68,9 +70,9 @@ export class EventsService {
       }).then((res: any) => {
 
 
+        console.log(res)
 
-        this.db.collection('users').doc(event.user_id).ref.get().then(user => {
-
+        this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
 
           var settings = {
             "async": true,
@@ -82,14 +84,16 @@ export class EventsService {
               "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
             },
             "processData": false,
-            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \""+event.title+"\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
           }
 
           $.ajax(settings).done(function (response) {
             console.log(response);
-          });
+          }).catch('token undefined');
 
 
+        }).catch(err => {
+          console.log('user undefined')
         })
 
 
@@ -128,27 +132,38 @@ export class EventsService {
         staff: event.staff,
         status: event.status
       }).then((res: any) => {
-        
-        this.db.collection('users').doc(event.user_id).ref.get().then(user => {
-          var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://fcm.googleapis.com/fcm/send",
-            "method": "POST",
-            "headers": {
-              "Content-Type": "application/json",
-              "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
-            },
-            "processData": false,
-            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \""+event.title+"\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": "+'"'+user.data().token+'"'+",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
-          }
 
-          $.ajax(settings).done(function (response) {
-            console.log(response);
-          });
+        console.log(res)
+
+        this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
+
+          
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://fcm.googleapis.com/fcm/send",
+              "method": "POST",
+              "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
+              },
+              "processData": false,
+              "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+            }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            }).catch('token undefined');
+        
+
+
+        }).catch(err => {
+          console.log('user undefined')
         })
+
         resolve(res)
-      
+
       }, err => reject(err));
     })
   }

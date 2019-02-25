@@ -41,7 +41,8 @@ export class ActivitiesService {
     this.activitiesCollection = this.db.collection('activities', ref => 
     ref
     .where('deleted', '==', '')
-    .where('subproject', '==', subproject));
+    .where('subproject', '==', subproject)
+    .orderBy('title'));
     this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as activity;

@@ -96,10 +96,10 @@ export class EventsComponent implements OnInit {
       this.usersCollection = users;
     });
 
-    this.activitiesService.getActivities().subscribe(items => {
-      this.activitiesCollection = items;
-      console.log()
-    });
+    // this.activitiesService.getActivities().subscribe(items => {
+    //   this.activitiesCollection = items;
+    //   console.log()
+    // });
 
     this.projectsService.getProjects().subscribe(projects => {
       this.projectsCollection = projects;
@@ -134,6 +134,8 @@ export class EventsComponent implements OnInit {
     console.log(event)
 
     if (event.target.value) {
+      this.eventDoc.activity_id = event.target.value
+      
      this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
        this.eventsCollection = events;
      })
