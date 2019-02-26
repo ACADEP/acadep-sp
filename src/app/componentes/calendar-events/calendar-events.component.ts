@@ -22,11 +22,11 @@ export class CalendarEventsComponent implements OnInit {
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  public data = [{
-    title: 'New event',
-    start: moment(),
-    end: moment().add(1, 'day'),
-  }]
+  // public data = [{
+  //   title: 'New event',
+  //   start: moment(),
+  //   end: moment().add(1, 'day'),
+  // }]
 
   public events: any[];
   public eventShow:any;
@@ -74,7 +74,7 @@ export class CalendarEventsComponent implements OnInit {
     this.calendarOptions = {
       droppable : false,
       editable: false,
-      eventLimit: true,
+      eventLimit: false,
       eventDurationEditable: true,
       header: {
         left: 'prev,next today',

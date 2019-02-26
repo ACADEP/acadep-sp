@@ -134,7 +134,7 @@
                         <b>Inicio:</b> {{event.start | date:'medium'}} <br>
                         <b>Final:</b> {{event.end | date:'medium'}}<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
-                        <b>Usuario que lo realizará:</b> <span *ngIf="event.user_id == 'undefined'">Sin especificar</span> <span [innerHTML]="findUser(event.user_id)" *ngIf="event.user_id != undefined"></span>
+                        <b>Usuario que lo realizará:</b> <span *ngIf="event.user_id == 'undefined'">Sin especificar</span> <span *ngIf="event.user_id != 'undefined'">{{event.user_id}}</span>
                       </div>
                       <div class="col-md-6">
                         <div *ngIf="event.tools.length > 0">
@@ -345,8 +345,7 @@
                     <label id="labeluser" class="">Usuario que realizara evento <span class="required">*</span></label>
                     <select class="form-control" id="user" [(ngModel)]="eventDoc.user_id" name="user" required>
                       <option value="">Seleccione una opción </option>
-                      <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id" [value]="user.id">{{user.name
-                        }}</option>
+                      <option *ngFor='let user of usersCollection' [selected]="user.id == eventDoc.user_id" [value]="user.id">{{user.name}}</option>
                     </select>
                   </div>
                   <hr class="b-s-dashed">
