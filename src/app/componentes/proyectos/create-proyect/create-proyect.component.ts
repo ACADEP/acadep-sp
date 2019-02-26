@@ -34,6 +34,7 @@ interface actExcel {
 }
 interface eventExcel {
   fecha_inicio: string
+  fecha_final: string
   name: string,
   description: string,
   unit: string,
@@ -289,27 +290,28 @@ export class CreateProyectComponent implements OnInit {
 
 
   jsonToFirebase(json: any, total: number) {
-     console.log(json)
+    //  console.log(json)
     //  console.log(total)
-    // var cont = 1;
-    // this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
-    //   json.activities.forEach(activity => {
-    //     this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
-    //       activity.events.forEach(event => {
-    //         this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail).then(() => {
-    //           cont++;
-    //           console.log(cont + '/' + total)
-    //         }).catch(err1 => {
-    //           console.log(err1);
-    //         })
-    //       });
-    //     }).catch(err2 => {
-    //       console.log(err2);
-    //     })
-    //   });
-    // }).catch(err3 => {
-    //   console.log(err3);
-    // })
+
+    var cont = 1;
+    this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
+      json.activities.forEach(activity => {
+        this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
+          activity.events.forEach(event => {
+            this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail, activity.name, activity.subproject, event.fecha_inicio, event.fecha_final).then(() => {
+              cont++;
+              console.log(cont + '/' + total)
+            }).catch(err1 => {
+              console.log(err1);
+            })
+          });
+        }).catch(err2 => {
+          console.log(err2);
+        })
+      });
+    }).catch(err3 => {
+      console.log(err3);
+    })
 
   }
 
@@ -352,7 +354,8 @@ export class CreateProyectComponent implements OnInit {
           unit: element[5],
           number: element[6],
           user_mail: element[4],
-          fecha_inicio : element[2].toString()
+          fecha_inicio : this.convertDate(element[2]),
+          fecha_final : this.convertDate(element[3]),
         }
 
         doc.activities[contAct].events.push(event);
@@ -361,7 +364,6 @@ export class CreateProyectComponent implements OnInit {
     })
 
     this.jsonToFirebase(doc, contEvent);
-
 
 
     //   var doc = {} as projExcel;
@@ -414,5 +416,18 @@ export class CreateProyectComponent implements OnInit {
     // }
 
 
+  }
+
+
+  convertDate(excelDate) {
+
+    // JavaScript dates can be constructed by passing milliseconds
+    // since the Unix epoch (January 1, 1970) example: new Date(12312512312);
+  
+    // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
+    // 2. Convert to milliseconds.
+  
+    return new Date((excelDate - (25567 + 1))*86400*1000).toJSON()
+  
   }
 }

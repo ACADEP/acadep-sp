@@ -31,7 +31,9 @@ export class TopbarComponent implements OnInit {
 
    this.evidenceService.getNotifications().subscribe(notifications => {
      this.notifications = notifications;
-     console.log(notifications)
+    //  let sound = new Audio;
+    //  sound.src = 'assets/sounds/notification.mp3'
+    //  sound.play()
    })
     // this.eventsService.getEventsUndefined2().subscribe( events => {
     //   this.notifications = events;

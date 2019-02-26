@@ -34,6 +34,8 @@ export class ProjectsService {
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
+        data.subprojects = data.subprojects.sort()
+        console.log(data.subprojects)
         data.id = a.payload.doc.id;
         return data;
       });

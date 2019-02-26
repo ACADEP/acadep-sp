@@ -134,7 +134,7 @@
                         <b>Inicio:</b> {{event.start | date:'medium'}} <br>
                         <b>Final:</b> {{event.end | date:'medium'}}<br>
                         <b>Actividad:</b> {{event.activity_id }} <br>
-                        <b>Usuario que lo realizará:</b> {{event.user_id}}
+                        <b>Usuario que lo realizará:</b> <span *ngIf="event.user_id == 'undefined'">Sin especificar</span> <span [innerHTML]="findUser(event.user_id)" *ngIf="event.user_id != undefined"></span>
                       </div>
                       <div class="col-md-6">
                         <div *ngIf="event.tools.length > 0">
@@ -162,8 +162,8 @@
 
               </mat-accordion>
             </div>
-              <!-- <div class="list-group filter-wrap">
 
+              <!-- <div class="list-group filter-wrap">
                 <article class="list-group-item" *ngFor="let event of eventsCollection; let i = index" [ngStyle]="{'background':event.active === false ? 'rgb(237, 255, 237)' : 'inherit' }">
                   <header class="filter-header">
                     <i class="icon-action fa fa-chevron-down" data-toggle="collapse" [attr.data-target]="'#collapse'+ i"></i>
@@ -171,7 +171,6 @@
                     <i class="icon-action fa fa-times" style="color:#d64040" (click)="deleteEvent(event)"></i>
                     <i class="icon-action fa fa-eye" style="color: black" (click)="seeEvent(event)" *ngIf="event.active === false"></i>
                     <h6 class="title">nombre evento {{i + 1}}</h6>
-
                   </header>
                   <div class="filter-content collapse" id="{{'collapse' + i}}">
                     <div class="row">
@@ -191,8 +190,6 @@
                           </ul>
                           <hr>
                         </div>
-
-
                         <b>Personal:</b><br>
                         <ul>
                           <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
@@ -322,11 +319,8 @@
                           <p><small>Hora:</small></p>
                           <input type="time" id="starttime" name="starttime" [(ngModel)]="eventDoc.start.time" required>
                         </div>
-
                       </div>
                     </div>
-
-
                     <div class="col-md-12" style="margin-top:15px">
                       <label id="labelend" for="">Fecha de término <span class="required">*</span></label>
                       <div class="input-group col-centered">
@@ -338,7 +332,6 @@
                           <p><small>Hora:</small></p>
                           <input type="time" id="endtime" name="endtime" [(ngModel)]="eventDoc.end.time" required>
                         </div>
-
                       </div>
                     </div>
 

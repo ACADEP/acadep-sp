@@ -130,6 +130,11 @@ export class EventsComponent implements OnInit {
     }
   }
 
+  findUser(id){
+    console.log(id)
+    return 'user log'
+  }
+
   loadingEvents(event){
     console.log(event)
 

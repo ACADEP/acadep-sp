@@ -113,16 +113,19 @@
                       <mat-expansion-panel [ngClass]="{'read': !evidence.read}"  [expanded]="indexExpanded == i"  *ngFor="let evidence of evidenceCollection; index as i" (click)="readEvidence(evidence, i)">
                         <mat-expansion-panel-header>
                           <mat-panel-title>
-                            <mat-checkbox (click)="$event.stopPropagation();" color="primary">{{evidence.ref_event.name.substring(0,75)}}</mat-checkbox>
-      
+                            <mat-checkbox (click)="$event.stopPropagation();" color="primary"></mat-checkbox>&nbsp;
+                            {{evidence.ref_event.name.substring(0,75)}}
                             <!-- <h4> </h4>  -->
                           </mat-panel-title>
                           <mat-panel-description>
       
                             <span *ngIf="evidence.total">
-                              {{evidence.total.number}}{{evidence.total.unit}}
+                              {{evidence.advanced}} / {{evidence.total.number}}&nbsp;{{evidence.total.unit}}
                             </span>
-                            <span>{{evidence.created_at | date:'dd/MM/y'}} {{evidence.created_at |date:'shortTime'}}</span>
+
+
+                            <!-- <span>{{evidence.user.name}}</span> -->
+                            <!-- <span>{{evidence.created_at | date:'dd/MM/y'}} {{evidence.created_at |date:'shortTime'}}</span> -->
 
                             <span>Etapa: {{getEtapa(evidence.header)}}</span>
                             <mat-icon style="color:#f44336" class="delete" (click)="$event.stopPropagation(); export(evidence, $event)">picture_as_pdf</mat-icon>

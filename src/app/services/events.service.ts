@@ -84,7 +84,7 @@ export class EventsService {
               "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
             },
             "processData": false,
-            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
           }
 
           $.ajax(settings).done(function (response) {
@@ -149,7 +149,7 @@ export class EventsService {
                 "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
               },
               "processData": false,
-              "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"FCM_PLUGIN_ACTIVITY\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+              "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -178,14 +178,17 @@ export class EventsService {
     });
   }
 
-  ImportEvent(name: string, unit: string, number: number, id_act: string, user_mail: string) {
+  ImportEvent(name: string, unit: string, number: number, id_act: string, user_mail: string, name_act:string, sub_name:string, inicio, final) {
 
-    let start = moment().format('Y-MM-DDThh:mm');
-    let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
+    // let start = moment().format('Y-MM-DDThh:mm');
+    // let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
+    let start = inicio.substring(0,16);
+    let end = final.substring(0,16);
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
         activity_id: id_act,
+        activity_name : name_act,
         user_id: 'undefined',
         type_activity: 'supervision',
         title: name,
@@ -198,6 +201,7 @@ export class EventsService {
         deleted: '',
         status: 1,
         advanced: 0,
+        subproject_name: sub_name,
         total: {
           unit: unit,
           number: number
