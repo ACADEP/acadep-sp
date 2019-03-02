@@ -21,26 +21,31 @@ type AOA = any[][];
 declare var $: any;
 
 
-
 interface projExcel {
   name: string,
 
   activities: actExcel[]
+  fecha_inicio: string
+  fecha_final: string
   // subprojects: string[]
 }
 interface actExcel {
   name: string,
   // subproject: string,
-  events: eventExcel[],
-  //  project_id : string
+  events: eventExcel[]
+   project_id? : string
+   fecha_inicio: string
+   fecha_final: string
 }
 interface eventExcel {
   fecha_inicio: string
   fecha_final: string
+  activity_name? : string
   name: string,
   description: string,
-  unit: string,
-  number: number,
+  activity_id? : string
+  unit: string
+  number: number
   user_mail: string
   // activiy_id : string
 }
@@ -61,6 +66,7 @@ export class CreateProyectComponent implements OnInit {
   public subproject: string;
 
 
+  percent = '0%';
   searchterm: string;
   startAt = new Subject();
   endAt = new Subject();
@@ -294,12 +300,39 @@ export class CreateProyectComponent implements OnInit {
   jsonToFirebase(json: any, total: number) {
      console.log(json)
      console.log(total)
+     var cont = 0;
 
 
+     json.map((project:projExcel ) => {
 
-     json.map(project => {
+      this.projectsService.importProject(project).then((proj:any) => {
 
-      this.projectsService.importProject(project.name)
+        project.activities.map( (activity : actExcel) =>{
+        
+          // console.log(activity)
+          activity.project_id = proj.id;
+          this.activitiesService.ImportActivity(activity).then((act:any) => {
+
+            activity.events.map( (event : eventExcel) => {
+              event.activity_name = activity.name;
+              event.activity_id = act.id;
+                this.eventsService.ImportEvent(event).then( final => {
+                  cont++;
+                  let percentage = Math.round((100*cont)/total)+ '%';
+                  this.percent = percentage;
+
+                  // console.log(Math.round((100*cont)/total)+ '%' )
+                })
+
+            })
+
+          })
+
+        })
+        
+      }).catch((err) => {
+        
+      });
 
      })
 
@@ -348,7 +381,9 @@ export class CreateProyectComponent implements OnInit {
       if (element[0] == 'subproyecto' || element[0] == 'Subproyecto') {
         const sub : projExcel ={
           name: element[1],
-          activities : []
+          activities : [],
+          fecha_inicio : this.convertDate(element[2]),
+          fecha_final : this.convertDate(element[3]),
         }
         container.push(sub);
         contSub++
@@ -359,7 +394,9 @@ export class CreateProyectComponent implements OnInit {
         contAct++;
         const act: actExcel = {
           name: element[1],
-          events: []
+          events: [],
+          fecha_inicio : this.convertDate(element[2]),
+          fecha_final : this.convertDate(element[3]),
         }
 
         container[contSub].activities.push(act)

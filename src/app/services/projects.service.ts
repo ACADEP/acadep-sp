@@ -41,10 +41,10 @@ export class ProjectsService {
   }
 
 
-/**
- * 
- * @param name 
- */
+  /**
+   * 
+   * @param name 
+   */
   searchProjects(name: string) {
     this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', ''));
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
@@ -107,40 +107,45 @@ export class ProjectsService {
 
 
 
-/**
- * 
- * @param name 
- * @param subprojects 
- */
-  importProject(name: string, subprojects: string[]) {
+  /**
+   * 
+   * @param name 
+   * @param subprojects 
+   */
+  importProject(project) {
     return new Promise((resolve, reject) => {
       this.db.collection('projects').add({
-        title: name,
+        title: project.name,
         description: '',
         ubication: {
           lat: 0,
           lng: 0
         },
-        start: new Date().toJSON(),
-        end: new Date().toJSON(),
+        start: project.fecha_inicio.substring(0, 16),
+        end: project.fecha_final.substring(0, 16),
         administrators: [],
         deleted: '',
-        type: 'project',
-        childrens: true
+        active: true,
+        childrens: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
       }).then((res: any) => {
-        resolve(res)
-      })
-        .catch(err => {
-          reject(err)
-        });
+
+        this.db.collection('projects').doc(res.id).update({
+          id: res.id
+        }).then(updated => {
+
+          resolve(res)
+        })
+      }, err => reject(err));
     })
 
   }
 
-/**
- * 
- * @param project 
- */
+  /**
+   * 
+   * @param project 
+   */
   updateProject(project: project) {
     console.log(project)
     return new Promise((resolve, reject) => {

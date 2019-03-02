@@ -103,25 +103,16 @@ export class EventsComponent implements OnInit {
 
     this.projectsService.getProjects().subscribe(projects => {
       this.projectsCollection = projects;
-      console.log(projects)
+      // console.log(projects)
     })
 
   }
 
   changeProject(project) {
     if (project.target.value) {
-      this.projectsService.getProject(project.target.value).then((project: any) => {
-        console.log(project)
-        this.subprojects = project.subprojects;
-      }).catch((err) => (console.log(err)));
-    }
-    else {
-      this.subprojects = []
-    }
-  }
-  changeActivity(event) {
-    if (event.target.value) {
-      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+      this.eventsCollection = []
+
+      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
         this.acts = activities;
       })
     }
@@ -129,6 +120,18 @@ export class EventsComponent implements OnInit {
       this.acts = []
     }
   }
+
+
+  // changeActivity(event) {
+  //   if (event.target.value) {
+  //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+  //       this.acts = activities;
+  //     })
+  //   }
+  //   else {
+  //     this.acts = []
+  //   }
+  // }
 
   
 

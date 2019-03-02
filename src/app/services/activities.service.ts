@@ -36,12 +36,12 @@ export class ActivitiesService {
 
   }
 
-  getActivitiesBySub(subproject:string) {
+  getActivitiesByProject(project_id:string) {
 
     this.activitiesCollection = this.db.collection('activities', ref => 
     ref
     .where('deleted', '==', '')
-    .where('subproject', '==', subproject)
+    .where('project_id', '==', project_id)
     .orderBy('title'));
     this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
@@ -81,19 +81,29 @@ export class ActivitiesService {
 
   }
 
-  ImportActivity(name:string, project_id:string, subproject: string) {
+  ImportActivity(activity) {
+
+    // console.log(activity)
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
-        title: name,
+        title: activity.name,
         description: '',
-        subproject: subproject,
-        project_id : project_id,
-        start: new Date().toJSON().substr(0, 16),
-        end: new Date().toJSON().substr(0, 16),
+        project_id : activity.project_id,
+        start: activity.fecha_inicio.substr(0, 16),
+        end: activity.fecha_final.substr(0, 16),
+        active : true,
+        created_at : new Date().toJSON(),
+        updated_at : new Date().toJSON(),
         insumos : [],
-        users : [],
         deleted : '',
-      }).then((res: any) => resolve(res), err => reject(err));
+      }).then((res: any) => {
+        this.db.collection('activities').doc(res.id).update({
+          id: res.id
+        }).then(updated => {
+
+          resolve(res)
+        })
+      }, err => reject(err));
     })
 
   }
@@ -106,11 +116,14 @@ export class ActivitiesService {
       this.db.collection('activities').doc(activity.id).update({
         title: activity.title,
         description: activity.description,
-        subproject: activity.subproject,
+        // subproject: activity.subproject,
         project_id : activity.project_id,
         start: activity.start,
         end: activity.end,
         insumos : activity.insumos,
+        deleted : '',
+        active : true,
+        created_at : new Date().toJSON()
       }).then((res:any) => resolve(res), err => reject(err));
     })
   }

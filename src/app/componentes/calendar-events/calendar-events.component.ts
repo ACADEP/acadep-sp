@@ -30,7 +30,7 @@ export class CalendarEventsComponent implements OnInit {
 
   public events: any[];
   public eventShow:any;
-  eventsCollection: Event[];
+  // eventsCollection: Event[];
   subprojects: any[]= [];
   acts : any[] = [];
   projectsCollection : any[] = [];
@@ -88,7 +88,7 @@ export class CalendarEventsComponent implements OnInit {
           day:      'Día',
           list:     'Lista',
       },
-      events: this.eventsCollection,
+      events: [],
       locale: 'es',
     };
 
@@ -99,18 +99,9 @@ export class CalendarEventsComponent implements OnInit {
 
   changeProject(project) {
     if (project.target.value) {
-      this.projectsService.getProject(project.target.value).then((project: any) => {
-        console.log(project)
-        this.subprojects = project.subprojects;
-      }).catch((err) => (console.log(err)));
-    }
-    else {
-      this.subprojects = []
-    }
-  }
-  changeActivity(event) {
-    if (event.target.value) {
-      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+      this.ucCalendar.renderEvents([])
+
+      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
         this.acts = activities;
       })
     }
@@ -118,6 +109,18 @@ export class CalendarEventsComponent implements OnInit {
       this.acts = []
     }
   }
+
+
+  // changeActivity(event) {
+  //   if (event.target.value) {
+  //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+  //       this.acts = activities;
+  //     })
+  //   }
+  //   else {
+  //     this.acts = []
+  //   }
+  // }
 
   loadingEvents(event){
     console.log(event)

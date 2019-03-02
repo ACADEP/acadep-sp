@@ -257,19 +257,16 @@ public subprojects: string[] = [];
   }
 
 
-  changeProject(project){
-    if(project.target.value)
-    {
-      this.projectsService.getProject(project.target.value).then((project : any) => {
-        console.log(project)
-        this.subprojects = project.subprojects;
-      }).catch((err) =>(console.log(err)));
-    }
-    else{
-      // console.log('nah')
-      this.subprojects = []
-    }
+  changeProject(project) {
+    if (project.target.value) {
 
+      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
+        this.activities = activities;
+      })
+    }
+    else {
+      this.activities = []
+    }
   }
 
   pushInsumo(form: NgForm) {
@@ -355,27 +352,29 @@ public subprojects: string[] = [];
     
   }
 
-  selectProject(project) {
-    if (project.target.value) {
-      this.projectsService.getProject(project.target.value).then((project: any) => {
-        console.log(project)
-        this.subprojects = project.subprojects;
-      }).catch((err) => (console.log(err)));
-    }
-    else {
-      this.subprojects = []
-    }
-  }
+  // selectProject(project) {
+  //   if (project.target.value) {
+
+  //     this.projectsService.getProject(project.target.value).then((project: any) => {
+  //       console.log(project)
+  //       this.subprojects = project.subprojects;
+  //     }).catch((err) => (console.log(err)));
+
+  //   }
+  //   else {
+  //     this.subprojects = []
+  //   }
+  // }
   
-  changeActivity(event) {
-    if (event.target.value) {
-      this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
-        this.activities = activities;
-      })
-    }
-    else {
-      this.activities = []
-    }
-  }
+  // changeActivity(event) {
+  //   if (event.target.value) {
+  //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
+  //       this.activities = activities;
+  //     })
+  //   }
+  //   else {
+  //     this.activities = []
+  //   }
+  // }
 
 }

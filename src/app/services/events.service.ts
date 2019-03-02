@@ -178,33 +178,37 @@ export class EventsService {
     });
   }
 
-  ImportEvent(name: string, unit: string, number: number, id_act: string, user_mail: string, name_act:string, sub_name:string, inicio, final) {
+  ImportEvent(event) {
 
     // let start = moment().format('Y-MM-DDThh:mm');
     // let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
-    let start = inicio.substring(0,16);
-    let end = final.substring(0,16);
+    let start = event.fecha_inicio.substring(0,16);
+    let end = event.fecha_final.substring(0,16);
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
-        activity_id: id_act,
-        activity_name : name_act,
+        during_complete : false,
+        before_complete : false,
+        activity_id: event.activity_id,
+        activity_name : event.activity_name,
         user_id: 'undefined',
         type_activity: 'supervision',
-        title: name,
+        title: event.name,
         description: '',
         start: start,
-        user_mail: user_mail,
+        user_mail: event.user_mail,
         end: end,
         tools: [],
         staff: [],
         deleted: '',
-        status: 1,
+        color: '#333',
         advanced: 0,
-        subproject_name: sub_name,
+        created_at : new Date().toJSON(),
+        updated_at : new Date().toJSON(),
+        // subproject_name: event.sub_name,
         total: {
-          unit: unit,
-          number: number
+          unit: event.unit,
+          number: event.number
         }
       }).then((res: any) => {
         this.db.collection('events').doc(res.id).update({

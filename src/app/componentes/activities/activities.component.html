@@ -44,16 +44,15 @@
                           </div>
                     </div>
     
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                       <div class="form-group">
                         <label id="labeltype">Subroyecto<span class="required">*</span></label>
                         <select id="type" class="form-control" name="type" required (change)="changeActivity($event)">
                           <option value="">Seleccione</option>
                           <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
-                          <!-- <option *ngFor='let item of types' [ngValue]="item">{{item}}</option> -->
                         </select>
                       </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="col-md-2">
                       <div class="form-group">
                         <label id="labeltype">Actividad<span class="required">*</span></label>
@@ -130,7 +129,7 @@
                         <b>Final:</b> {{activity.end | date:'short'}}
                       </div>
                       <div class="col-md-6">
-                        <b>Insumos necesarios:</b><br>
+                        <!-- <b>Insumos necesarios:</b><br>
                         <ul>
                           <li *ngFor="let item of activity.tools">{{item}}</li>
 
@@ -139,7 +138,7 @@
                         <ul>
                           <li *ngFor="let person of activity.users">{{person}}</li>
 
-                        </ul>
+                        </ul> -->
 
                       </div>
                     </div>
