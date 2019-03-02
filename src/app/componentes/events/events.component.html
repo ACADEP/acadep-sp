@@ -118,7 +118,7 @@
                 <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      <h4>{{event.title}} </h4>
+                      <h4>{{(event.title.substring(0,25))}} </h4>
                     </mat-panel-title>
                     <mat-panel-description>
                       {{(100*event.advanced)/event.total.number}}%
@@ -129,25 +129,45 @@
 
                   <div class="row">
                       <div class="col-md-6">
-                        <b>Descripción:</b> {{event.description}} <br>
+                        <b>Descripción:</b> {{event.title}} <br>
                         <b>Tipo de actividad:</b> {{event.actividad}} <br>
                         <b>Inicio:</b> {{event.start | date:'medium'}} <br>
                         <b>Final:</b> {{event.end | date:'medium'}}<br>
-                        <b>Actividad:</b> {{event.activity_id }} <br>
-                        <b>Usuario que lo realizará:</b> <span *ngIf="event.user_id == 'undefined'">Sin especificar</span> <span *ngIf="event.user_id != 'undefined'">{{event.user_id}}</span>
+                        <b>Actividad:</b> <span *ngFor='let activity of acts'>
+                            <span *ngIf="activity.id == event.activity_id"> {{activity.title}}</span>
+                          </span> <br>
+                        <b>Usuario que lo realizará:</b> <span *ngIf="event.user_id == 'undefined'">Sin especificar</span> <span *ngIf="event.user_id != 'undefined'">
+                          <span *ngFor='let user of usersCollection'>
+                            <span *ngIf="user.id == event.user_id"> {{user.name}}</span>
+                          </span>
+                         
+                        </span>
                       </div>
                       <div class="col-md-6">
-                        <div *ngIf="event.tools.length > 0">
+                        <div >
                           <b>Herramientas: </b><br>
                           <ul>
-                            <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                            <span *ngIf="event.tools.length > 0; else notools">
+                              <li *ngFor="let item of event.tools">{{item.quantity}}&nbsp;{{item.name}}</li>
+                            </span>
+                            <ng-template #notools><i>Sin herramientas registradas</i></ng-template>
+                            
                           </ul>
                           <hr>
                         </div>
-                        <b>Personal:</b><br>
-                        <ul>
-                          <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
-                        </ul>
+                        
+
+                          <b>Personal:</b><br>
+                          <ul>
+                            <span *ngIf="event.staff.length > 0; else nostaff">
+                              <li *ngFor="let person of event.staff">{{person.quantity}}&nbsp;{{person.name}}</li>
+                            </span>
+
+                            <ng-template #nostaff><i>Sin personal registrado</i></ng-template>
+                            
+                          </ul>
+
+                       
                       </div>
                     </div>
                 
@@ -453,10 +473,10 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <h3 class="modal-title" >Actualizar evento</h3>
       </div>
       <div class="modal-body">
 
@@ -501,19 +521,77 @@
 
           <hr class="b-s-dashed">
           <div class="form-group">
-            <label class="">Usuario que realizara evento <span class="required">*</span></label>
+            <label class="">Usuario que realizará evento <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="eventDocEdit.user_id" name="user">
               <option value="">Seleccione una opción </option>
               <option *ngFor='let user of usersCollection' [selected]="user.id == eventDocEdit.user_id" [value]="user.id">{{user.name
                 }}</option>
             </select>
           </div>
-          <!-- <hr class="b-s-dashed">
-          <div class="form-group">
+
+          <hr class="b-s-dashed">
+
+      
+         
+          <!-- <label id="total">Actividad a la que pertenece <span class="required">*</span></label>
+          <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <p>Proyecto</p>
+                  <select class="form-control" name="activity">
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                        [value]="activity.id">{{activity.title }}</option>
+                    </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <p>Subproyecto</p>
+                  <select class="form-control" name="activity">
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                        [value]="activity.id">{{activity.title }}</option>
+                    </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <p>Actividad</p>
+                  <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
+                      <option value="">Seleccione una opción </option>
+                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                        [value]="activity.id">{{activity.title }}</option>
+                    </select>
+                </div>
+              </div>
+            </div> -->
+
+            <!-- <label>Actividad : <span class="required">*</span></label>
+            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
+              <option value="">Seleccione una opción </option>
+              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                [value]="activity.id">{{activity.title }}</option>
+            </select> -->
+
+
+          <!-- <div class="form-group">
             <label>Actividad a la que pertenece <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
               <option value="">Seleccione una opción </option>
-              <option *ngFor='let activity of activitiesCollection' [selected]="activity.id == eventDocEdit.activity_id"
+              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                [value]="activity.id">{{activity.title }}</option>
+            </select>
+
+            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
+              <option value="">Seleccione una opción </option>
+              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
+                [value]="activity.id">{{activity.title }}</option>
+            </select>
+            
+            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
+              <option value="">Seleccione una opción </option>
+              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
                 [value]="activity.id">{{activity.title }}</option>
             </select>
           </div> -->

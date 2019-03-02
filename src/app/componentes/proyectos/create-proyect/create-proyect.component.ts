@@ -20,15 +20,17 @@ type AOA = any[][];
 
 declare var $: any;
 
+
+
 interface projExcel {
   name: string,
 
   activities: actExcel[]
-  subprojects: string[]
+  // subprojects: string[]
 }
 interface actExcel {
   name: string,
-  subproject: string,
+  // subproject: string,
   events: eventExcel[],
   //  project_id : string
 }
@@ -92,7 +94,7 @@ export class CreateProyectComponent implements OnInit {
 
     this.projectDoc.ubication = {} as marker;
     this.editProjectDoc.ubication = {} as marker;
-    this.projectDoc.subprojects = [];
+    // this.projectDoc.subprojects = [];
     this.objectExcel.activities = [];
 
 
@@ -127,10 +129,11 @@ export class CreateProyectComponent implements OnInit {
 
     }
   }
-  async PushSubproject() {
-    await this.projectDoc.subprojects.push(this.subproject);
-    this.subproject = '';
-  }
+
+  // async PushSubproject() {
+  //   await this.projectDoc.subprojects.push(this.subproject);
+  //   this.subproject = '';
+  // }
 
 
   findMe() {
@@ -158,9 +161,9 @@ export class CreateProyectComponent implements OnInit {
 
   addProject() {
 
-    if (this.sub == false) {
-      this.projectDoc.subprojects = []
-    }
+    // if (this.sub == false) {
+    //   this.projectDoc.subprojects = []
+    // }
 
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
@@ -170,7 +173,7 @@ export class CreateProyectComponent implements OnInit {
       this.projectDoc.description = "";
       this.projectDoc.start = new Date().toJSON();
       this.projectDoc.end = new Date().toJSON();
-      this.projectDoc.subprojects = [];
+      // this.projectDoc.subprojects = [];
       this.sub = false;
 
     }).catch((err) => {
@@ -288,41 +291,54 @@ export class CreateProyectComponent implements OnInit {
   }
 
 
-
   jsonToFirebase(json: any, total: number) {
-    //  console.log(json)
-    //  console.log(total)
+     console.log(json)
+     console.log(total)
 
-    var cont = 1;
-    this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
-      json.activities.forEach(activity => {
-        this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
-          activity.events.forEach(event => {
-            this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail, activity.name, activity.subproject, event.fecha_inicio, event.fecha_final).then(() => {
-              cont++;
-              console.log(cont + '/' + total)
-            }).catch(err1 => {
-              console.log(err1);
-            })
-          });
-        }).catch(err2 => {
-          console.log(err2);
-        })
-      });
-    }).catch(err3 => {
-      console.log(err3);
-    })
+
+
+     json.map(project => {
+
+      this.projectsService.importProject(project.name)
+
+     })
+
+
+
+    // var cont = 1;
+    // this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
+
+    //   json.activities.forEach(activity => {
+
+    //     this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
+    //       activity.events.forEach(event => {
+    //         this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail, activity.name, activity.subproject, event.fecha_inicio, event.fecha_final).then(() => {
+    //           cont++;
+    //           console.log(cont + '/' + total)
+    //         }).catch(err1 => {
+    //           console.log(err1);
+    //         })
+    //       });
+    //     }).catch(err2 => {
+    //       console.log(err2);
+    //     })
+    //   });
+    // }).catch(err3 => {
+    //   console.log(err3);
+    // })
 
   }
 
 
   async constructObject(array, name) {
 
+    var container = [];
 
-    var doc = {} as projExcel;
-    doc.name = name;
-    doc.activities = [];
-    doc.subprojects = [];
+
+    // var doc = {} as projExcel;
+    // doc.name = name;
+    // doc.activities = [];
+    // doc.subprojects = [];
 
     var contSub = -1;
     var contAct = -1;
@@ -330,23 +346,27 @@ export class CreateProyectComponent implements OnInit {
 
     const arr = await array.map(element => {
       if (element[0] == 'subproyecto' || element[0] == 'Subproyecto') {
-        doc.subprojects.push(element[1]);
+        const sub : projExcel ={
+          name: element[1],
+          activities : []
+        }
+        container.push(sub);
         contSub++
+        contAct = -1;
       }
 
       if (element[0] == 'actividad' || element[0] == 'Actividad') {
         contAct++;
         const act: actExcel = {
           name: element[1],
-          subproject: doc.subprojects[contSub],
           events: []
         }
 
-        doc.activities.push(act)
+        container[contSub].activities.push(act)
       }
 
       if (element[0] == 'evento' || element[0] == 'Evento') {
-
+       
         contEvent++;
         const event: eventExcel = {
           name: element[1],
@@ -358,12 +378,13 @@ export class CreateProyectComponent implements OnInit {
           fecha_final : this.convertDate(element[3]),
         }
 
-        doc.activities[contAct].events.push(event);
+       container[contSub].activities[contAct].events.push(event);
+
       }
 
     })
 
-    this.jsonToFirebase(doc, contEvent);
+    this.jsonToFirebase(container, contEvent);
 
 
     //   var doc = {} as projExcel;

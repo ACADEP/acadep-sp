@@ -11,6 +11,6 @@ ubication: {
 start: string;
 end: string;
 administrators: string[];
-
-subprojects : string[];
+type: string
+childrens : boolean
 }
