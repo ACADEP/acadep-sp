@@ -62,25 +62,25 @@ export class CreateProyectComponent implements OnInit {
 
   objectExcel = {} as projExcel;
 
-  public sub: boolean = false;
+  // public sub: boolean = false;
   public subproject: string;
 
 
   percent = '0%';
-  searchterm: string;
-  startAt = new Subject();
-  endAt = new Subject();
+  // searchterm: string;
+  // startAt = new Subject();
+  // endAt = new Subject();
 
-  clubs;
-  allclubs;
-  startobs = this.startAt.asObservable();
-  endobs = this.endAt.asObservable();
+  // clubs;
+  // allclubs;
+  // startobs = this.startAt.asObservable();
+  // endobs = this.endAt.asObservable();
 
   projects: project[];
   users: User[];
   projectDoc = {} as project;
   editProjectDoc = {} as project;
-  query: string;
+  // query: string;
 
   constructor(
     public projectsService: ProjectsService,
@@ -92,15 +92,10 @@ export class CreateProyectComponent implements OnInit {
 
     // this.marker.label = 'myPosition';
     this.notifier = notifierService;
-
     this.projectDoc.start = new Date().toJSON();
     this.projectDoc.end = new Date().toJSON();
-    // this.editProjectDoc.start = {} as datetime;
-    // this.editProjectDoc.end = {} as datetime;
-
     this.projectDoc.ubication = {} as marker;
     this.editProjectDoc.ubication = {} as marker;
-    // this.projectDoc.subprojects = [];
     this.objectExcel.activities = [];
 
 
@@ -109,37 +104,22 @@ export class CreateProyectComponent implements OnInit {
   ngOnInit() {
     this.findMe();
 
-    this.projectsService.getProjects().subscribe((clubs) => {
-      this.allclubs = clubs;
-      this.clubs = clubs;
+    this.projectsService.getProjects().subscribe((projects) => {
+      this.projects = projects;
+      // this.clubs = clubs;
     })
 
-    combineLatest(this.startobs, this.endobs).subscribe((value) => {
-      this.firequery(value[0], value[1]).subscribe((clubs) => {
-        this.clubs = clubs;
-      })
-    })
+    // combineLatest(this.startobs, this.endobs).subscribe((value) => {
+    //   this.firequery(value[0], value[1]).subscribe((clubs) => {
+    //     this.clubs = clubs;
+    //   })
+    // })
 
-    this.userservice.getUsers().subscribe(items => {
-      this.users = items;
+    this.userservice.getUsers().subscribe(users => {
+      this.users = users;
     })
 
   }
-
-
-  checkSub() {
-    if (this.sub == false) {
-      this.sub = true;
-    } else {
-      this.sub = false;
-
-    }
-  }
-
-  // async PushSubproject() {
-  //   await this.projectDoc.subprojects.push(this.subproject);
-  //   this.subproject = '';
-  // }
 
 
   findMe() {
@@ -167,9 +147,6 @@ export class CreateProyectComponent implements OnInit {
 
   addProject() {
 
-    // if (this.sub == false) {
-    //   this.projectDoc.subprojects = []
-    // }
 
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
@@ -179,11 +156,10 @@ export class CreateProyectComponent implements OnInit {
       this.projectDoc.description = "";
       this.projectDoc.start = new Date().toJSON();
       this.projectDoc.end = new Date().toJSON();
-      // this.projectDoc.subprojects = [];
-      this.sub = false;
+      // this.sub = false;
 
     }).catch((err) => {
-      this.notifier.notify('error', 'Opps! algo salío mal');
+      this.notifier.notify('error', 'Verifique su conexión a internet');
     });
   }
 
@@ -209,14 +185,14 @@ export class CreateProyectComponent implements OnInit {
       $('#modalEdit').modal('hide');
       this.notifier.notify('success', 'Actualizado correctamente!');
     }).catch(() => {
-      this.notifier.notify('error', 'Opps! algo salío mal');
+      this.notifier.notify('error', 'Verifique su conexión a internet');
     });
   }
 
 
-  objectValues(obj) {
-    return Object.values(obj);
-  }
+   objectValues(obj) {
+     return Object.values(obj);
+   }
 
   onDeleteProject(project) {
     if (confirm("Está seguro que desea eliminar " + project.title)) {
@@ -228,25 +204,25 @@ export class CreateProyectComponent implements OnInit {
     }
   }
 
-  search($event) {
-    let q = $event.target.value;
-    if (q != "") {
-      this.startAt.next(q);
-      this.endAt.next(q + "\uf8ff");
-    }
-    else {
-      this.clubs = this.allclubs;
-    }
-  }
+  // search($event) {
+  //   let q = $event.target.value;
+  //   if (q != "") {
+  //     this.startAt.next(q);
+  //     this.endAt.next(q + "\uf8ff");
+  //   }
+  //   else {
+  //     this.clubs = this.allclubs;
+  //   }
+  // }
 
 
-  firequery(start, end) {
-    return this.afs.collection('projects', ref => ref.orderBy('name').startAt(start).endAt(end)).valueChanges();
-  }
+  // firequery(start, end) {
+  //   return this.afs.collection('projects', ref => ref.orderBy('name').startAt(start).endAt(end)).valueChanges();
+  // }
 
-  getallclubs() {
-    return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
-  }
+  // getallclubs() {
+  //   return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
+  // }
 
   /*
   **
@@ -321,7 +297,7 @@ export class CreateProyectComponent implements OnInit {
                   let percentage = Math.round((100*cont)/total)+ '%';
                   this.percent = percentage;
 
-                  // console.log(Math.round((100*cont)/total)+ '%' )
+                  console.log(Math.round((100*cont)/total)+ '%' )
                 })
 
             })

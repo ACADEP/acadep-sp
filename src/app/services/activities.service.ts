@@ -18,7 +18,7 @@ export class ActivitiesService {
 
 
   constructor(private db: AngularFirestore) {
- 
+
   }
 
   getActivities() {
@@ -36,13 +36,13 @@ export class ActivitiesService {
 
   }
 
-  getActivitiesByProject(project_id:string) {
+  getActivitiesByProject(project_id: string) {
 
-    this.activitiesCollection = this.db.collection('activities', ref => 
-    ref
-    .where('deleted', '==', '')
-    .where('project_id', '==', project_id)
-    .orderBy('title'));
+    this.activitiesCollection = this.db.collection('activities', ref =>
+      ref
+        .where('deleted', '==', '')
+        .where('project_id', '==', project_id)
+        .orderBy('title'));
     this.activities = this.activitiesCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as activity;
@@ -66,17 +66,26 @@ export class ActivitiesService {
   addActivity(activity: activity) {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
-
+        active: true,
         title: activity.title,
         description: activity.description,
         subproject: activity.subproject,
-        project_id : activity.project_id,
+        project_id: activity.project_id,
         start: activity.start,
         end: activity.end,
-        insumos : activity.insumos,
-        users : activity.users,
-        deleted : '',
-      }).then((res: any) => resolve(res), err => reject(err));
+        insumos: activity.insumos,
+        administrators : activity.administrators,
+        deleted: '',
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+      }).then((res: any) => {
+        this.db.collection('activities').doc(res.id).update({
+          id: res.id
+        }).then(updated => {
+
+          resolve(res)
+        })
+      }, err => reject(err));
     })
 
   }
@@ -88,14 +97,14 @@ export class ActivitiesService {
       this.db.collection('activities').add({
         title: activity.name,
         description: '',
-        project_id : activity.project_id,
+        project_id: activity.project_id,
         start: activity.fecha_inicio.substr(0, 16),
         end: activity.fecha_final.substr(0, 16),
-        active : true,
-        created_at : new Date().toJSON(),
-        updated_at : new Date().toJSON(),
-        insumos : [],
-        deleted : '',
+        active: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+        insumos: [],
+        deleted: '',
       }).then((res: any) => {
         this.db.collection('activities').doc(res.id).update({
           id: res.id
@@ -110,21 +119,21 @@ export class ActivitiesService {
 
 
 
-  updateActivity(activity: activity)
-  {
-    return new Promise ((resolve, reject) => {
+  updateActivity(activity: activity) {
+    return new Promise((resolve, reject) => {
       this.db.collection('activities').doc(activity.id).update({
         title: activity.title,
         description: activity.description,
         // subproject: activity.subproject,
-        project_id : activity.project_id,
+        project_id: activity.project_id,
         start: activity.start,
         end: activity.end,
-        insumos : activity.insumos,
-        deleted : '',
-        active : true,
-        created_at : new Date().toJSON()
-      }).then((res:any) => resolve(res), err => reject(err));
+        administrators : activity.administrators,
+        // insumos: activity.insumos,
+        // deleted: '',
+        // active: true,
+        updated_at: new Date().toJSON()
+      }).then((res: any) => resolve(res), err => reject(err));
     })
   }
 

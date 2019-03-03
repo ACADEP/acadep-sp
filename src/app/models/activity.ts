@@ -6,7 +6,7 @@ export interface activity {
     description: string;
     insumos : tool[];
     project_id : string;
-    users: string[];
+    administrators: string[];
     start: string;
     end: string;
     deleted : any,

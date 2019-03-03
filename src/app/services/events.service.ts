@@ -64,7 +64,11 @@ export class EventsService {
         tools: event.tools,
         staff: event.staff,
         deleted: '',
-        status: 1,
+        color: '#333',
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+        before_complete: false,
+        during_complete: false,
         advanced: 0,
         total: event.total
       }).then((res: any) => {
@@ -72,29 +76,29 @@ export class EventsService {
 
         console.log(res)
 
-        this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
+        // this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
 
-          var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://fcm.googleapis.com/fcm/send",
-            "method": "POST",
-            "headers": {
-              "Content-Type": "application/json",
-              "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
-            },
-            "processData": false,
-            "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
-          }
+        //   var settings = {
+        //     "async": true,
+        //     "crossDomain": true,
+        //     "url": "https://fcm.googleapis.com/fcm/send",
+        //     "method": "POST",
+        //     "headers": {
+        //       "Content-Type": "application/json",
+        //       "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
+        //     },
+        //     "processData": false,
+        //     "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+        //   }
 
-          $.ajax(settings).done(function (response) {
-            console.log(response);
-          }).catch('token undefined');
+        //   $.ajax(settings).done(function (response) {
+        //     console.log(response);
+        //   }).catch('token undefined');
 
 
-        }).catch(err => {
-          console.log('user undefined')
-        })
+        // }).catch(err => {
+        //   console.log('user undefined')
+        // })
 
 
         this.db.collection('events').doc(res.id).update({
@@ -130,37 +134,37 @@ export class EventsService {
         end: event.end,
         tools: event.tools,
         staff: event.staff,
-        status: event.status
+        // color: event.status
       }).then((res: any) => {
 
         console.log(res)
 
-        this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
-
-          
-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://fcm.googleapis.com/fcm/send",
-              "method": "POST",
-              "headers": {
-                "Content-Type": "application/json",
-                "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
-              },
-              "processData": false,
-              "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            }).catch('token undefined');
-        
+        // this.db.collection('users').doc(event.user_id).ref.get().then((user: any) => {
 
 
-        }).catch(err => {
-          console.log('user undefined')
-        })
+
+        //     var settings = {
+        //       "async": true,
+        //       "crossDomain": true,
+        //       "url": "https://fcm.googleapis.com/fcm/send",
+        //       "method": "POST",
+        //       "headers": {
+        //         "Content-Type": "application/json",
+        //         "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M"
+        //       },
+        //       "processData": false,
+        //       "data": "{\n   \"notification\": {\n     \"title\": \"Se te ha asignado un nuevo evento\",\n        \"body\": \"" + event.title + "\",\n        \"sound\": \"default\",\n        \"click_action\": \"Login.class\",\n        \"icon\": \"fcm_push_icon\"\n    },\n    \"to\": " + '"' + user.data().token + '"' + ",\n    \"priority\": \"high\",\n    \"restricted_package_name\": \"\"\n}"
+        //     }
+
+        //     $.ajax(settings).done(function (response) {
+        //       console.log(response);
+        //     }).catch('token undefined');
+
+
+
+        // }).catch(err => {
+        //   console.log('user undefined')
+        // })
 
         resolve(res)
 
@@ -182,15 +186,15 @@ export class EventsService {
 
     // let start = moment().format('Y-MM-DDThh:mm');
     // let end = moment().add(1, 'minute').format('Y-MM-DDThh:mm');
-    let start = event.fecha_inicio.substring(0,16);
-    let end = event.fecha_final.substring(0,16);
+    let start = event.fecha_inicio.substring(0, 16);
+    let end = event.fecha_final.substring(0, 16);
     return new Promise((resolve, reject) => {
       this.db.collection('events').add({
         active: true,
-        during_complete : false,
-        before_complete : false,
+        during_complete: false,
+        before_complete: false,
         activity_id: event.activity_id,
-        activity_name : event.activity_name,
+        // activity_name : event.activity_name,
         user_id: 'undefined',
         type_activity: 'supervision',
         title: event.name,
@@ -203,8 +207,8 @@ export class EventsService {
         deleted: '',
         color: '#333',
         advanced: 0,
-        created_at : new Date().toJSON(),
-        updated_at : new Date().toJSON(),
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
         // subproject_name: event.sub_name,
         total: {
           unit: event.unit,

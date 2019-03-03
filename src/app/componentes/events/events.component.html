@@ -37,13 +37,13 @@
               <!-- <h2 class="text-center">hola</h2> -->
               <form action="">
     
-                <form style="margin-top:10px; margin-left:15px">
+                <form style="margin-top:10px; margin-left:15px;  margin-right:15px">
                   <div class="row">
     
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label id="labeltype">Proyecto<span class="required">*</span></label>
-                            <select id="type" class="form-control" name="type" required (change)="changeProject($event)">
+                            <label >Proyecto<span class="required">*</span></label>
+                            <select class="form-control" [(ngModel)]="projSelect" name="type1" required (change)="changeProject($event)">
                               <option value="">Seleccione un proyecto</option>
                               <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
                             </select>
@@ -62,8 +62,8 @@
                     
                     <div class="col-md-3">
                       <div class="form-group">
-                        <label id="labeltype">Actividad<span class="required">*</span></label>
-                        <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
+                        <label >Actividad<span class="required">*</span></label>
+                        <select  class="form-control" [(ngModel)]="eventDoc.activity_id" name="activity1" required (change)="loadingEvents($event)">
                           <option value="">Seleccione</option>
                         
                           <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
@@ -118,7 +118,7 @@
                 <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      <h4>{{(event.title.substring(0,25))}} </h4>
+                      <h4><span *ngIf="event.title.length > 23">{{(event.title.substring(0,23))}}...</span> <span *ngIf="event.title.length <= 23">{{event.title}}</span> </h4>
                     </mat-panel-title>
                     <mat-panel-description>
                       {{(100*event.advanced)/event.total.number}}%
@@ -369,15 +369,35 @@
                     </select>
                   </div>
                   <hr class="b-s-dashed">
-                  <div class="form-group">
-                    <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
-                    <select class="form-control" id="activity" [(ngModel)]="eventDoc.activity_id" name="activity"
-                      required >
-                      <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDoc.activity_id"
-                        [value]="activity.id">{{activity.title }}</option>
-                    </select>
+                  
+
+
+                  <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
+                  <div class="row">
+                    
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <p>Proyecto</p>
+                        <select class="form-control activity" name="typeER" [(ngModel)]="projSelect" required (change)="changeProject($event)">
+                          <option value="">Seleccione un proyecto</option>
+                          <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <p>Actividad</p>
+                        <select  class="form-control activity" [(ngModel)]="eventDoc.activity_id" name="activity" required (change)="loadingEvents($event)">
+                          <option value="">Seleccione</option>
+                        
+                          <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
+
+
 
                   <hr class="b-s-dashed">
 
@@ -523,7 +543,7 @@
           <div class="form-group">
             <label class="">Usuario que realizará evento <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="eventDocEdit.user_id" name="user">
-              <option value="">Seleccione una opción </option>
+              <option value="undefined">Seleccione una opción </option>
               <option *ngFor='let user of usersCollection' [selected]="user.id == eventDocEdit.user_id" [value]="user.id">{{user.name
                 }}</option>
             </select>
@@ -532,69 +552,31 @@
           <hr class="b-s-dashed">
 
       
-         
-          <!-- <label id="total">Actividad a la que pertenece <span class="required">*</span></label>
+          <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
           <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <p>Proyecto</p>
-                  <select class="form-control" name="activity">
-                      <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                        [value]="activity.id">{{activity.title }}</option>
-                    </select>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <p>Subproyecto</p>
-                  <select class="form-control" name="activity">
-                      <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                        [value]="activity.id">{{activity.title }}</option>
-                    </select>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <p>Actividad</p>
-                  <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
-                      <option value="">Seleccione una opción </option>
-                      <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                        [value]="activity.id">{{activity.title }}</option>
-                    </select>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- <label>Actividad : <span class="required">*</span></label>
-            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
-              <option value="">Seleccione una opción </option>
-              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.title }}</option>
-            </select> -->
-
-
-          <!-- <div class="form-group">
-            <label>Actividad a la que pertenece <span class="required">*</span></label>
-            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
-              <option value="">Seleccione una opción </option>
-              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.title }}</option>
-            </select>
-
-            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
-              <option value="">Seleccione una opción </option>
-              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.title }}</option>
-            </select>
             
-            <select class="form-control" [(ngModel)]="eventDocEdit.activity_id" name="activity">
-              <option value="">Seleccione una opción </option>
-              <option *ngFor='let activity of acts' [selected]="activity.id == eventDocEdit.activity_id"
-                [value]="activity.id">{{activity.title }}</option>
-            </select>
-          </div> -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <p>Proyecto</p>
+                <select class="form-control activity" name="typeER" [(ngModel)]="projSelect" required (change)="changeProject($event)">
+                  <option value="">Seleccione un proyecto</option>
+                  <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <p>Actividad</p>
+                <select  class="form-control activity" [(ngModel)]="eventDocEdit.activity_id" name="activity" required (change)="loadingEvents($event)">
+                  <option value="">Seleccione</option>
+                
+                  <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+         
           <hr class="b-s-dashed">
 
 

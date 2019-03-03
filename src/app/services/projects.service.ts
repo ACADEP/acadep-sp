@@ -69,21 +69,25 @@ export class ProjectsService {
       this.db.collection('projects').add({
 
         title: project.title,
+        active: true,
         description: project.description,
         ubication: project.ubication,
         start: project.start,
         end: project.end,
         administrators: project.administrators,
         deleted: '',
-        childrens: project.childrens,
-        type: project.type
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON()
 
       }).then((res: any) => {
-        resolve(res)
-      })
-        .catch(err => {
-          reject(err)
-        });
+
+        this.db.collection('projects').doc(res.id).update({
+          id: res.id
+        }).then(updated => {
+
+          resolve(res)
+        })
+      }, err => reject(err));
     })
   }
 
@@ -138,6 +142,7 @@ export class ProjectsService {
           resolve(res)
         })
       }, err => reject(err));
+
     })
 
   }
@@ -156,8 +161,7 @@ export class ProjectsService {
         start: project.start,
         end: project.end,
         administrators: project.administrators,
-        childrens: project.childrens,
-        type: project.type
+        updated_at: new Date().toJSON(),
       })
         .then((res: any) => {
           resolve(res)

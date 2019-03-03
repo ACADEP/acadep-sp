@@ -37,56 +37,14 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label id="labeltype">Proyecto<span class="required">*</span></label>
-                            <select id="type" class="form-control" name="type" required (change)="changeProject($event)" >
+                            <select id="type" class="form-control" [(ngModel)]="activityDoc.project_id" name="type" required (change)="changeProject($event)" >
                               <option value="">Seleccione un proyecto</option>
                         <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>                              
                             </select>
                           </div>
-                    </div>
-    
-                    <!-- <div class="col-md-4">
-                      <div class="form-group">
-                        <label id="labeltype">Subroyecto<span class="required">*</span></label>
-                        <select id="type" class="form-control" name="type" required (change)="changeActivity($event)">
-                          <option value="">Seleccione</option>
-                          <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
-                        </select>
-                      </div>
-                    </div> -->
-                    <!-- <div class="col-md-2">
-                      <div class="form-group">
-                        <label id="labeltype">Actividad<span class="required">*</span></label>
-                        <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
-                          <option value="">Seleccione</option>
-                        
-                          <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
-                        </select>
-                      </div>
-                    </div> -->
-                    <!-- <div class="col-md-2" style="text-align:right">
-                      <div class="radio">
-                        <label class="">
-                          <input class="hidden" type="radio" name="optionsRadios">
-                          <i class="fa fa-2x text-info"></i>
-                          <span class="vertical-super">Actividades</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-2" style="text-align:left">
-                      <div class="radio">
-                        <label class="">
-                          <input class="hidden" type="radio" checked name="optionsRadios">
-                          <i class="fa fa-2x text-info"></i>
-                          <span class="vertical-super">Eventos</span>
-                        </label>
-                      </div>
-                    </div> -->
-    
+                    </div>    
                   </div>
                 </form>
-    
-    
-    
               </form>
             </div>
           </div>
@@ -114,7 +72,7 @@
                       [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-plus" style="color:#566dd6" (click)="copyActivity(activity)"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editActivity(activity)"></i>
-                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteActivity(activity)"></i>
+                    <!-- <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteActivity(activity)"></i> -->
                     <h6 class="title">{{activity.title}} </h6>
 
                   </header>
@@ -123,7 +81,7 @@
                       <div class="col-md-6">
                         <b>Nombre:</b> {{activity.title}} <br>
                         <!-- <b>Tipo:</b> {{activity.type}} <br> -->
-                        <b>proyecto:</b> {{activity.project_id}} <br>
+                        <b>proyecto:</b>  <span *ngFor="let elem of projects" ><span *ngIf="elem.id == activity.project_id"> {{elem.title}}</span></span> <br>
                         <b>Descripción:</b> {{activity.description}} <br>
                         <b>Inicio:</b> {{activity.start | date:'short'}}<br>
                         <b>Final:</b> {{activity.end | date:'short'}}
@@ -214,21 +172,12 @@
 
                   <label id="labelproject" class="">Proyecto<span class="required">*</span></label>
                   <div class="form-group">
-                    <div class="col-sm-6">
                       <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id"
-                        (change)="changeProject($event)" required>
+                      (change)="changeProject($event)">
                         <option value="">Seleccione una proyecto</option>
                         <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
                       </select>
-                    </div>
-                    <div class="col-sm-6">
-                      <select class="form-control" id="project" name="subproject" [(ngModel)]="activityDoc.subproject">
-                        <option value="">Ningúno</option>
-                        <option *ngFor="let subproject of subprojects" value="{{subproject}}">{{subproject}}</option>
-                      </select>
-                    </div>
                   </div>
-                  <br>
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
@@ -290,13 +239,12 @@
                     <div class="col-sm-12">
                       <select id="admin" class="form-control size-full" name="admin[]" multiple
                         [(ngModel)]="activityDoc.users" required>
-                        <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
+                        <option *ngFor="let user of persons" value="{{user.id}}">{{user.name}}</option>
                       </select>
                     </div>
                   </div>
 
-                  <br>
-                  <br><br><br><br><br>
+  
                   <hr class="b-s-dashed">
 
 
@@ -304,7 +252,7 @@
                   <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
 
                   <!-- Inicio de INSUMOS -->
-                  <label for="atext3">Insumos</label>
+                  <!-- <label for="atext3">Insumos</label>
                   <form #formInsumo="ngForm" (submit)="pushInsumo(formInsumo)">
                     <div class="row">
                       <div class="col-md-4">
@@ -335,7 +283,7 @@
                       {{tool.quantity}}
                       {{tool.name}} <i style="color:red" class="fa fa-close pull-right fa-lg deleteEvent"
                         (click)="deleteInsumo(i)"></i>&nbsp;</li>
-                  </ul>
+                  </ul> -->
 
                   <!-- <div style="margin-top:135px">
                     <form (submit)="pushTool()">
@@ -355,15 +303,15 @@
 
 
 
-                  <ul class="list-group list-group-flush">
+                  <!-- <ul class="list-group list-group-flush">
 
                     <li class="list-group-item" *ngFor="let tool of activityDoc.insumos; let i = index">{{tool}} <i
                         style="color:red" class="fa fa-close pull-right fa-lg deleteEvent"
                         (click)="deleteTool(i)"></i>&nbsp;</li>
-                  </ul>
+                  </ul> -->
 
                   <div class="col-md-12 text-center" style="margin-top:30px">
-                    <button type="submit" class="btn btn-success">Crear</button>
+                    <button type="submit" class="btn btn-success">Crear Actividad</button>
 
                   </div>
 
@@ -433,15 +381,29 @@
 
           <hr class="b-s-dashed">
 
-     
+          <div class="row text-center">
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label id="labelstart" for="">Fecha de término <span class="required">*</span></label>
+              <div class="input-group col-centered">
+                <input type="datetime-local" id="dateend" name="dateend" [(ngModel)]="activityEdit.end" required>
+              </div>
+            </div>
+            
+          </div>
 
           <hr class="b-s-dashed">
 
           <div class="form-group">
             <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
             <div class="col-sm-12">
-              <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityEdit.users">
-                <option *ngFor="let user of persons" value="{{user.name}}">{{user.name}}</option>
+              <select class="form-control size-full" name="admin[]" multiple [(ngModel)]="activityEdit.administrators">
+                <option *ngFor="let user of persons" value="{{user.id}}">{{user.name}}</option>
               </select>
             </div>
           </div>

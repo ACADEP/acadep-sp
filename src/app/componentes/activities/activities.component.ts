@@ -45,7 +45,7 @@ export class ActivitiesComponent implements OnInit {
   public description: string;
   public insumos: tool[] = [];
   public project_id: string;
-  public users: string[];
+  public administrators: string[];
   public subproject: any;
   public start: string;
   public end: string;
@@ -53,7 +53,7 @@ export class ActivitiesComponent implements OnInit {
 
   persons;
 
-public subprojects: string[] = [];
+// public subprojects: string[] = [];
 
 
   // activitiesListArray: any[];
@@ -70,7 +70,7 @@ public subprojects: string[] = [];
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
     public projectsService: ProjectsService, public userservice : UsersService) {
     this.notifier = notifierService;
-
+    this.activityDoc.insumos = [];
     this.emptyForm()
   }
 
@@ -84,14 +84,12 @@ public subprojects: string[] = [];
     
 
     //proyectos
-    this.projectsService.getProjects().subscribe(items => {
-      this.projects = items;
-      this.activityDoc.insumos = [];
+    this.projectsService.getProjects().subscribe(projects => {
+      this.projects = projects;
     })
 
     this.userservice.getUsers().subscribe(items =>{
       this.persons = items;
-      // console.log(this.users)
     })
 
   }
@@ -108,7 +106,7 @@ public subprojects: string[] = [];
         this.emptyForm();
 
       }).catch((err) => {
-        this.notifier.notify('error', 'Algo salío mal!');
+        this.notifier.notify('error', 'Verifique su conexión a internet');
 
       });
     } else {
@@ -192,7 +190,7 @@ public subprojects: string[] = [];
       //   }
       // }
 
-      if (this.activityDoc.users.length < 1) {
+      if (this.activityDoc.administrators.length < 1) {
         $('#admin').addClass('error')
         $('#labeladmin').addClass('errortxt')
 
@@ -226,7 +224,7 @@ public subprojects: string[] = [];
 
   editActivity(activity) {
     this.activityEdit = activity;
-    // console.log(this.activityEdit.type);
+     console.log(this.activityEdit);
 
     $('#modalEdit').modal('show');
   }
@@ -239,7 +237,7 @@ public subprojects: string[] = [];
     this.insumos = activity.insumos;
     this.project_id = activity.project_id;
     this.subproject = activity.subproject;
-    this.users = activity.users;
+    this.administrators = activity.administrators;
     this.start = activity.start;
     this.end = activity.end;
 
@@ -248,7 +246,7 @@ public subprojects: string[] = [];
     this.activityDoc.description = this.description;
     this.activityDoc.insumos = this.insumos;
     this.activityDoc.project_id = this.project_id;
-    this.activityDoc.users = this.users;
+    this.activityDoc.administrators = this.administrators;
     this.activityDoc.start = this.start;
     this.activityDoc.end = this.end;
 
@@ -258,13 +256,15 @@ public subprojects: string[] = [];
 
 
   changeProject(project) {
-    if (project.target.value) {
 
+    if (project.target.value) {
+        // this.activityDoc.project_id = project.target.value;
       this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
         this.activities = activities;
       })
     }
     else {
+      // this.activityDoc.project_id = '';
       this.activities = []
     }
   }
@@ -308,7 +308,7 @@ public subprojects: string[] = [];
     this.activityDoc.description = '';
     this.activityDoc.insumos = [];
     this.activityDoc.project_id = '';
-    this.activityDoc.users = [];
+    this.activityDoc.administrators = [];
     this.activityDoc.start = new Date().toJSON();
     this.activityDoc.end = new Date().toJSON();
   }

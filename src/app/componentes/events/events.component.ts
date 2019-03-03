@@ -44,13 +44,12 @@ export class EventsComponent implements OnInit {
 
   private readonly notifier: NotifierService;
   types = [
-    'auditoria',
     'supervision'
   ];
 
   public subprojects: string[] = [];
   public acts: activity[] = [];
-
+  projSelect = ''
   eventsCollection: Event[];
   usersCollection: User[];
   activitiesCollection: activity[];
@@ -81,6 +80,7 @@ export class EventsComponent implements OnInit {
     this.eventDocEdit.start = new Date().toJSON();
     this.eventDocEdit.end = new Date().toJSON();
     this.emptyForm();
+  
   }
 
   ngOnInit() {
@@ -117,35 +117,22 @@ export class EventsComponent implements OnInit {
       })
     }
     else {
-      this.acts = []
+      this.eventsCollection = []
     }
   }
 
 
-  // changeActivity(event) {
-  //   if (event.target.value) {
-  //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
-  //       this.acts = activities;
-  //     })
-  //   }
-  //   else {
-  //     this.acts = []
-  //   }
-  // }
-
-  
 
   loadingEvents(event){
     console.log(event)
 
     if (event.target.value) {
-      this.eventDoc.activity_id = event.target.value
       
      this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
        this.eventsCollection = events;
      })
     }
-    else { this.acts = [] }
+    else { this.eventsCollection = [] }
   }
 
   scrollHandler(e) {
@@ -280,10 +267,10 @@ export class EventsComponent implements OnInit {
         $('#labeluser').removeClass('errortxt');
       }
       if (form.controls.activity.invalid) {
-        $('#activity').addClass('error');
+        $('.activity').addClass('error');
         $('#labelactivity').addClass('errortxt');
       } else {
-        $('#activity').removeClass('error');
+        $('.activity').removeClass('error');
         $('#labelactivity').removeClass('errortxt');
       }
     }
