@@ -20,7 +20,7 @@ export class ProjectsService {
 
 
   getProjects() {
-    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', ''));
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', '').orderBy('title', 'asc'));
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
@@ -70,6 +70,7 @@ export class ProjectsService {
 
         title: project.title,
         active: true,
+        advanced: 0,
         description: project.description,
         ubication: project.ubication,
         start: project.start,
@@ -129,6 +130,7 @@ export class ProjectsService {
         end: project.fecha_final.substring(0, 16),
         administrators: [],
         deleted: '',
+        advanced: 0,
         active: true,
         childrens: true,
         created_at: new Date().toJSON(),

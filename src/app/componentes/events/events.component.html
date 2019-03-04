@@ -121,7 +121,8 @@
                       <h4><span *ngIf="event.title.length > 23">{{(event.title.substring(0,23))}}...</span> <span *ngIf="event.title.length <= 23">{{event.title}}</span> </h4>
                     </mat-panel-title>
                     <mat-panel-description>
-                      {{(100*event.advanced)/event.total.number}}%
+                      <span></span>
+                      <!-- {{(100*event.advanced)/event.total.number}}% -->
                       <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
                       <!-- <mat-icon> create</mat-icon> -->
                     </mat-panel-description>

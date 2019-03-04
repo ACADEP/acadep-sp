@@ -65,6 +65,7 @@ export class CreateProyectComponent implements OnInit {
   // public sub: boolean = false;
   public subproject: string;
 
+  loading: boolean = true;
 
   percent = '0%';
   // searchterm: string;
@@ -106,6 +107,8 @@ export class CreateProyectComponent implements OnInit {
 
     this.projectsService.getProjects().subscribe((projects) => {
       this.projects = projects;
+      this.loading = false;
+
       // this.clubs = clubs;
     })
 
@@ -285,7 +288,6 @@ export class CreateProyectComponent implements OnInit {
 
         project.activities.map( (activity : actExcel) =>{
         
-          // console.log(activity)
           activity.project_id = proj.id;
           this.activitiesService.ImportActivity(activity).then((act:any) => {
 

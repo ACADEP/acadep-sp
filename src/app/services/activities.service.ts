@@ -67,6 +67,7 @@ export class ActivitiesService {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').add({
         active: true,
+        advanced: 0,
         title: activity.title,
         description: activity.description,
         subproject: activity.subproject,
@@ -101,6 +102,7 @@ export class ActivitiesService {
         start: activity.fecha_inicio.substr(0, 16),
         end: activity.fecha_final.substr(0, 16),
         active: true,
+        advanced: 0,
         created_at: new Date().toJSON(),
         updated_at: new Date().toJSON(),
         insumos: [],

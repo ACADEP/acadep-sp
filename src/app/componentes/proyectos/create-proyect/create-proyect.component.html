@@ -45,10 +45,10 @@
             <div class="box">
               <header>
                 <h3>Lista de proyectos</h3>
-                <div class="box-tools">
+                <!-- <div class="box-tools">
                   <i style="color:rgb(129, 120, 120)" id="btncolapse" class="fa fa-plus-circle fa-2x deleteEvent"
                     (click)="toogleProjects()"></i>
-                </div>
+                </div> -->
               </header>
               <div class="list-group filter-wrap">
                 <!-- <div class="row">
@@ -69,36 +69,40 @@
                     </form>
                   </div>
                 </div> -->
+                <mat-spinner *ngIf="loading"></mat-spinner>
+
+                <div style="height:800px; overflow-y: scroll;">
                 <article class="list-group-item" *ngFor="let project of projects; let i = index">
-                  <header class="filter-header">
-                    <i class="icon-action fa fa-chevron-down" data-toggle="collapse"
-                      [attr.data-target]="'#collapse'+ i"></i>
-                    <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
-                    <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
-                    <h6 class="title">{{project.title | titlecase}}</h6>
-                  </header>
-                  <div class="filter-content collapse" id="{{'collapse' + i}}">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <b>Descripción:</b> {{project.description}} <br>
-                        <b>Inicio:</b> {{project.start | date:"medium"}}<br>
-                        <b>Final:</b> {{project.end | date:"medium"}}<br>
-                      </div>
-                      <div class="col-md-6">
-                        <!-- <b>Administradores:</b><br>
-                        <ul>
-                          <li *ngFor="let admin of objectValues(project.administrators)">{{admin}}</li>
-                        </ul> -->
-                        <b>Ubicación:</b> <br>
-                        <agm-map [zoom]="14" [latitude]="project.ubication.lat" [longitude]="project.ubication.lng">
-                          <agm-marker [latitude]="project.ubication.lat" [longitude]="project.ubication.lng"
-                            [markerDraggable]="false"></agm-marker>
-                        </agm-map>
-                        <br>
+                    <header class="filter-header">
+                      <i class="icon-action fa fa-chevron-down" data-toggle="collapse"
+                        [attr.data-target]="'#collapse'+ i"></i>
+                      <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
+                      <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
+                      <h6 class="title">{{project.title | titlecase}}</h6>
+                    </header>
+                    <div class="filter-content collapse" id="{{'collapse' + i}}">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <b>Descripción:</b> {{project.description}} <br>
+                          <b>Inicio:</b> {{project.start | date:"medium"}}<br>
+                          <b>Final:</b> {{project.end | date:"medium"}}<br>
+                        </div>
+                        <div class="col-md-6">
+                          <!-- <b>Administradores:</b><br>
+                          <ul>
+                            <li *ngFor="let admin of objectValues(project.administrators)">{{admin}}</li>
+                          </ul> -->
+                          <b>Ubicación:</b> <br>
+                          <agm-map [zoom]="14" [latitude]="project.ubication.lat" [longitude]="project.ubication.lng">
+                            <agm-marker [latitude]="project.ubication.lat" [longitude]="project.ubication.lng"
+                              [markerDraggable]="false"></agm-marker>
+                          </agm-map>
+                          <br>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </article>
+                  </article>
+                </div>
                 <div *ngIf="projects?.length < 1">
                   <p class="text-center">Ningún proyecto registrado</p>
                 </div>

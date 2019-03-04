@@ -238,7 +238,7 @@
                     </label>
                     <div class="col-sm-12">
                       <select id="admin" class="form-control size-full" name="admin[]" multiple
-                        [(ngModel)]="activityDoc.users" required>
+                        [(ngModel)]="activityDoc.administrators" required>
                         <option *ngFor="let user of persons" value="{{user.id}}">{{user.name}}</option>
                       </select>
                     </div>

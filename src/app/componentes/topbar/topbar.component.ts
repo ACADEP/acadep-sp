@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../servicios/auth.service';
 import { EventsService } from "../../services/events.service";
 import { EvidenceService } from "../../services/evidence.service";
+import { project } from "../../models/project";
+import { ProjectsService } from "../../services/projects.service";
+
 declare var $: any;
 @Component({
   selector: 'app-topbar',
@@ -15,12 +18,15 @@ export class TopbarComponent implements OnInit {
     email : ''
   }
 
+  projects: project[];
+
   public notifications = [
     
   ]
   public numNotifications : number;
 
-  constructor(public authService: AuthService, public eventsService:EventsService,
+  constructor(public authService: AuthService, public eventsService:EventsService, 
+    public projectsService : ProjectsService,
     public evidenceService : EvidenceService) { }
 
   ngOnInit() {
@@ -35,11 +41,12 @@ export class TopbarComponent implements OnInit {
     //  sound.src = 'assets/sounds/notification.mp3'
     //  sound.play()
    })
-    // this.eventsService.getEventsUndefined2().subscribe( events => {
-    //   this.notifications = events;
-    //   this.numNotifications = events.length;
-    // })
-  }
+   
+  // this.projectsService.getProjects().subscribe(projects => {
+  //   this.projects = projects;
+  //   console.log(this.projects)
+  // })
+   }
 
   onClickLogout(){
     this.authService.logout()

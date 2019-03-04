@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
-import { map } from 'rxjs/operators';
+import { ActivitiesService } from '../../services/activities.service';
 import { EvidenceService } from "../../services/evidence.service";
 import { EventsService } from "../../services/events.service";
 import { UsersService } from "../../services/users.service";
 import { MatAccordion } from '@angular/material';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { ProjectsService } from '../../services/projects.service';
 
 import * as jsPDF from 'jspdf'
-import { element } from '@angular/core/src/render3';
+import { TopbarComponent } from "../topbar/topbar.component";
 import { configPdf } from '../configuration/configuration.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 declare var $: any;
@@ -34,14 +34,18 @@ interface image {
 })
 export class EvidenceComponent implements OnInit {
 
-  // @ViewChild('content') content: ElementRef;
-  // header_1 = 'https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pdf_configuration%2F1sf2wdkxh5m?alt=media&token=03f95f47-0c8b-4bd7-967d-4c9b970b9d2b'
-  // header_2 = 'https://firebasestorage.googleapis.com/v0/b/seguimiento-de-proyectos-4fa3c.appspot.com/o/pdf_configuration%2F1sf2wdkxh5m?alt=media&token=03f95f47-0c8b-4bd7-967d-4c9b970b9d2b'
+  projects : any;
 
-  // text_header = 'header lorem ipsum dolor at sit';
-  // text_footer = 'footer lorem ipsum dolor at sit';
+  lockEvidence:boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
 
+//selected
+proySelect =""
 
+actSelect =""
+ 
+eventSelect =""
+
+  
   idEvent = "";
   idUser = "";
   loading: boolean = true;
@@ -53,23 +57,40 @@ export class EvidenceComponent implements OnInit {
   items: GalleryItem[];
   evidenceCollection: any[];
   eventsCollection: any[];
+  activitiesCollection: any[];
   usersCollection: any[];
 
   @ViewChild('myaccordion') myPanels: MatAccordion;
   configPdf = {} as configPdf;
 
-  constructor(public gallery: Gallery, public evidenceService: EvidenceService,
-    public eventsService: EventsService, public usersService: UsersService,
-    public db: AngularFirestore) {
+  constructor(
+    public gallery: Gallery, 
+    public projectService : ProjectsService,
+    public evidenceService: EvidenceService,
+    public eventsService: EventsService, 
+    public usersService: UsersService,
+    public activitiesService: ActivitiesService,
+    public db: AngularFirestore,
+    public topbar : TopbarComponent) {
+      
     this.image.ubication = {
       lat: 0,
       lng: 0
     }
+
+    // this.projects = th|is.topbar.projects;
   }
 
 
 
   ngOnInit() {
+
+
+    this.projectService.getProjects().subscribe( projects => { 
+      this.projects = projects
+      this.loading = false;
+    })
+
 
     this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
       this.configPdf = doc.data() as configPdf;
@@ -77,13 +98,9 @@ export class EvidenceComponent implements OnInit {
       console.log('error inesperado: ' + err)
     })
 
-    this.evidenceService.getEvidence().subscribe(evidence => {
-      this.evidenceCollection = evidence;
-      this.loading = false;
-    })
-
-    // this.eventsService.getEvents().subscribe(events => {
-    //   this.eventsCollection = events
+    // this.evidenceService.getEvidence().subscribe(evidence => {
+    //   this.evidenceCollection = evidence;
+    //   this.loading = false;
     // })
 
     this.usersService.getUsers().subscribe(users => {
@@ -92,6 +109,35 @@ export class EvidenceComponent implements OnInit {
 
 
   }
+
+  selectProject(project){
+    this.activitiesService.getActivitiesByProject(project.id).subscribe( activities => {
+      this.proySelect = project.title;
+      this.activitiesCollection = activities;
+      // console.log(activities)
+    })
+  }
+
+  selectActivity(activity){
+    this.actSelect = activity.title;
+    this.eventsService.getEventsByActivity(activity.id).subscribe( events => {
+      this.eventsCollection = events;
+      // console.log(events)
+    })
+  }
+
+  selectEvent(event){
+    this.lockEvidence = true;
+    this.evidenceService.getEvidenceByEvent(event.id).subscribe( evidence => {
+      this.eventSelect = event.title;
+   
+        this.evidenceCollection = evidence;
+
+     
+
+    })
+  }
+
 
   getEtapa(etapa) {
 
@@ -112,6 +158,7 @@ export class EvidenceComponent implements OnInit {
     }
   }
 
+ 
 
 
   readEvidence(event, index: number){
@@ -365,6 +412,11 @@ export class EvidenceComponent implements OnInit {
     xhr.responseType = 'blob';
     xhr.send();
   }
+
+  // backAct(){
+  //   this.activitiesCollection = null
+  //    this.actSelect = ''
+  // }
 
 
 }
