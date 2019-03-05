@@ -36,8 +36,10 @@ export class EvidenceComponent implements OnInit {
 
   projects : any;
 
-  lockEvidence:boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
-
+  lockProjects:boolean = true
+  lockEvents:boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
+  lockActivities:boolean = false;
+  lockEvidence:boolean = false
 //selected
 proySelect =""
 
@@ -111,29 +113,38 @@ eventSelect =""
   }
 
   selectProject(project){
+    // this.loading = true;
+    this.lockProjects = false;
+    this.lockActivities = true;
+    this.proySelect = project.title;
     this.activitiesService.getActivitiesByProject(project.id).subscribe( activities => {
-      this.proySelect = project.title;
       this.activitiesCollection = activities;
+      // this.loading = false;
       // console.log(activities)
     })
   }
 
   selectActivity(activity){
+    // this.loading = true;
+    this.lockEvents = true;
+    this.lockActivities = false;
     this.actSelect = activity.title;
     this.eventsService.getEventsByActivity(activity.id).subscribe( events => {
       this.eventsCollection = events;
+      // this.loading = false;
+
       // console.log(events)
     })
   }
 
   selectEvent(event){
+    // this.loading = true;
     this.lockEvidence = true;
+    this.lockEvents = false;    
+    this.eventSelect = event.title;
     this.evidenceService.getEvidenceByEvent(event.id).subscribe( evidence => {
-      this.eventSelect = event.title;
-   
         this.evidenceCollection = evidence;
-
-     
+        // this.loading = false;
 
     })
   }

@@ -32,12 +32,12 @@ ntent bg-clouds">
 
       <div class="col-md-12">
         <div class="box">
-          <h3 class="text-center" *ngIf="!activitiesCollection">Todos los proyectos</h3>
-          <h3 class="text-center" *ngIf="activitiesCollection && !eventsCollection">Actividades <span
+          <h3 class="text-center" *ngIf="lockProjects">Todos los SubProyectos</h3>
+          <h3 class="text-center" *ngIf="lockActivities && proySelect != ''">Actividades <span
               style="color:#b5180d">{{proySelect}}</span></h3>
-          <h3 class="text-center" *ngIf="eventsCollection && !lockEvidence">Eventos <span
+          <h3 class="text-center" *ngIf="lockEvents && actSelect != ''">Eventos <span
               style="color:#b5180d">{{actSelect}}</span></h3>
-          <h3 class="text-center" *ngIf="evidenceCollection && lockEvidence">Evidencia <span
+          <h3 class="text-center" *ngIf="lockEvidence">Evidencia <span
               style="color:#b5180d">{{eventSelect}}</span></h3>
           <!-- <form action="">
 
@@ -77,16 +77,18 @@ ntent bg-clouds">
           <div class="col-xs-12">
             <div class="box">
               <header>
-                <mat-icon class="pointer" *ngIf="activitiesCollection && !eventsCollection"
-                  (click)="activitiesCollection = null;">keyboard_backspace</mat-icon>
+                <mat-icon class="pointer" *ngIf="lockActivities"
+                  (click)="lockActivities = false; lockProjects = true; activitiesCollection = []; proySelect = '' ">keyboard_backspace</mat-icon>
 
-                <mat-icon class="pointer" *ngIf="activitiesCollection && eventsCollection && !lockEvidence"
-                  (click)="eventsCollection = null; actSelect = ''">keyboard_backspace</mat-icon>
+
+                <mat-icon class="pointer" *ngIf="lockEvents"
+                  (click)="eventsCollection = []; actSelect = ''; lockEvents=false; lockActivities=true">keyboard_backspace</mat-icon>
+
 
                 <mat-icon class="pointer" *ngIf="lockEvidence"
-                  (click)="evidenceCollection = null; eventSelect = '' ; lockEvidence = false">keyboard_backspace</mat-icon>
+                  (click)="evidenceCollection = []; eventSelect = '' ; lockEvidence = false; lockEvents=true">keyboard_backspace</mat-icon>
 
-                <nav aria-label="breadcrumb" *ngIf="activitiesCollection">
+                <nav aria-label="breadcrumb" *ngIf="proySelect != ''">
                   <ol class="breadcrumb" style="margin-bottom: 0px;">
                     <li class="breadcrumb-item" *ngIf="proySelect != ''"><a style="color:#333">{{proySelect}}</a></li>
                     <li class="breadcrumb-item" *ngIf="actSelect != ''"><a style="color:#333">{{actSelect}}</a></li>
@@ -115,7 +117,7 @@ ntent bg-clouds">
                 </div>
               <div style="height:800px; overflow-y: scroll;">
 
-                <mat-list *ngIf="!activitiesCollection && !lockEvidence">
+                <mat-list *ngIf="lockProjects">
                   <mat-list-item *ngFor="let project of projects; index as i" (click)="selectProject(project)">
                     <mat-icon mat-list-icon>category</mat-icon>
                     <h4 mat-line>{{project.title}}</h4>
@@ -126,7 +128,7 @@ ntent bg-clouds">
                   </mat-list-item>
                 </mat-list>
 
-                <mat-list *ngIf="activitiesCollection && !eventsCollection && !lockEvidence">
+                <mat-list *ngIf="lockActivities">
                   <mat-list-item *ngFor="let activity of activitiesCollection; index as i"
                     (click)="selectActivity(activity)">
                     <mat-icon mat-list-icon>folder</mat-icon>
@@ -139,7 +141,7 @@ ntent bg-clouds">
                   </mat-list-item>
                 </mat-list>
 
-                <mat-list *ngIf="eventsCollection && !lockEvidence">
+                <mat-list *ngIf="lockEvents">
                   <mat-list-item *ngFor="let event of eventsCollection; index as i" (click)="selectEvent(event)">
                     <mat-icon mat-list-icon>insert_drive_file</mat-icon>
                     <h4 mat-line>{{event.title}}</h4>
@@ -153,7 +155,7 @@ ntent bg-clouds">
 
 
 
-                <mat-accordion *ngIf="evidenceCollection && lockEvidence" class="example-headers-align" #myaccordion="matAccordion"
+                <mat-accordion *ngIf="lockEvidence" class="example-headers-align" #myaccordion="matAccordion"
                   multi="true">
 
                   <mat-expansion-panel [ngClass]="{'read': !evidence.read}" [expanded]="indexExpanded == i"
@@ -215,7 +217,7 @@ ntent bg-clouds">
                     </div>
                   </mat-expansion-panel>
 
-                  <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection.length">Aún no se ha subido
+                  <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection.length && loading == false">Aún no se ha subido
                     evidencia a este evento <mat-icon>mood_bad</mat-icon>
                   </h4>
 
