@@ -24,7 +24,20 @@ export class ProjectsService {
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
-        data.id = a.payload.doc.id;
+        // data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+    return this.projects;
+  }
+
+
+  getProjectsFilter(text : string){
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', '').orderBy('title', 'asc').startAt(text).endAt(text+"\uf8ff"));
+    this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as project;
+        // data.id = a.payload.doc.id;
         return data;
       });
     }));

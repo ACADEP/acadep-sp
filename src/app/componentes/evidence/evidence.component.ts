@@ -150,6 +150,15 @@ eventSelect =""
   }
 
 
+  filterProjects(e){
+
+    this.projectService.getProjectsFilter(e.target.value).subscribe( projs => {
+      this.projects = projs;
+    })
+
+    // console.log(``)
+  }
+
   getEtapa(etapa) {
 
     switch (etapa) {

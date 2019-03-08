@@ -106,10 +106,13 @@ ntent bg-clouds">
 
 
 
-              <mat-spinner *ngIf="loading"></mat-spinner>
-
+              
               <div class="box">
-
+                <mat-form-field style="margin-left:20px; margin-right: 20px" [ngStyle]="{'display':lockProjects ? 'block' : 'none' }">
+                  <input matInput placeholder="Buscar subproyectos" (keyup)="filterProjects($event)">
+                </mat-form-field>
+                
+                <mat-spinner *ngIf="loading"></mat-spinner>
                 <div class="box-tools" *ngIf="lockEvidence" style="margin-right:10px">
                   <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x"
                     (click)="openAll()"></i>
