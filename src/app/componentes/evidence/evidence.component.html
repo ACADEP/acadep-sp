@@ -125,7 +125,7 @@ ntent bg-clouds">
                 <mat-list>
                   <mat-list-item *ngFor="let project of projects; index as i" (click)="selectProject(project)">
                     <mat-icon mat-list-icon>category</mat-icon>
-                    <h4 mat-line>{{project.title}}</h4>
+                    <h4 mat-line>{{project.title | titlecase}}</h4>
                     <mat-icon>keyboard_arrow_right</mat-icon>
                     <p mat-line>{{project.advanced}}% completado</p>
 
