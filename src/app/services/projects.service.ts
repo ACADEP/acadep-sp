@@ -3,6 +3,7 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { project } from "../models/project";
+import { resolve, isRejected } from 'q';
 
 
 @Injectable({
@@ -32,8 +33,8 @@ export class ProjectsService {
   }
 
 
-  getProjectsFilter(text : string){
-    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', '').orderBy('title', 'asc').startAt(text).endAt(text+"\uf8ff"));
+  getProjectsFilter(text: string) {
+    this.projectsCollection = this.db.collection('projects', ref => ref.where('deleted', '==', '').orderBy('title', 'asc').startAt(text).endAt(text + "\uf8ff"));
     this.projects = this.projectsCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data() as project;
@@ -111,16 +112,46 @@ export class ProjectsService {
    * 
    */
   deleteProject(id: string) {
-    return new Promise((resolve, reject) => {
-      this.db.collection('projects').doc(id).update({
-        deleted: new Date(),
-      }).then((res: any) => {
-        resolve(res)
+
+    return new Promise((resolve, rejected)=>{
+
+      this.db.doc(`projects/${id}`).delete().then(()=>{
+        resolve()
+      }).catch(()=>{
+        rejected()
       })
-        .catch(err => {
-          reject(err)
-        });
     })
+
+
+    // return new Promise((resolve, reject) => {
+    //   this.db.collection('projects').doc(id).update({
+    //     deleted: new Date().toJSON(),
+    //     active : false
+    //   }).then((res: any) => {
+    //     this.db.collection('activities').ref.where('project_id', '==', id).get().then(acts => {
+    //       acts.docs.map(activity => {
+    //         this.db.doc(`activities/${activity.data().id}`).update({
+    //           deleted: new Date().toJSON(),
+    //           active: false
+    //         }).then(() => {
+    //           this.db.collection('events').ref.where('activity_id', '==', activity.data().id).get().then(events => {
+    //             events.docs.map(event => {
+    //               this.db.doc(`events/${event.data().id}`).update({
+    //                 deleted: new Date().toJSON(),
+    //                 active: false
+    //               })
+    //             })
+    //           })
+    //         })
+    //       })
+    //     })
+    //     resolve(res)
+    //   })
+    //     .catch(err => {
+    //       reject(err)
+    //     });
+    // })
+
   }
 
 

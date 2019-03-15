@@ -36,6 +36,15 @@ export class ActivitiesService {
 
   }
 
+  getActivityById(id:string) {
+
+    return new Promise((resolve, reject) => {
+      this.db.collection('activities').doc(id).ref.get()
+        .then(res => resolve(res.data()),
+          err => reject(err));
+    });
+  }
+
   getActivitiesByProject(project_id: string) {
 
     this.activitiesCollection = this.db.collection('activities', ref =>

@@ -15,6 +15,7 @@ import { ConfigurationComponent } from "./componentes/configuration/configuratio
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'evidence'},
   { path: 'evidence', component: EvidenceComponent  },
+  { path: 'evidence/:id', component: EvidenceComponent  },
   { path: 'calendar', component:  CalendarEventsComponent },
   { path: 'configuration', component:  ConfigurationComponent },
   { path: 'map', component:  GmapComponent },

@@ -139,7 +139,7 @@
               <div class="media">
                 <div class="media-left">
                   <a class="profile-pic" href="#">
-                    <img class="media-object" src="../assets/img/success.png" alt="...">
+                    <img class="media-object" src="/assets/img/success.png" alt="...">
                   </a>
                 </div>
                 <div class="media-body">
@@ -156,12 +156,12 @@
           </ng-template>
 
           <span *ngIf="notifications.length; else zeroNotifications">
-            <a routerLink="/evidence" *ngFor="let notification of notifications">
+            <a [routerLink]="['/evidence',notification.ref_event.id]" *ngFor="let notification of notifications">
                 <li class="b-b" >
                     <div class="media">
                       <div class="media-left">
                         <span class="profile-pic">
-                          <img class="media-object" src="../assets/img/notification.png" alt="...">
+                          <img class="media-object" src="/assets/img/notification.png" alt="...">
                         </span>
                       </div>
                       <div class="media-body">

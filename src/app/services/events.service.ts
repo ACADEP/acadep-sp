@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Event } from '../models/event';
@@ -17,6 +17,7 @@ declare var $: any;
 export class EventsService {
   eventsCollection: AngularFirestoreCollection<Event>;
   events: Observable<Event[]>;
+  eventDocument : AngularFirestoreDocument; 
   eventDoc: Event;
 
   public nameEvent: string;
@@ -180,6 +181,11 @@ export class EventsService {
         .then(res => resolve(res.data()),
           err => reject(err));
     });
+  }
+
+  getEventObservableId(id:string){
+    this.eventDocument = this.db.collection('events').doc(id);
+    return this.eventDocument.snapshotChanges();
   }
 
   ImportEvent(event) {

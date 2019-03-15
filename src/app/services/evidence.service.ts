@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ export class EvidenceService {
 
   evidenceCollection: AngularFirestoreCollection<any>;
   evidence: Observable<any[]>;
-  evidenceDoc: any;
+  evidenceDoc: AngularFirestoreDocument;
   constructor(public db: AngularFirestore) { }
 
   getEvidence() {
@@ -28,7 +28,7 @@ export class EvidenceService {
 
 
   getNotifications() {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('read', '==', false));
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('read', '==', false).limit(5));
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -105,5 +105,10 @@ export class EvidenceService {
     // console.log(this.evidence)
     return this.evidence;
   }
+
+  // getEvidenceById(id:string){
+  //   this.evidenceDoc = this.db.collection('events').doc(id);
+  //   return this.evidenceDoc.snapshotChanges();
+  // }
 
 }

@@ -199,33 +199,13 @@ export class CreateProyectComponent implements OnInit {
 
   onDeleteProject(project) {
     if (confirm("Está seguro que desea eliminar " + project.title)) {
-      this.projectsService.deleteProject(project.id).then((result) => {
+      this.projectsService.deleteProject(project.id).then(() => {
         this.notifier.notify('success', 'Proyecto eliminado!');
-      }).catch((err) => {
+      }).catch(() => {
         this.notifier.notify('error', 'Opps! algo salío mal');
       });
     }
   }
-
-  // search($event) {
-  //   let q = $event.target.value;
-  //   if (q != "") {
-  //     this.startAt.next(q);
-  //     this.endAt.next(q + "\uf8ff");
-  //   }
-  //   else {
-  //     this.clubs = this.allclubs;
-  //   }
-  // }
-
-
-  // firequery(start, end) {
-  //   return this.afs.collection('projects', ref => ref.orderBy('name').startAt(start).endAt(end)).valueChanges();
-  // }
-
-  // getallclubs() {
-  //   return this.afs.collection('projects', ref => ref.orderBy('name')).valueChanges();
-  // }
 
   /*
   **

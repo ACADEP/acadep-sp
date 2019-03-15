@@ -166,8 +166,10 @@ ntent bg-clouds">
 
 
 
+<div style="height:800px; overflow-y: scroll;" *ngIf="lockEvidence">
 
-              <mat-accordion *ngIf="lockEvidence" class="example-headers-align" #myaccordion="matAccordion"
+
+              <mat-accordion   class="example-headers-align" #myaccordion="matAccordion"
                 multi="true">
 
                 <mat-expansion-panel [ngClass]="{'read': !evidence.read}" [expanded]="indexExpanded == i"
@@ -205,7 +207,7 @@ ntent bg-clouds">
                           <div class="row">
                             <div class="col-md-2 col-sm-4 col-xs-6"
                               *ngFor="let item of evidence.multimedia; index as a">
-                              <img class="galery" id="img{{i}}{{a}}" src="{{item.src}}" style="border: #ccc 1px solid"
+                              <img class="galery" id="img{{i}}{{a}}" src="{{item?.src}}" style="border: #ccc 1px solid"
                                 (click)="showImage(evidence, a)">
                             </div>
                           </div>
@@ -229,14 +231,14 @@ ntent bg-clouds">
                   </div>
                 </mat-expansion-panel>
 
-                <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection.length && loading == false">Aún
+                <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection?.length && loading == false">Aún
                   no se ha subido
                   evidencia a este evento <mat-icon>mood_bad</mat-icon>
                 </h4>
 
               </mat-accordion>
 
-
+            </div>
 
 
             </div>
@@ -279,7 +281,7 @@ ntent bg-clouds">
         </button>
       </div>
       <div class="modal-body">
-        <img class="center" [src]="image.src" alt="">
+        <img class="center" *ngIf="image.src" [src]="image.src" alt="">
         <hr>
         Ubicación: <br>
 

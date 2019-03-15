@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
+// import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
 import { ActivitiesService } from '../../services/activities.service';
 import { EvidenceService } from "../../services/evidence.service";
 import { EventsService } from "../../services/events.service";
 import { UsersService } from "../../services/users.service";
 import { MatAccordion } from '@angular/material';
 import { ProjectsService } from '../../services/projects.service';
-
+import { ActivatedRoute } from "@angular/router";
 import * as jsPDF from 'jspdf'
 import { TopbarComponent } from "../topbar/topbar.component";
 import { configPdf } from '../configuration/configuration.component';
@@ -34,20 +34,17 @@ interface image {
 })
 export class EvidenceComponent implements OnInit {
 
-  projects : any;
+  projects: any;
 
-  lockProjects:boolean = true
-  lockEvents:boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
-  lockActivities:boolean = false;
-  lockEvidence:boolean = false
-//selected
-proySelect =""
+  lockProjects: boolean = false
+  lockEvents: boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
+  lockActivities: boolean = false;
+  lockEvidence: boolean = false
+  //selected
+  proySelect = ""
+  actSelect = ""
+  eventSelect = ""
 
-actSelect =""
- 
-eventSelect =""
-
-  
   idEvent = "";
   idUser = "";
   loading: boolean = true;
@@ -56,25 +53,61 @@ eventSelect =""
 
   @ViewChild('content') content: ElementRef;
   public image = {} as image;
-  items: GalleryItem[];
+  // items: GalleryItem[];
   evidenceCollection: any[];
   eventsCollection: any[];
   activitiesCollection: any[];
   usersCollection: any[];
-
   @ViewChild('myaccordion') myPanels: MatAccordion;
   configPdf = {} as configPdf;
 
   constructor(
-    public gallery: Gallery, 
-    public projectService : ProjectsService,
+
+    // public gallery: Gallery, 
+    private _route: ActivatedRoute,
+    public projectService: ProjectsService,
     public evidenceService: EvidenceService,
-    public eventsService: EventsService, 
+    public eventsService: EventsService,
     public usersService: UsersService,
     public activitiesService: ActivitiesService,
     public db: AngularFirestore,
-    public topbar : TopbarComponent) {
-      
+    public topbar: TopbarComponent) {
+
+    this._route.paramMap.subscribe((route: any) => {
+      if (route.params.id) {
+        console.log(route.params.id)
+        // this.projects = [];
+        this.lockEvidence = false;
+        this.loading = true;
+
+        this.projectService.getProjects().subscribe(projects => {
+          this.projects = projects
+        })
+        this.eventsService.getEventById(route.params.id).then((event:any) =>{
+
+          this.activitiesService.getActivity(event.activity_id).then((activity:any)=>{
+
+            this.projectService.getProject(activity.project_id).then((project:any)=>{
+              this.selectProject(project);
+              this.selectActivity(activity);
+              this.selectEvent(event);
+            })
+
+          })
+
+        }).catch((err)=>{
+          console.log(err)
+        })
+       
+      }else{
+        this.projectService.getProjects().subscribe(projects => {
+          this.projects = projects
+          this.loading = false;
+          this.lockProjects = true;
+        })
+      } 
+    })
+
     this.image.ubication = {
       lat: 0,
       lng: 0
@@ -87,11 +120,7 @@ eventSelect =""
 
   ngOnInit() {
 
-
-    this.projectService.getProjects().subscribe( projects => { 
-      this.projects = projects
-      this.loading = false;
-    })
+   
 
 
     this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
@@ -112,24 +141,24 @@ eventSelect =""
 
   }
 
-  selectProject(project){
+  selectProject(project) {
     // this.loading = true;
     this.lockProjects = false;
     this.lockActivities = true;
     this.proySelect = project.title;
-    this.activitiesService.getActivitiesByProject(project.id).subscribe( activities => {
+    this.activitiesService.getActivitiesByProject(project.id).subscribe(activities => {
       this.activitiesCollection = activities;
       // this.loading = false;
       // console.log(activities)
     })
   }
 
-  selectActivity(activity){
+  selectActivity(activity) {
     // this.loading = true;
     this.lockEvents = true;
     this.lockActivities = false;
     this.actSelect = activity.title;
-    this.eventsService.getEventsByActivity(activity.id).subscribe( events => {
+    this.eventsService.getEventsByActivity(activity.id).subscribe(events => {
       this.eventsCollection = events;
       // this.loading = false;
 
@@ -137,22 +166,22 @@ eventSelect =""
     })
   }
 
-  selectEvent(event){
+  selectEvent(event) {
     // this.loading = true;
     this.lockEvidence = true;
-    this.lockEvents = false;    
+    this.lockEvents = false;
     this.eventSelect = event.title;
-    this.evidenceService.getEvidenceByEvent(event.id).subscribe( evidence => {
-        this.evidenceCollection = evidence;
-        // this.loading = false;
+    this.evidenceService.getEvidenceByEvent(event.id).subscribe(evidence => {
+      this.evidenceCollection = evidence;
+      this.loading = false;
 
     })
   }
 
 
-  filterProjects(e){
+  filterProjects(e) {
 
-    this.projectService.getProjectsFilter(e.target.value).subscribe( projs => {
+    this.projectService.getProjectsFilter(e.target.value).subscribe(projs => {
       this.projects = projs;
     })
 
@@ -178,18 +207,18 @@ eventSelect =""
     }
   }
 
- 
 
 
-  readEvidence(event, index: number){
+
+  readEvidence(event, index: number) {
     this.indexExpanded = index == this.indexExpanded ? -1 : index;
-    if(!event.read){
-      this.evidenceService.readNotification(event.id).then(res =>{
+    if (!event.read) {
+      this.evidenceService.readNotification(event.id).then(res => {
 
       }).catch(err => console.log(err))
 
     }
-   
+
   }
 
   // getUnit(id){

@@ -202,18 +202,13 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(
       {
-    //     apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
-    // authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
-    // databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
-    // projectId: "seguimiento-de-proyectos-4fa3c",
-    // storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
-    // messagingSenderId: "958208857248"
-          apiKey: "AIzaSyBwtvT0MFyjxmLgfNdHwYPRQvlEAft9SMc",
-          authDomain: "soriana-49211.firebaseapp.com",
-          databaseURL: "https://soriana-49211.firebaseio.com",
-          projectId: "soriana-49211",
-          storageBucket: "soriana-49211.appspot.com",
-          messagingSenderId: "617618237761"
+    
+        apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
+        authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
+        databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
+        projectId: "seguimiento-de-proyectos-4fa3c",
+        storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
+        messagingSenderId: "958208857248"
       }
     ),
     AngularFirestoreModule,
