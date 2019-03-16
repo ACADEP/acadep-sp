@@ -28,7 +28,8 @@ export class EvidenceService {
 
 
   getNotifications() {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('read', '==', false).limit(5));
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.orderBy('created_at', 'desc').limit(10));
+
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -37,6 +38,11 @@ export class EvidenceService {
       });
     }));
     return this.evidence;
+  }
+
+  getUnreadEvidence() {
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('read', '==', false));
+    return this.evidenceCollection.snapshotChanges();
   }
 
   readNotification(id:string){
@@ -55,7 +61,7 @@ export class EvidenceService {
   }
 
   getEvidenceByEvent(id) {
-    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('ref_event.id', '==', id));
+    this.evidenceCollection = this.db.collection('evidence', ref => ref.where('ref_event.id', '==', id).orderBy('created_at', 'desc'));
     this.evidence = this.evidenceCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();

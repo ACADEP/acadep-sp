@@ -400,11 +400,12 @@ export class EvidenceComponent implements OnInit {
   }
 
   showImage(evidence, index) {
+   this.image.type == 'imagen';
 
     this.image = evidence.multimedia[index];
 
     $('#showimage').modal('show');
-    console.log(index);
+    console.log(evidence.multimedia[index]);
     // console.log(this.image.src);
 
   }

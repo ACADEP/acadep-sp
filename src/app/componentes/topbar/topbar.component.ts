@@ -35,6 +35,10 @@ export class TopbarComponent implements OnInit {
       this.authUser.name = auth.displayName;
     });
 
+    this.evidenceService.getUnreadEvidence().subscribe(evidence => {
+      this.numNotifications = evidence.length;
+    })
+
    this.evidenceService.getNotifications().subscribe(notifications => {
      this.notifications = notifications;
     //  let sound = new Audio;

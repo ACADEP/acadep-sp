@@ -123,41 +123,44 @@
 
             <span class="b-wisteria fa fa-fw fa-bell u-posRelative"></span>
 
-            <span class="label label-danger b-orange" *ngIf="notifications.length">{{notifications.length}}
+            <span class="label label-danger b-orange" *ngIf="numNotifications">{{numNotifications}}
               <span class="waves"></span>
             </span>
-            
 
-          
-          </a> 
+
+
+          </a>
           <!-- -------- -->
           <ul class="dropdown-menu animated fadeInUp w-sm pull-right" style="left: -167px;">
 
 
-          <ng-template #zeroNotifications>
-            <li class="b-b" >
-              <div class="media">
-                <div class="media-left">
-                  <a class="profile-pic" href="#">
-                    <img class="media-object" src="/assets/img/success.png" alt="...">
-                  </a>
-                </div>
-                <div class="media-body">
-                  <h5 class="text-center">
-                    <!-- <small class="pull-right">12 hours ago</small> -->
-                    Ninguna notificación pendiente
-                  </h5>
-                  <!-- Evento 
+            <ng-template #zeroNotifications>
+
+              <li class="b-b">
+                <div class="media">
+                  <div class="media-left">
+                    <a class="profile-pic" href="#">
+                      <img class="media-object" src="/assets/img/success.png" alt="...">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="text-center">
+                      <!-- <small class="pull-right">12 hours ago</small> -->
+                      Ninguna notificación pendiente
+                    </h5>
+                    <!-- Evento 
                   <strong>incompleto </strong>
                   <p class="text-muted">Asigne un usuario</p> -->
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ng-template>
+              </li>
 
-          <span *ngIf="notifications.length; else zeroNotifications">
-            <a [routerLink]="['/evidence',notification.ref_event.id]" *ngFor="let notification of notifications">
-                <li class="b-b" >
+            </ng-template>
+
+            <span *ngIf="notifications.length; else zeroNotifications">
+              <div style="height:500px; overflow-y: scroll;">
+                <a [routerLink]="['/evidence',notification.ref_event.id]" *ngFor="let notification of notifications">
+                  <li class="b-b" [ngStyle]="{'background': notification.read ? '' : '#e6e6e6'}">
                     <div class="media">
                       <div class="media-left">
                         <span class="profile-pic">
@@ -166,7 +169,7 @@
                       </div>
                       <div class="media-body">
                         <h5 class="media-heading">
-                          <!-- <small class="pull-right">{{notification.created_at | date:'short'}}</small> -->
+                          <small class="pull-right">{{notification.created_at | date:'short'}}</small>
                           <b>Nueva Evidencia!</b>
                         </h5>
                         <strong> </strong>
@@ -174,10 +177,11 @@
                       </div>
                     </div>
                   </li>
-            </a>
-            
-          </span>
-            
+                </a>
+              </div>
+
+            </span>
+
 
             <!-- <li class="b-b">
               <div class="media">
@@ -206,7 +210,8 @@
         </li>
 
         <li class="dropdown b-l">
-          <a class="dropdown-toggle profile-pic" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle profile-pic" href="#" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">
             <!-- <img class="img-circle" src="../assets/img/m4.jpg" alt="Jane Doe"> -->
             <b class="hidden-xs hidden-sm">{{authUser.email}}</b>
           </a>
@@ -272,15 +277,14 @@
   <!-- END: .navbar -->
 </header>
 
- <app-dashboard></app-dashboard>
+<app-dashboard></app-dashboard>
 
-  <!-- begin .app-footer -->
-  <footer class="app-footer p-t-10 text-white">
-    <div class="container-fluid">
-      <p class="text-center small">
-        Copyright ACADEP v1.0 &copy; 2018
-      </p>
-    </div>
-  </footer>
-  <!-- END: .app-footer -->
-
+<!-- begin .app-footer -->
+<footer class="app-footer p-t-10 text-white">
+  <div class="container-fluid">
+    <p class="text-center small">
+      Copyright ACADEP v1.0 &copy; 2018
+    </p>
+  </div>
+</footer>
+<!-- END: .app-footer -->

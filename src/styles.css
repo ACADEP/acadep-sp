@@ -24,3 +24,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .input-succes{
     border: rgb(60, 204, 60) 1px solid;
 }
+
+.fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active {
+    z-index: 0 !important;
+}
