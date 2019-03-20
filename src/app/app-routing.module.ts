@@ -11,16 +11,17 @@ import { GmapComponent } from "./componentes/gmap/gmap.component";
 import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 import { EvidenceComponent } from "./componentes/evidence/evidence.component";
 import { ConfigurationComponent } from "./componentes/configuration/configuration.component";
+import { CalendarioEventosComponent } from "./componentes/calendario-eventos/calendario-eventos.component";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'evidence'},
   { path: 'evidence', component: EvidenceComponent  },
   { path: 'evidence/:id', component: EvidenceComponent  },
-  { path: 'calendar', component:  CalendarEventsComponent },
+  { path: 'calendar', component:  CalendarioEventosComponent },
   { path: 'configuration', component:  ConfigurationComponent },
   { path: 'map', component:  GmapComponent },
   { path: 'users', component:  RegisterUserComponent },
-  { path: 'events', component:  EventsComponent },
+  // { path: 'events', component:  EventsComponent },
   { path: 'activities', component:  ActivitiesComponent },
   { path: 'projects', component:  CreateProyectComponent },
   // { path: 'calendar', component:  InicioComponent },

@@ -81,6 +81,7 @@ import { GalleryModule } from '@ngx-gallery/core';
 import { LightboxModule } from '@ngx-gallery/lightbox';
 import { ConfigurationComponent } from './componentes/configuration/configuration.component';
 import { ScrollableDirective } from './directives/scrollable.directive';
+import { CalendarioEventosComponent } from './componentes/calendario-eventos/calendario-eventos.component';
 
 
 
@@ -145,7 +146,8 @@ const customNotifierOptions: NotifierOptions = {
     CalendarEventsComponent,
     EvidenceComponent,
     ConfigurationComponent,
-    ScrollableDirective
+    ScrollableDirective,
+    CalendarioEventosComponent
 
   ],
   imports: [
@@ -203,12 +205,12 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireModule.initializeApp(
       {
     
-        apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
-        authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
-        databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
-        projectId: "seguimiento-de-proyectos-4fa3c",
-        storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
-        messagingSenderId: "958208857248"
+        apiKey: "AIzaSyCNjzNihDQ-sJm2n40vDTMyg1Bz6IkwsTk",
+        authDomain: "bravoarquitectos.firebaseapp.com",
+        databaseURL: "https://bravoarquitectos.firebaseio.com",
+        projectId: "bravoarquitectos",
+        storageBucket: "bravoarquitectos.appspot.com",
+        messagingSenderId: "582530589101"
       }
     ),
     AngularFirestoreModule,

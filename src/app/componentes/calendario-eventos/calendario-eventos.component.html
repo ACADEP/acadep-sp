@@ -1,0 +1,61 @@
+<header class="main-heading shadow-2dp">
+    <!-- begin dashhead -->
+    <div class="dashhead bg-white">
+      <div class="dashhead-titles">
+        <h6 class="dashhead-subtitle">
+          ACADEP
+        </h6>
+        <h3 class="dashhead-title">Calendario de eventos</h3>
+      </div>
+  
+      <div class="dashhead-toolbar">
+        <div class="dashhead-toolbar-item">
+          <a>App</a>
+          / Calendario de eventos
+        </div>
+      </div>
+    </div>
+    <!-- END: dashhead -->
+  </header>
+  <!-- END: .main-heading -->
+  
+  
+  <!-- begin .main-content -->
+  <div class="main-content bg-clouds">
+  
+    <!-- begin .container-fluid -->
+    <div class="container-fluid p-t-15">
+      <div class="row">
+   
+          <div class="box">
+             
+              <div class="box-body">
+                <ul class="nav nav-tabs is-center">
+                  <li class="active">
+                    <a href="#a1" data-toggle="tab">Calendario</a>
+                  </li>
+                  <li>
+                    <a href="#a2" data-toggle="tab">Eventos</a>
+                  </li>
+                
+                </ul>
+                <div class="tab-content">
+                  <div id="a1" class="tab-pane fade in active">
+                    <!-- calendar -->
+                    <app-calendar-events></app-calendar-events>
+                  </div>
+                  <div id="a2" class="tab-pane fade">
+                    <!-- events -->
+                    <app-events></app-events>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+       
+      </div>
+    </div>
+    <!-- END: .container-fluid -->
+  </div>
+  
+  
