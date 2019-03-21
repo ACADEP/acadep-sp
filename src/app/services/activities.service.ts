@@ -4,6 +4,7 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { activity } from "../models/activity";
+import { reject } from 'q';
 // import { project } from '../models/project';
 // import { reject } from 'q';
 
@@ -33,10 +34,9 @@ export class ActivitiesService {
     }));
 
     return this.activities;
-
   }
 
-  getActivityById(id:string) {
+  getActivityById(id: string) {
 
     return new Promise((resolve, reject) => {
       this.db.collection('activities').doc(id).ref.get()
@@ -84,7 +84,7 @@ export class ActivitiesService {
         start: activity.start,
         end: activity.end,
         insumos: activity.insumos,
-        administrators : activity.administrators,
+        administrators: activity.administrators,
         deleted: '',
         created_at: new Date().toJSON(),
         updated_at: new Date().toJSON(),
@@ -139,7 +139,7 @@ export class ActivitiesService {
         project_id: activity.project_id,
         start: activity.start,
         end: activity.end,
-        administrators : activity.administrators,
+        administrators: activity.administrators,
         // insumos: activity.insumos,
         // deleted: '',
         // active: true,
@@ -148,15 +148,23 @@ export class ActivitiesService {
     })
   }
 
-  // deleteActivity(key:string)
-  // {
+  asignActivity(activity_id: string, user_id: string) {
+    console.log(activity_id)
+    return new Promise((resolve, reject) => {
+      this.db.collection('events').ref.where('activity_id', '==', activity_id).get().then(events => {
 
-  //   return new Promise((resolve, reject) => {
-  //     this.activitiesList.update(key, {active : false})
-  //       .then(res => resolve(key),
-  //         err => reject(err));
-  //   });
+        events.docs.map((event, index) => {
 
-  // }
+          this.db.doc(`events/${event.id}`).update({
+            user_id: user_id
+          }).then(() => {
+            if (events.size == (index + 1)) {
+              resolve()
+            }
+          })
+        })
+      }).catch(err => console.log(err))
+    })
+  }
 
 }

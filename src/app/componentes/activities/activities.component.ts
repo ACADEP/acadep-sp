@@ -32,6 +32,8 @@ export class ActivitiesComponent implements OnInit {
 
   activityEdit = {} as activity;
 
+  activityAsign = {} as activity;
+
 
 
   projects: project[];
@@ -53,9 +55,7 @@ export class ActivitiesComponent implements OnInit {
 
   persons;
 
-// public subprojects: string[] = [];
-
-
+  // public subprojects: string[] = [];
   // activitiesListArray: any[];
   // projectsListArray: any[];
 
@@ -64,38 +64,66 @@ export class ActivitiesComponent implements OnInit {
     'servicio',
     'supervision'
   ];
-  
-  
+  // select: string;
+
+
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
-    public projectsService: ProjectsService, public userservice : UsersService) {
+    public projectsService: ProjectsService, public userservice: UsersService) {
     this.notifier = notifierService;
     this.activityDoc.insumos = [];
     this.emptyForm()
   }
 
   ngOnInit() {
-    //actividades
+    let storage = localStorage.getItem('project_id');
 
-    // this.activitiesService.getActivities().subscribe(items => {
-    //   this.activities = items;
-    // })
+    if (storage) {
+      this.changeProject(storage);
+      this.activityDoc.project_id = storage;
+    }
 
-    
 
     //proyectos
     this.projectsService.getProjects().subscribe(projects => {
       this.projects = projects;
     })
 
-    this.userservice.getUsers().subscribe(items =>{
+    this.userservice.getUsers().subscribe(items => {
       this.persons = items;
     })
 
   }
 
-  onDeleteActivity(){
+  onDeleteActivity() {
     console.log('en proceso')
+  }
+
+  openAsign(activity) {
+
+    this.activityAsign = activity;
+    $('#asign').modal('show');
+  }
+
+  toDoAsign(form: NgForm) {
+
+    if (form.valid) {
+      $('#error_asign').hide();
+
+          if (confirm("Está seguro que desea asignar todos los eventos de " + this.activityAsign.title + "?")) {
+            
+              this.activitiesService.asignActivity(this.activityAsign.id, form.value.user_asign).then( res => {
+                $('#asign').modal('hide');
+              })
+              
+          }
+    }
+    else {
+      $('#error_asign').show();
+    }
+
+
+
   }
 
   addActivity(form: NgForm) {
@@ -138,12 +166,12 @@ export class ActivitiesComponent implements OnInit {
         $('#labelproject').removeClass('errortxt')
       }
 
-       
-      if (form.controls.start.invalid ) {
+
+      if (form.controls.start.invalid) {
         $('#start').addClass('error')
         $('#labelstart').addClass('errortxt')
       } else {
-        $('#start').css('border' , 'red 1px solid')
+        $('#start').css('border', 'red 1px solid')
         $('#labelstart').removeClass('errortxt')
       }
 
@@ -155,41 +183,6 @@ export class ActivitiesComponent implements OnInit {
         $('#labelend').removeClass('errortxt')
       }
 
-
-      // if (form.controls.enddate.invalid) {
-      //   $('#enddate').addClass('error')
-      //   $('#labelend').addClass('errortxt')
-      // } else {
-      //   $('#enddate').removeClass('error')
-      //   $('#labelend').removeClass('errortxt')
-      // }
-      // if (form.controls.endtime.invalid) {
-      //   $('#endtime').addClass('error')
-      //   $('#labelend').addClass('errortxt')
-      // } else {
-      //   $('#endtime').removeClass('error')
-      //   if (form.controls.enddate.valid) {
-      //     $('#labelend').removeClass('errortxt')
-      //   }
-      // }
-
-      // if (form.controls.startdate.invalid) {
-      //   $('#startdate').addClass('error')
-      //   $('#labelstart').addClass('errortxt')
-      // } else {
-      //   $('#startdate').removeClass('error')
-      //   $('#labelstart').removeClass('errortxt')
-      // }
-      // if (form.controls.starttime.invalid) {
-      //   $('#starttime').addClass('error')
-      //   $('#labelstart').addClass('errortxt')
-      // } else {
-      //   $('#starttime').removeClass('error')
-      //   if (form.controls.startdate.valid) {
-      //     $('#labelstart').removeClass('errortxt')
-      //   }
-      // }
-
       if (this.activityDoc.administrators.length < 1) {
         $('#admin').addClass('error')
         $('#labeladmin').addClass('errortxt')
@@ -198,20 +191,6 @@ export class ActivitiesComponent implements OnInit {
         $('#admin').removeClass('error')
         $('#labeladmin').removeClass('errortxt')
       }
-
-
-
-
-
-      // if (form.controls.end.invalid) {
-      //   $('#end').addClass('error')
-      //   $('#labelend').addClass('errortxt')
-
-      // } else {
-      //   $('#end').removeClass('error')
-      //   $('#labelend').removeClass('errortxt')
-      // }
-
 
       this.notifier.notify('error', 'Verifica que los campos no esten vacíos');
 
@@ -224,7 +203,7 @@ export class ActivitiesComponent implements OnInit {
 
   editActivity(activity) {
     this.activityEdit = activity;
-     console.log(this.activityEdit);
+    console.log(this.activityEdit);
 
     $('#modalEdit').modal('show');
   }
@@ -255,12 +234,14 @@ export class ActivitiesComponent implements OnInit {
   }
 
 
-  changeProject(project) {
+  changeProject(project_id) {
 
-    if (project.target.value) {
-        // this.activityDoc.project_id = project.target.value;
-      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
+    if (project_id) {
+      // this.activityDoc.project_id = project.target.value;
+      this.activitiesService.getActivitiesByProject(project_id).subscribe(activities => {
         this.activities = activities;
+
+        localStorage.setItem('project_id', project_id);
       })
     }
     else {
@@ -285,13 +266,13 @@ export class ActivitiesComponent implements OnInit {
     }
   }
 
- 
+
 
   deleteInsumo(item) {
     this.activityDoc.insumos.splice(item, 1);
   }
 
- 
+
 
   updateActivity() {
     this.activitiesService.updateActivity(this.activityEdit).then((result) => {
@@ -329,15 +310,13 @@ export class ActivitiesComponent implements OnInit {
   //   });
   // }
 
-  removeErrors()
-  {
+  removeErrors() {
     $('input').removeClass('error');
     $('label').removeClass('errortxt');
     $('select').removeClass('error');
   }
 
-  toogleActivities()
-  {
+  toogleActivities() {
 
     if ($('#btncolapse').hasClass('fa-plus-circle')) {
       $('#btncolapse').removeClass('fa-plus-circle');
@@ -349,7 +328,7 @@ export class ActivitiesComponent implements OnInit {
     }
 
     $('.fa-chevron-down').trigger('click');
-    
+
   }
 
   // selectProject(project) {
@@ -365,7 +344,7 @@ export class ActivitiesComponent implements OnInit {
   //     this.subprojects = []
   //   }
   // }
-  
+
   // changeActivity(event) {
   //   if (event.target.value) {
   //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {

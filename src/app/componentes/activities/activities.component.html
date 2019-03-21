@@ -26,28 +26,29 @@
   <div class="container-fluid p-t-15">
     <div class="row">
 
-        <div class="col-md-12">
-            <div class="box">
-              <!-- <h2 class="text-center">hola</h2> -->
-              <form action="">
-    
-                <form style="margin-top:10px; margin-left:15px">
-                  <div class="row">
-    
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label id="labeltype">Proyecto<span class="required">*</span></label>
-                            <select id="type" class="form-control" [(ngModel)]="activityDoc.project_id" name="type" required (change)="changeProject($event)" >
-                              <option value="">Seleccione un proyecto</option>
-                        <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>                              
-                            </select>
-                          </div>
-                    </div>    
+      <div class="col-md-12">
+        <div class="box">
+          <!-- <h2 class="text-center">hola</h2> -->
+          <form action="">
+
+            <form style="margin-top:10px; margin-left:15px">
+              <div class="row">
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label id="labeltype">Proyecto<span class="required">*</span></label>
+                    <select id="type" class="form-control" [(ngModel)]="activityDoc.project_id" name="type" required
+                      (change)="changeProject($event.target.value)">
+                      <option value="">Seleccione un proyecto</option>
+                      <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
+                    </select>
                   </div>
-                </form>
-              </form>
-            </div>
-          </div>
+                </div>
+              </div>
+            </form>
+          </form>
+        </div>
+      </div>
 
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
@@ -72,7 +73,8 @@
                       [attr.data-target]="'#collapse'+ i"></i>
                     <i class="icon-action fa fa-plus" style="color:#566dd6" (click)="copyActivity(activity)"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editActivity(activity)"></i>
-                    <!-- <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteActivity(activity)"></i> -->
+
+                    <i class="icon-action fa fa-user-plus" style="color:#d64040" (click)="openAsign(activity)"></i>
                     <h6 class="title">{{activity.title}} </h6>
 
                   </header>
@@ -81,7 +83,8 @@
                       <div class="col-md-6">
                         <b>Nombre:</b> {{activity.title}} <br>
                         <!-- <b>Tipo:</b> {{activity.type}} <br> -->
-                        <b>proyecto:</b>  <span *ngFor="let elem of projects" ><span *ngIf="elem.id == activity.project_id"> {{elem.title}}</span></span> <br>
+                        <b>proyecto:</b> <span *ngFor="let elem of projects"><span
+                            *ngIf="elem.id == activity.project_id"> {{elem.title}}</span></span> <br>
                         <b>Descripción:</b> {{activity.description}} <br>
                         <b>Inicio:</b> {{activity.start | date:'short'}}<br>
                         <b>Final:</b> {{activity.end | date:'short'}}
@@ -149,7 +152,7 @@
                     <label for="itext">Descripción </label>
                     <div class="">
                       <textarea class="form-control" rows="3" id="textarea1"
-                        placeholder="Escriba un descripción para el proyecto ..." name="description"
+                        placeholder="Escriba un descripción para el Actividad ..." name="description"
                         [(ngModel)]="activityDoc.description" data-plugin="autosize"></textarea>
                     </div>
                   </div>
@@ -172,11 +175,11 @@
 
                   <label id="labelproject" class="">Proyecto<span class="required">*</span></label>
                   <div class="form-group">
-                      <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id"
+                    <select class="form-control" id="project" name="project" [(ngModel)]="activityDoc.project_id"
                       (change)="changeProject($event)">
-                        <option value="">Seleccione una proyecto</option>
-                        <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
-                      </select>
+                      <option value="">Seleccione una proyecto</option>
+                      <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
+                    </select>
                   </div>
                   <hr class="b-s-dashed">
 
@@ -244,7 +247,7 @@
                     </div>
                   </div>
 
-  
+
                   <hr class="b-s-dashed">
 
 
@@ -356,8 +359,6 @@
             </div>
           </div>
           <hr class="b-s-dashed">
-
-
           <div class="form-group">
             <label class="">Proyecto al que pertenece <span class="required">*</span></label>
             <select class="form-control" [(ngModel)]="activityEdit.project_id" name="project_ide">
@@ -365,17 +366,14 @@
                 [value]="project.id">{{project.title
                 | titlecase}}</option>
             </select>
-            <!-- <p></ `p> -->
           </div>
-
           <hr class="b-s-dashed">
           <div class="form-group">
             <label for="itext">Descripción </label>
             <div class="">
               <textarea class="form-control" rows="3" id="textarea1"
-                placeholder="Escriba un descripción para el proyecto ..." name="description"
+                placeholder="Escriba un descripción para la actividad ..." name="description"
                 [(ngModel)]="activityEdit.description" data-plugin="autosize"></textarea>
-           
             </div>
           </div>
 
@@ -385,7 +383,8 @@
             <div class="col-md-6">
               <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start" required>
+                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="activityEdit.start"
+                  required>
               </div>
             </div>
             <div class="col-md-6">
@@ -394,7 +393,6 @@
                 <input type="datetime-local" id="dateend" name="dateend" [(ngModel)]="activityEdit.end" required>
               </div>
             </div>
-            
           </div>
 
           <hr class="b-s-dashed">
@@ -408,23 +406,7 @@
             </div>
           </div>
 
-
           <hr class="b-s-dashed">
-
-          <!-- <ngb-datepicker (select)="onDateSelect($event)"></ngb-datepicker> -->
-
-          <!-- <form (submit)="pushToolEdit()">
-            <div class="form-group">
-              <label for="atext3">Insumos necesarios</label>
-              <div class="icon-after-input">
-                <input type="text" class="form-control input-sm p-r-80" id="atext3" name="tool" placeholder="escriba..."
-                  [(ngModel)]="toolEdit">
-                <div class="icon">
-                  <button class="btn btn-info btn-sm btn-rect" type="submit"><i class="fa fa-plus fa-lg"></i></button>
-                </div>
-              </div>
-            </div>
-          </form> -->
 
           <ul class="list-group list-group-flush">
 
@@ -443,6 +425,47 @@
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- modal asigancion masiva -->
+<div class="modal fade" id="asign" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title text-center" id="exampleModalLongTitle"><i class="fas fa-exclamation-triangle"></i>
+          Asignación Masiva</h2>
+      </div>
+
+      <form  (submit)="toDoAsign(asign)" #asign="ngForm">
+      <div class="modal-body">
+          <div class="form-group">
+            <label class="">Actividad</label>
+            <select class="form-control" id="asdasa" name="activiy_asign" readonly>
+              <option value="activityAsign.id" selected>{{activityAsign.title}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="">Usuario al que se le asignarán eventos de la actividad<span
+                class="required">*</span></label>
+            <select class="form-control" ngModel name="user_asign" required>
+              <option value="">Seleccione un usuario...</option>
+              <option *ngFor='let user of persons' [value]="user.id">{{user.name | titlecase}}</option>
+            </select>
+            <small id="error_asign" class="errortxt" style="display:none">Este campo es obligatorio</small>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" >Asignar</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>
