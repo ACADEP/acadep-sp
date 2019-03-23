@@ -64,6 +64,14 @@ export class ActivitiesService {
 
   }
 
+  getActivitiesByProjectNotObservable(project_id: string){
+    return new Promise((resolve, reject)=>{
+      this.db.collection('activities').ref.where('project_id', '==', project_id).get().then((acts) => {
+        resolve(acts)
+      }).catch((err)=> reject(err))
+    })
+  }
+
   getActivity(id: string) {
     return new Promise((resolve, reject) => {
       this.db.collection('activities').doc(id).ref.get()
@@ -149,7 +157,7 @@ export class ActivitiesService {
   }
 
   asignActivity(activity_id: string, user_id: string) {
-    console.log(activity_id)
+    console.log(user_id)
     return new Promise((resolve, reject) => {
       this.db.collection('events').ref.where('activity_id', '==', activity_id).get().then(events => {
 
@@ -163,7 +171,7 @@ export class ActivitiesService {
             }
           })
         })
-      }).catch(err => console.log(err))
+      }).catch(err => reject(err))
     })
   }
 

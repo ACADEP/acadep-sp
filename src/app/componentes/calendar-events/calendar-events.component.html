@@ -1,93 +1,44 @@
-
 <!-- END: .main-heading -->
 
 
 <!-- begin .main-content -->
 <div class="main-content bg-clouds">
-
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
-
-
-
-
     <div class="row">
-
       <div class="col-md-12">
         <div class="box">
           <!-- <h2 class="text-center">hola</h2> -->
           <form action="">
-
             <form style="margin-top:10px; margin-left:15px">
               <div class="row">
-
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label id="labeltype">Proyecto<span class="required">*</span></label>
-                        <select id="type" class="form-control" name="type" required (change)="changeProject($event)">
-                          <option value="">Seleccione un proyecto</option>
-                          <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
-                        </select>
-                      </div>
+                  <div class="form-group">
+                    <label id="labeltype">Proyecto<span class="required">*</span></label>
+                    <select class="form-control" name="calendar_project" [(ngModel)]="calendar_project"
+                      (change)="changeProject($event.target.value)">
+                      <option value="">Seleccione un proyecto</option>
+                      <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                    </select>
+                  </div>
                 </div>
-
-               
-
                 <div class="col-md-3">
                   <div class="form-group">
                     <label id="labeltype">Actividad<span class="required">*</span></label>
-                    <select id="type" class="form-control" name="type" required (change)="loadingEvents($event)">
+                    <select id="type" class="form-control" [(ngModel)]="calendar_activity" name="calendar_activity" required
+                      (change)="loadingEvents($event.target.value)">
                       <option value="">Seleccione</option>
-                    
                       <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
                     </select>
                   </div>
                 </div>
-                <!-- <div class="col-md-2" style="text-align:right">
-                  <div class="radio">
-                    <label class="">
-                      <input class="hidden" type="radio" name="optionsRadios">
-                      <i class="fa fa-2x text-info"></i>
-                      <span class="vertical-super">Actividades</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-2" style="text-align:left">
-                  <div class="radio">
-                    <label class="">
-                      <input class="hidden" type="radio" checked name="optionsRadios">
-                      <i class="fa fa-2x text-info"></i>
-                      <span class="vertical-super">Eventos</span>
-                    </label>
-                  </div>
-                </div> -->
-
               </div>
             </form>
-
-
-
           </form>
         </div>
       </div>
-
       <div class="col-sm-3">
         <div class="row">
-          <!-- <div class="col-xs-12">
-            <div class="box">
-              <header>
-                <h3>Eventos</h3>
-              </header>
-              <div class="box-body">
-
-                <button id="newEventBtn" type="button" class="btn btn-outline btn-primary btn-block" data-toggle="modal"
-                  data-target="#eventModal">
-                  Nuevo <i class="fa fa-plus"></i>
-                </button>
-              </div>
-              <br>
-            </div>
-          </div> -->
           <div class="col-xs-12">
             <div class="box">
               <header>
@@ -107,13 +58,6 @@
                   <div class='fc-event bg-sun-flower'>Con retraso</div>
                   <div class='fc-event bg-pomegranate'>No realizado</div>
                 </div>
-                <!-- <div class="checkbox">
-              <label class="text-wisteria switch fa-lg" for='drop-remove'>
-                <input class="hidden" type='checkbox' id='drop-remove' />
-                <i class="fa"></i>
-                Remover despues de insertar
-              </label>
-            </div> -->
               </div>
             </div>
           </div>
@@ -122,12 +66,10 @@
       <div class="col-sm-9">
         <div class="box">
           <div class="box-body">
-            <!-- <p>
-          calendar-events works!
-        </p> -->
             <div *ngIf="calendarOptions">
               <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail.event)"
-                (eventDrop)="dropEvent($event.detail)" (eventResize)="resizeEvent($event.detail)" (clickButton)="clickButton($event)"></ng-fullcalendar>
+                (eventDrop)="dropEvent($event.detail)" (eventResize)="resizeEvent($event.detail)"
+                (clickButton)="clickButton($event)"></ng-fullcalendar>
             </div>
           </div>
         </div>
@@ -170,19 +112,17 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" id="deleteEventBtn">Eliminar Evento</button>
-            <button type="button" class="btn btn-success" id="updateEventBtn" data-dismiss="modal">Actualizar Evento</button>
+            <button type="button" class="btn btn-success" id="updateEventBtn" data-dismiss="modal">Actualizar
+              Evento</button>
             <button type="button" class="btn btn-primary" id="createEventBtn" data-dismiss="modal">Crear Evento</button>
           </div>
         </div>
       </div>
     </div>
     <!-- END: modal -->
-
   </div>
   <!-- END: .container-fluid -->
-
 </div>
-
 <!-- Modal -->
 <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -191,14 +131,11 @@
         <button type="button" style="color:red" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h3 class="modal-title text-center" id="exampleModalLabel">{{eventShow.title}}</h3> 
-
+        <h3 class="modal-title text-center" id="exampleModalLabel">{{eventShow.title}}</h3>
       </div>
       <div class="modal-body">
-
         <div class="row">
           <form class="" action="">
-            
             <div class="col-md-6">
               <label for="">Fecha inicio de evento</label>
               <input class="form-control" type="datetime-local" [(ngModel)]="eventShow.start" name="start" id="">
@@ -210,13 +147,13 @@
             <hr>
             <div class="col-md-12">
               <!-- <div class="form-group"> -->
-                  <label id="labeltype">Usuario Asignado<span class="required">*</span></label>
-                  <select id="type" class="form-control" [(ngModel)]="eventShow.user_id" name="type" required>
-                    <option value="undefined">Seleccione un Usuario</option>
-                    <option *ngFor='let user of users' [value]="user.id">{{user.name}}</option>
-                  </select>
-                <!-- </div> -->
-          </div>
+              <label id="labeltype">Usuario Asignado<span class="required">*</span></label>
+              <select id="type" class="form-control" [(ngModel)]="eventShow.user_id" name="type" required>
+                <option value="undefined">Seleccione un Usuario</option>
+                <option *ngFor='let user of users' [value]="user.id">{{user.name}}</option>
+              </select>
+              <!-- </div> -->
+            </div>
           </form>
         </div>
       </div>

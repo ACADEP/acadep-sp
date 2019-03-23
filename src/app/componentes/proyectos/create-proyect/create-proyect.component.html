@@ -26,12 +26,12 @@
   <div class="container-fluid p-t-15">
     <div class="row">
 
-      <div class="col-md-12">
+      <div class="col-md-12" style="display:none">
         <div class="box">
           <div><input type="file" (change)="onFileChange($event)" multiple="false" /></div> <br>
           <div class="progress" style="margin-left:20px; margin-right:20px">
-            <div class="progress-bar" [ngClass]="{'complete': percent == '100%'}"
-              role="progressbar" [style.width]="percent" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" [ngClass]="{'complete': percent == '100%'}" role="progressbar"
+              [style.width]="percent" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
               {{percent}}</div>
           </div>
 
@@ -72,12 +72,13 @@
                 <mat-spinner *ngIf="loading"></mat-spinner>
 
                 <div style="height:800px; overflow-y: scroll;">
-                <article class="list-group-item" *ngFor="let project of projects; let i = index">
+                  <article class="list-group-item" *ngFor="let project of projects; let i = index">
                     <header class="filter-header">
                       <i class="icon-action fa fa-chevron-down" data-toggle="collapse"
                         [attr.data-target]="'#collapse'+ i"></i>
                       <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editProject(project)"></i>
                       <i class="icon-action fa fa-times" style="color:#d64040" (click)="onDeleteProject(project)"></i>
+                      <i class="icon-action fa fa-user-plus text-peter-river" (click)="openAsign(project)"></i>
                       <h6 class="title">{{project.title | titlecase}}</h6>
                     </header>
                     <div class="filter-content collapse" id="{{'collapse' + i}}">
@@ -189,56 +190,6 @@
                     </div>
                   </div>
 
-                  <!-- <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Date range picker</h3>
-                    </div>
-                    <div class="panel-body">
-                      <input
-                        class="form-control"
-                        type="text"
-                        mwlFlatpickr
-                        [(ngModel)]="rangeValue"
-                        [altInput]="true"
-                        [convertModelValue]="true"
-                        name="daterange" 
-                        [enableTime]="true"
-                        mode="range">
-                      NgModel value: {{ rangeValue | json }}
-                    </div>
-                  </div> -->
-
-                  <!-- <div class="row text-center">
-                    <div class="col-md-12">
-                      <label id="labelstart" for="">Inicio de Proyecto <span class="required">*</span></label>
-                      <div class="input-group col-centered">
-                        <div class="col-md-6">
-                          <p><small>Fecha:</small></p>
-                          <input type="date" id="startdate" name="startdate" [(ngModel)]="projectDoc.start.date" required>
-                        </div>
-                        <div class="col-md-6">
-                          <p><small>Hora:</small></p>
-                          <input type="time" id="starttime" name="starttime" [(ngModel)]="projectDoc.start.time" required>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12" style="margin-top:15px">
-                      <label id="labelend" for="">Fin de Proyecto <span class="required">*</span></label>
-                      <div class="input-group col-centered">
-                        <div class="col-md-6">
-                          <p><small>Fecha:</small></p>
-                          <input type="date" id="enddate" name="enddate" [(ngModel)]="projectDoc.end.date" required>
-                        </div>
-                        <div class="col-md-6">
-                          <p><small>Hora:</small></p>
-                          <input type="time" id="endtime" name="endtime" [(ngModel)]="projectDoc.end.time" required>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div> -->
-
-
                   <hr class="b-s-dashed">
 
                   <div class="form-group">
@@ -300,9 +251,7 @@
         </button>
       </div>
       <div class="modal-body">
-
         <form (submit)="updateProject()">
-
           <div class="form-group">
             <label for="itext">Nombre <span class="required">*</span></label>
             <div class="icon-before-input">
@@ -313,9 +262,7 @@
               </div>
             </div>
           </div>
-
           <hr class="b-s-dashed">
-
           <!-- <div class="form-group">
                     <label for="textarea1" class="col-sm-4 control-label">Descripción</label>
                     <div class="col-sm-8">
@@ -333,14 +280,13 @@
                         </div> -->
             </div>
           </div>
-
           <hr class="b-s-dashed">
-
           <div class="row text-center">
             <div class="col-md-6">
               <label id="labelstart" for="">Fecha de inicio <span class="required">*</span></label>
               <div class="input-group col-centered">
-                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="editProjectDoc.start" required>
+                <input type="datetime-local" id="startdate" name="editstartdate" [(ngModel)]="editProjectDoc.start"
+                  required>
               </div>
             </div>
             <div class="col-md-6">
@@ -349,9 +295,7 @@
                 <input type="datetime-local" id="dateend" name="dateend" [(ngModel)]="editProjectDoc.end" required>
               </div>
             </div>
-            
           </div>
-
           <hr class="b-s-dashed">
 
           <div class="form-group">
@@ -363,12 +307,7 @@
               </agm-map>
             </div>
           </div>
-
-       
-
-
           <hr class="b-s-dashed">
-
           <div class="form-group">
             <label class="col-sm-12 control-label">Administradores<span class="required">*</span> </label>
             <div class="col-sm-12">
@@ -376,36 +315,78 @@
                 [(ngModel)]="editProjectDoc.administrators">
                 <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
               </select>
-
             </div>
           </div>
-
-
           <!-- <div class="form-group">
             <label>Administrador</label>
             <div class="col-sm-10">
               <select class="form-control" name="administrador" [(ngModel)]="administrador">
                 <option *ngFor="let user of userListArray" value="{{user.name}}">{{user.name}}</option>
-
               </select>
             </div>
           </div> -->
-
           <br>
           <hr class="b-s-dashed">
-
-
-
-
           <div class="col-md-12 text-center" style="margin-top:30px">
             <button type="submit" class="btn btn-success">Actualizar Proyecto</button>
           </div>
-
         </form>
       </div>
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal asigancion masiva -->
+<div class="modal fade" id="asign" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title text-center" id="exampleModalLongTitle"><i class="fas fa-exclamation-triangle"></i>
+          Asignación Masiva</h2>
+      </div>
+
+      <form (submit)="toDoAsign(asign)" #asign="ngForm">
+        <ng-container *ngIf="!loadingLine; else elseTemplate">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="">Subproyecto</label>
+              <select class="form-control" id="asdasa" name="activiy_asign" readonly>
+                <option value="{{proyectAsign.id}}" selected>{{proyectAsign.title}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="">Usuario al que se le asignarán eventos del Subproyecto<span
+                  class="required">*</span></label>
+              <select class="form-control" ngModel name="user_asign" required>
+                <option value="">Seleccione un usuario...</option>
+                <option *ngFor='let user of users' [value]="user.id">{{user.name | titlecase}}</option>
+              </select>
+              <small id="error_asign" class="text-alizarin" style="display:none">Este campo es obligatorio</small>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div class="modal-body">
+            <p class="text-center">Si sale de esta ventana la asignación se detendrá</p>
+            <br>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <br>
+          </div>
+        </ng-template>
+
+
+        <div class="modal-footer" *ngIf="!loadingLine">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Asignar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

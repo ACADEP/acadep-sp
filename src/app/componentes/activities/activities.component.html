@@ -74,7 +74,7 @@
                     <i class="icon-action fa fa-plus" style="color:#566dd6" (click)="copyActivity(activity)"></i>
                     <i class="icon-action fa fa-edit" style="color:#6fb478" (click)="editActivity(activity)"></i>
 
-                    <i class="icon-action fa fa-user-plus" style="color:#d64040" (click)="openAsign(activity)"></i>
+                    <i class="icon-action fa fa-user-plus text-peter-river" (click)="openAsign(activity)"></i>
                     <h6 class="title">{{activity.title}} </h6>
 
                   </header>
@@ -444,24 +444,35 @@
       </div>
 
       <form  (submit)="toDoAsign(asign)" #asign="ngForm">
-      <div class="modal-body">
-          <div class="form-group">
-            <label class="">Actividad</label>
-            <select class="form-control" id="asdasa" name="activiy_asign" readonly>
-              <option value="activityAsign.id" selected>{{activityAsign.title}}</option>
-            </select>
+        <ng-container *ngIf="!loadingLine; else elseTemplate">
+          <div class="modal-body">
+              <div class="form-group">
+                <label class="">Actividad</label>
+                <select class="form-control" id="asdasa" name="activiy_asign" readonly>
+                  <option value="{{activityAsign.id}}" selected>{{activityAsign.title}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="">Usuario al que se le asignarán eventos de la actividad<span
+                    class="required">*</span></label>
+                <select class="form-control" ngModel name="user_asign" required>
+                  <option value="">Seleccione un usuario...</option>
+                  <option *ngFor='let user of persons' [value]="user.id">{{user.name | titlecase}}</option>
+                </select>
+                <small id="error_asign" class="errortxt" style="display:none">Este campo es obligatorio</small>
+              </div>
           </div>
-          <div class="form-group">
-            <label class="">Usuario al que se le asignarán eventos de la actividad<span
-                class="required">*</span></label>
-            <select class="form-control" ngModel name="user_asign" required>
-              <option value="">Seleccione un usuario...</option>
-              <option *ngFor='let user of persons' [value]="user.id">{{user.name | titlecase}}</option>
-            </select>
-            <small id="error_asign" class="errortxt" style="display:none">Este campo es obligatorio</small>
-          </div>
-      </div>
-      <div class="modal-footer">
+        </ng-container>
+        <ng-template #elseTemplate>
+            <div class="modal-body">
+                <p class="text-center">Si sale de esta ventana la asignación se detendrá</p>
+                <br>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                <br>
+              </div>
+        </ng-template>
+        
+      <div *ngIf="!loadingLine" class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <button type="submit" class="btn btn-primary" >Asignar</button>
       </div>

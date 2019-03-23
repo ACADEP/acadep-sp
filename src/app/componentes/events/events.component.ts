@@ -9,7 +9,7 @@ import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user';
 import { tool } from '../../models/tool';
 import { total } from "../../models/event";
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAccordion } from '@angular/material';
+import { MatDialog, MatAccordion } from '@angular/material';
 import { ProjectsService } from "../../services/projects.service";
 
 import { AfireService } from "../../services/afire.service";
@@ -64,9 +64,6 @@ export class EventsComponent implements OnInit {
   personEdit = {} as tool;
   // EventSee: any = { observation: { before: { evidence: [] }, during: { evidence: [] }, after: { evidence: [] } } };
 
-
-
-
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService,
     public dialog: MatDialog, public aFireService: AfireService,
@@ -84,13 +81,7 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    // this.fetchTodosPaginated();
-
-    // this.eventsService.getEvents().subscribe(events => {
-    //   this.eventsCollection = events;
-    // });
-
+    
     // usuarios
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
@@ -108,11 +99,11 @@ export class EventsComponent implements OnInit {
 
   }
 
-  changeProject(project) {
-    if (project.target.value) {
+  changeProject(project_id) {
+    if (project_id) {
       this.eventsCollection = []
 
-      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
+      this.activitiesService.getActivitiesByProject(project_id).subscribe(activities => {
         this.acts = activities;
       })
     }
@@ -123,12 +114,9 @@ export class EventsComponent implements OnInit {
 
 
 
-  loadingEvents(event){
-    console.log(event)
-
-    if (event.target.value) {
-      
-     this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
+  loadingEvents(activity_id){
+    if (activity_id) {
+     this.eventsService.getEventsByActivity(activity_id).subscribe( events => {
        this.eventsCollection = events;
      })
     }

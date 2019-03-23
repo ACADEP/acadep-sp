@@ -66,6 +66,7 @@ export class ActivitiesComponent implements OnInit {
   ];
   // select: string;
 
+  loadingLine : boolean = false;
 
 
   constructor(notifierService: NotifierService, public activitiesService: ActivitiesService,
@@ -108,22 +109,21 @@ export class ActivitiesComponent implements OnInit {
   toDoAsign(form: NgForm) {
 
     if (form.valid) {
+      this.loadingLine = true;
       $('#error_asign').hide();
-
           if (confirm("Está seguro que desea asignar todos los eventos de " + this.activityAsign.title + "?")) {
-            
               this.activitiesService.asignActivity(this.activityAsign.id, form.value.user_asign).then( res => {
+                this.notifier.notify('success', 'Asignación correcta!')
                 $('#asign').modal('hide');
-              })
-              
+                setTimeout(() => {
+                  this.loadingLine = false;
+                }, 200);
+              }) 
           }
     }
     else {
       $('#error_asign').show();
     }
-
-
-
   }
 
   addActivity(form: NgForm) {

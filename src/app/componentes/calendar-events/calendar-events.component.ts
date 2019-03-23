@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 import { EventsService } from "../../services/events.service";
@@ -21,36 +21,55 @@ declare var $: any;
 export class CalendarEventsComponent implements OnInit {
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
-
-  // public data = [{
-  //   title: 'New event',
-  //   start: moment(),
-  //   end: moment().add(1, 'day'),
-  // }]
+  // @ViewChild('calendar_project') calendar_project: ElementRef;
 
   public events: any[];
-  public eventShow:any;
+  public eventShow: any;
   // eventsCollection: Event[];
-  subprojects: any[]= [];
-  acts : any[] = [];
-  projectsCollection : any[] = [];
+  subprojects: any[] = [];
+  acts: any[] = [];
+  projectsCollection: any[] = [];
   users: User[];
+
+
+  calendar_project = "";
+  calendar_activity = "";
+
   constructor(
     public eventsService: EventsService,
-    public projectsService : ProjectsService,
-    public activitiesService : ActivitiesService,
-    public userService : UsersService
-) {
+    public projectsService: ProjectsService,
+    public activitiesService: ActivitiesService,
+    public userService: UsersService
+  ) {
+
+    let calendar_project = localStorage.getItem('calendar_project');
+    let calendar_activity = localStorage.getItem('calendar_activity');
+
+    // if(calendar_project){
+    //   this.initProjectSelect(calendar_project);
+    //  this.calendar_project = calendar_project;
+    // }
+    if(calendar_project){
+      this.initProjectSelect(calendar_project);
+      this.calendar_project = calendar_project;  
+    }
+
+    if (calendar_activity) {
+      this.loadingEvents(calendar_activity);
+      this.calendar_activity = calendar_activity;
+      
+    }
+
     this.events = [];
     this.eventShow = {
       name: '',
       description: '',
       start: {
-        date:'',
+        date: '',
         time: ''
       },
       end: {
-        date:'',
+        date: '',
         time: ''
       },
       activity_id: '',
@@ -62,17 +81,20 @@ export class CalendarEventsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.getUsers().subscribe( users => {
+    // let calendar_event = localStorage.getItem('calendar_event');
+    // console.log(storage);
+
+    this.userService.getUsers().subscribe(users => {
       this.users = users;
     })
 
     this.projectsService.getProjects().subscribe(projects => {
-    this.projectsCollection = projects;
+      this.projectsCollection = projects;
     })
 
 
     this.calendarOptions = {
-      droppable : false,
+      droppable: false,
       editable: false,
       eventLimit: false,
       eventDurationEditable: true,
@@ -82,11 +104,11 @@ export class CalendarEventsComponent implements OnInit {
         right: 'month,agendaWeek,agendaDay,listMonth'
       },
       buttonText: {
-          today:    'Hoy',
-          month:    'Mes',
-          week:     'Semana',
-          day:      'Día',
-          list:     'Lista',
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        list: 'Lista',
       },
       events: [],
       locale: 'es',
@@ -97,11 +119,13 @@ export class CalendarEventsComponent implements OnInit {
     // })
   }
 
-  changeProject(project) {
-    if (project.target.value) {
+  changeProject(project_id) {
+    if (project_id) {
+      localStorage.setItem('calendar_project', project_id);
+      localStorage.removeItem('calendar_activity');
       this.ucCalendar.renderEvents([])
 
-      this.activitiesService.getActivitiesByProject(project.target.value).subscribe(activities => {
+      this.activitiesService.getActivitiesByProject(project_id).subscribe(activities => {
         this.acts = activities;
       })
     }
@@ -110,30 +134,29 @@ export class CalendarEventsComponent implements OnInit {
     }
   }
 
-
-  // changeActivity(event) {
-  //   if (event.target.value) {
-  //     this.activitiesService.getActivitiesBySub(event.target.value).subscribe(activities => {
-  //       this.acts = activities;
-  //     })
-  //   }
-  //   else {
-  //     this.acts = []
-  //   }
-  // }
-
-  loadingEvents(event){
-    console.log(event)
-
-    if (event.target.value) {
-     this.eventsService.getEventsByActivity(event.target.value).subscribe( events => {
-      this.events = events;
-
-      this.ucCalendar.renderEvents(this.events)
-
-     })
+  initProjectSelect(project_id) {
+    if (project_id) {
+      this.activitiesService.getActivitiesByProject(project_id).subscribe(activities => {
+        this.acts = activities;
+      })
     }
-    else { 
+    else {
+      this.acts = []
+    }
+  }
+
+  loadingEvents(activity_id) {
+    // console.log(event)
+    if (activity_id) {
+      
+      localStorage.setItem('calendar_activity', activity_id); 
+      this.eventsService.getEventsByActivity(activity_id).subscribe((events:any) => {
+        this.events = events;
+        console.log()
+        this.ucCalendar.renderEvents(this.events)
+      })
+    }
+    else {
       this.ucCalendar.renderEvents([])
     }
   }
@@ -146,32 +169,32 @@ export class CalendarEventsComponent implements OnInit {
     console.log(event)
     this.eventShow = event;
     this.eventShow.start = event.start._i;
-    this.eventShow.end = event.end._i ;
+    this.eventShow.end = event.end._i;
     $('#details').modal('show');
   }
 
-  
 
-  resizeEvent($event){
 
-console.log('resize ',$event)
+  resizeEvent($event) {
+
+    console.log('resize ', $event)
   }
-  dropEvent($event){
+  dropEvent($event) {
 
-console.log('drop ',$event)
+    console.log('drop ', $event)
   }
 
-  updateDates(event){
-    
+  updateDates(event) {
+
     console.log(this.eventShow)
     this.eventsService.updateEvent(this.eventShow).then((result) => {
-    // aqui va alerta de success
+      // aqui va alerta de success
       event.start = this.eventShow.start;
       event.end = this.eventShow.end;
-     this.ucCalendar.updateEvent(this.eventShow);
-     $('#details').modal('hide');
+      this.ucCalendar.updateEvent(this.eventShow);
+      $('#details').modal('hide');
     }).catch((err) => {
-     
+
     });
   }
 }

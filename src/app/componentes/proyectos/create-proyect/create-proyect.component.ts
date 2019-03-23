@@ -16,6 +16,7 @@ import { marker } from "../../../models/marker";
 import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
 import { element } from '@angular/core/src/render3';
+import { NgForm } from '@angular/forms';
 type AOA = any[][];
 
 declare var $: any;
@@ -68,6 +69,8 @@ export class CreateProyectComponent implements OnInit {
   loading: boolean = true;
 
   percent = '0%';
+
+  loadingLine : boolean = false;
   // searchterm: string;
   // startAt = new Subject();
   // endAt = new Subject();
@@ -81,6 +84,7 @@ export class CreateProyectComponent implements OnInit {
   users: User[];
   projectDoc = {} as project;
   editProjectDoc = {} as project;
+  proyectAsign = {} as project;
   // query: string;
 
   constructor(
@@ -99,7 +103,6 @@ export class CreateProyectComponent implements OnInit {
     this.editProjectDoc.ubication = {} as marker;
     this.objectExcel.activities = [];
 
-
   }
 
   ngOnInit() {
@@ -108,20 +111,48 @@ export class CreateProyectComponent implements OnInit {
     this.projectsService.getProjects().subscribe((projects) => {
       this.projects = projects;
       this.loading = false;
-
-      // this.clubs = clubs;
     })
-
-    // combineLatest(this.startobs, this.endobs).subscribe((value) => {
-    //   this.firequery(value[0], value[1]).subscribe((clubs) => {
-    //     this.clubs = clubs;
-    //   })
-    // })
 
     this.userservice.getUsers().subscribe(users => {
       this.users = users;
     })
 
+  }
+
+  openAsign(project) {
+    console.log(project);
+    
+    this.proyectAsign = project;
+    $('#asign').modal('show');
+  }
+
+  toDoAsign(form: NgForm) {
+
+    if (form.valid) {
+      const user_id = form.value.user_asign;
+      
+      $('#error_asign').hide();
+          if (confirm("Está seguro que desea asignar todos los eventos de "+this.proyectAsign.title + "?")) {
+            this.loadingLine = true;
+            this.activitiesService.getActivitiesByProjectNotObservable(this.proyectAsign.id).then((acts:any) => {
+              acts.docs.map( (activity, index) => {
+                this.activitiesService.asignActivity(activity.id, user_id).then(()=> {
+                  // console.log(acts.docs.length, index)
+                  if (acts.docs.length == (index+1)) {
+                    $('#asign').modal('hide');
+                    this.notifier.notify('success', 'Asignación correcta!');
+                    setTimeout(() => {
+                      this.loadingLine = false;
+                    }, 200);
+                  }
+                })
+              })
+            })
+          }
+    }
+    else {
+      $('#error_asign').show();
+    }
   }
 
 
@@ -149,7 +180,6 @@ export class CreateProyectComponent implements OnInit {
 
 
   addProject() {
-
 
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
