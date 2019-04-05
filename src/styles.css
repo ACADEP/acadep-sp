@@ -28,3 +28,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active {
     z-index: 0 !important;
 }
+
+.required {
+    color: red;
+    display: inline;
+  }
