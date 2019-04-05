@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreCollection, AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { project } from "../models/project";
@@ -216,6 +216,21 @@ export class ProjectsService {
           reject(err)
         });
     })
+  }
+
+  transaction(){
+    var batch = this.db.firestore.batch();
+
+    const userRef : DocumentReference = this.db.collection('users').doc('54').ref;
+    userRef.set({ population: 0 })
+    return this.db.firestore.runTransaction(transaction =>{
+      return transaction.get(userRef).then( sfDoc =>{
+        if (!sfDoc.exists) {
+          throw "Document does not exist!";
+      }
+      })
+    })
+
   }
 
 

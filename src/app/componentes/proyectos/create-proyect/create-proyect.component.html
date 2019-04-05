@@ -25,19 +25,20 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-
-      <div class="col-md-12" style="display:none">
-        <div class="box">
-          <div><input type="file" (change)="onFileChange($event)" multiple="false" /></div> <br>
-          <div class="progress" style="margin-left:20px; margin-right:20px">
+      <!-- <div class="col-md-12" style="display:inherit">
+        <div class="box" style="text-align: right">
+          
+          <div>
+            <input class="btn" type="file" (change)="onFileChange($event)" multiple="false" />
+          </div> <br>
+          <div class="progress" style="margin-left:20px; margin-right:20px" *ngIf="percent != '0%'">
             <div class="progress-bar" [ngClass]="{'complete': percent == '100%'}" role="progressbar"
-              [style.width]="percent" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-              {{percent}}</div>
+              [style.width]="percent" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" >
+              {{percent}}
+            </div>
           </div>
-
         </div>
-      </div>
-
+      </div> -->
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
         <div class="row">
@@ -215,9 +216,6 @@
 
                   <br>
                   <hr class="b-s-dashed">
-
-
-
 
                   <div class="col-md-12 text-center" style="margin-top:30px">
                     <button type="submit" class="btn btn-success">Crear Proyecto</button>

@@ -34,17 +34,17 @@ interface actExcel {
   name: string,
   // subproject: string,
   events: eventExcel[]
-   project_id? : string
-   fecha_inicio: string
-   fecha_final: string
+  project_id?: string
+  fecha_inicio: string
+  fecha_final: string
 }
 interface eventExcel {
   fecha_inicio: string
   fecha_final: string
-  activity_name? : string
+  activity_name?: string
   name: string,
   description: string,
-  activity_id? : string
+  activity_id?: string
   unit: string
   number: number
   user_mail: string
@@ -70,7 +70,7 @@ export class CreateProyectComponent implements OnInit {
 
   percent = '0%';
 
-  loadingLine : boolean = false;
+  loadingLine: boolean = false;
   // searchterm: string;
   // startAt = new Subject();
   // endAt = new Subject();
@@ -88,10 +88,10 @@ export class CreateProyectComponent implements OnInit {
   // query: string;
 
   constructor(
-    public projectsService: ProjectsService,
+    private afs: AngularFirestore,
     notifierService: NotifierService,
     public userservice: UsersService,
-    private afs: AngularFirestore,
+    public projectsService: ProjectsService,
     public activitiesService: ActivitiesService,
     public eventsService: EventsService) {
 
@@ -107,21 +107,17 @@ export class CreateProyectComponent implements OnInit {
 
   ngOnInit() {
     this.findMe();
-
     this.projectsService.getProjects().subscribe((projects) => {
       this.projects = projects;
       this.loading = false;
     })
-
     this.userservice.getUsers().subscribe(users => {
       this.users = users;
     })
-
   }
 
   openAsign(project) {
     console.log(project);
-    
     this.proyectAsign = project;
     $('#asign').modal('show');
   }
@@ -130,25 +126,24 @@ export class CreateProyectComponent implements OnInit {
 
     if (form.valid) {
       const user_id = form.value.user_asign;
-      
       $('#error_asign').hide();
-          if (confirm("Está seguro que desea asignar todos los eventos de "+this.proyectAsign.title + "?")) {
-            this.loadingLine = true;
-            this.activitiesService.getActivitiesByProjectNotObservable(this.proyectAsign.id).then((acts:any) => {
-              acts.docs.map( (activity, index) => {
-                this.activitiesService.asignActivity(activity.id, user_id).then(()=> {
-                  // console.log(acts.docs.length, index)
-                  if (acts.docs.length == (index+1)) {
-                    $('#asign').modal('hide');
-                    this.notifier.notify('success', 'Asignación correcta!');
-                    setTimeout(() => {
-                      this.loadingLine = false;
-                    }, 200);
-                  }
-                })
-              })
+      if (confirm("Está seguro que desea asignar todos los eventos de " + this.proyectAsign.title + "?")) {
+        this.loadingLine = true;
+        this.activitiesService.getActivitiesByProjectNotObservable(this.proyectAsign.id).then((acts: any) => {
+          acts.docs.map((activity, index) => {
+            this.activitiesService.asignActivity(activity.id, user_id).then(() => {
+              // console.log(acts.docs.length, index)
+              if (acts.docs.length == (index + 1)) {
+                $('#asign').modal('hide');
+                this.notifier.notify('success', 'Asignación correcta!');
+                setTimeout(() => {
+                  this.loadingLine = false;
+                }, 200);
+              }
             })
-          }
+          })
+        })
+      }
     }
     else {
       $('#error_asign').show();
@@ -180,10 +175,8 @@ export class CreateProyectComponent implements OnInit {
 
 
   addProject() {
-
     this.projectsService.saveProject(this.projectDoc).then((result) => {
       this.notifier.notify('success', 'Proyecto creado!');
-
       this.projectDoc.title = "";
       this.projectDoc.administrators = [];
       this.projectDoc.description = "";
@@ -223,9 +216,9 @@ export class CreateProyectComponent implements OnInit {
   }
 
 
-   objectValues(obj) {
-     return Object.values(obj);
-   }
+  objectValues(obj) {
+    return Object.values(obj);
+  }
 
   onDeleteProject(project) {
     if (confirm("Está seguro que desea eliminar " + project.title)) {
@@ -248,130 +241,88 @@ export class CreateProyectComponent implements OnInit {
   fileName: string = 'SheetJS.xlsx';
 
   onFileChange(evt: any) {
-    /* wire up file reader */
-    const target: DataTransfer = <DataTransfer>(evt.target);
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      /* read workbook */
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-      //  console.log(wb)
+    const OnlyExtensions = ['xlsx', 'csv']
+    const extensionFile = evt.target.files[0].name.split('.').pop();
 
-      /* grab first sheet */
-      const wsname: string = wb.SheetNames[0];
-      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-      //  console.log(wb);
+    if (OnlyExtensions.includes(extensionFile)) {
+      const target: DataTransfer = <DataTransfer>(evt.target);
+      if (target.files.length == 1) {
 
-      /* save data */
-      const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+        const reader: FileReader = new FileReader();
+        reader.onload = (e: any) => {
+          const bstr: string = e.target.result;
+          const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+          const wsname: string = wb.SheetNames[0];
+          const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+          const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+          this.constructObject(array, wsname);
+        };
+        reader.readAsBinaryString(target.files[0]);
 
-      this.constructObject(array, wsname);
-      // console.log(array)
-    };
-    reader.readAsBinaryString(target.files[0]);
+      } else {
+        throw new Error('No se permiten multiples archivos');
+      }
+    } else {
+      throw new Error('Extension no valida');
+    }
+    
   }
 
 
   export(): void {
-    /* generate worksheet */
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.data);
-
-    /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    /* save to file */
     XLSX.writeFile(wb, this.fileName);
   }
 
 
   jsonToFirebase(json: any, total: number) {
-     console.log(json)
-     console.log(total)
-     var cont = 0;
+    console.log(json)
+    console.log(total)
 
+    // Descomentar cuando termine test
 
-     json.map((project:projExcel ) => {
-
-      this.projectsService.importProject(project).then((proj:any) => {
-
-        project.activities.map( (activity : actExcel) =>{
-        
-          activity.project_id = proj.id;
-          this.activitiesService.ImportActivity(activity).then((act:any) => {
-
-            activity.events.map( (event : eventExcel) => {
-              event.activity_name = activity.name;
-              event.activity_id = act.id;
-                this.eventsService.ImportEvent(event).then( final => {
-                  cont++;
-                  let percentage = Math.round((100*cont)/total)+ '%';
-                  this.percent = percentage;
-
-                  console.log(Math.round((100*cont)/total)+ '%' )
-                })
-
-            })
-
-          })
-
-        })
-        
-      }).catch((err) => {
-        
-      });
-
-     })
-
-
-
-    // var cont = 1;
-    // this.projectsService.importProject(json.name, json.subprojects).then((project: any) => {
-
-    //   json.activities.forEach(activity => {
-
-    //     this.activitiesService.ImportActivity(activity.name, project.id, activity.subproject).then((res: any) => {
-    //       activity.events.forEach(event => {
-    //         this.eventsService.ImportEvent(event.name, event.unit, event.number, res.id, event.user_mail, activity.name, activity.subproject, event.fecha_inicio, event.fecha_final).then(() => {
-    //           cont++;
-    //           console.log(cont + '/' + total)
-    //         }).catch(err1 => {
-    //           console.log(err1);
+    // var cont = 0;  
+    // json.map((project: projExcel) => {
+    //   this.projectsService.importProject(project).then((proj: any) => {
+    //     project.activities.map((activity: actExcel) => {
+    //       activity.project_id = proj.id;
+    //       this.activitiesService.ImportActivity(activity).then((act: any) => {
+    //         activity.events.map((event: eventExcel) => {
+    //           event.activity_name = activity.name;
+    //           event.activity_id = act.id;
+    //           this.eventsService.ImportEvent(event).then(final => {
+    //             cont++;
+    //             let percentage = Math.round((100 * cont) / total) + '%';
+    //             this.percent = percentage;
+    //             console.log(Math.round((100 * cont) / total) + '%')
+    //           })
     //         })
-    //       });
-    //     }).catch(err2 => {
-    //       console.log(err2);
+    //       })
     //     })
-    //   });
-    // }).catch(err3 => {
-    //   console.log(err3);
+    //   }).catch((err) => { console.log(err) });
     // })
-
   }
 
 
   async constructObject(array, name) {
-
     var container = [];
-
-
     // var doc = {} as projExcel;
     // doc.name = name;
     // doc.activities = [];
     // doc.subprojects = [];
-
     var contSub = -1;
     var contAct = -1;
     var contEvent = 0;
 
     const arr = await array.map(element => {
       if (element[0] == 'subproyecto' || element[0] == 'Subproyecto') {
-        const sub : projExcel ={
+        const sub: projExcel = {
           name: element[1],
-          activities : [],
-          fecha_inicio : this.convertDate(element[2]),
-          fecha_final : this.convertDate(element[3]),
+          activities: [],
+          fecha_inicio: this.convertDate(element[2]),
+          fecha_final: this.convertDate(element[3]),
         }
         container.push(sub);
         contSub++
@@ -383,15 +334,15 @@ export class CreateProyectComponent implements OnInit {
         const act: actExcel = {
           name: element[1],
           events: [],
-          fecha_inicio : this.convertDate(element[2]),
-          fecha_final : this.convertDate(element[3]),
+          fecha_inicio: this.convertDate(element[2]),
+          fecha_final: this.convertDate(element[3]),
         }
 
         container[contSub].activities.push(act)
       }
 
       if (element[0] == 'evento' || element[0] == 'Evento') {
-       
+
         contEvent++;
         const event: eventExcel = {
           name: element[1],
@@ -399,69 +350,17 @@ export class CreateProyectComponent implements OnInit {
           unit: element[5],
           number: element[6],
           user_mail: element[4],
-          fecha_inicio : this.convertDate(element[2]),
-          fecha_final : this.convertDate(element[3]),
+          fecha_inicio: this.convertDate(element[2]),
+          fecha_final: this.convertDate(element[3]),
         }
 
-       container[contSub].activities[contAct].events.push(event);
+        container[contSub].activities[contAct].events.push(event);
 
       }
 
     })
 
     this.jsonToFirebase(container, contEvent);
-
-
-    //   var doc = {} as projExcel;
-    //   doc.name = array[2][1];
-
-    //   doc.activities = [];
-    //   // var act = {} as actExcel;
-    //  var indexAct = 0;
-
-    //   array.forEach(function (element, index) {
-    //     if (index > 2 && isNullOrUndefined(element[5])) {
-
-    //       if(index != 0){
-    //         indexAct = indexAct + 1;
-    //       }
-    //       const activity = {
-    //         name: element[1],
-    //         events: []
-    //       }
-    //       // activity.events = [];
-    //       // console.log(activity)
-
-    //       doc.activities.push(activity);
-    //       // this..activities.push(act);
-
-    //       // console.log('actividad: '+ element[1])
-    //     } else if (index > 2 && !isNullOrUndefined(element[2]) && !isNullOrUndefined(element[3])) {
-
-    //       const event : eventExcel = {
-    //         name : element[0],
-    //         description : element[1],
-    //         unit : element[2],
-    //         number : element[3]
-
-    //       }
-    //       // console.log(indexAct)
-
-    //     // console.log(doc.activities[indexAct-1])
-
-    //       doc.activities[indexAct-1].events.push(event);
-
-    //     }
-
-    //     // console.log(index, array.length)
-
-    //   });
-
-    //     this.jsonToFirebase(doc);
-
-    // }
-
-
   }
 
 
@@ -469,11 +368,11 @@ export class CreateProyectComponent implements OnInit {
 
     // JavaScript dates can be constructed by passing milliseconds
     // since the Unix epoch (January 1, 1970) example: new Date(12312512312);
-  
+
     // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
     // 2. Convert to milliseconds.
-  
-    return new Date((excelDate - (25567 + 1))*86400*1000).toJSON()
-  
+
+    return new Date((excelDate - (25567 + 1)) * 86400 * 1000).toJSON()
+
   }
 }

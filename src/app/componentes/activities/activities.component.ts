@@ -73,6 +73,7 @@ export class ActivitiesComponent implements OnInit {
     public projectsService: ProjectsService, public userservice: UsersService) {
     this.notifier = notifierService;
     this.activityDoc.insumos = [];
+    this.activityDoc.project_id = "";
     this.emptyForm()
   }
 

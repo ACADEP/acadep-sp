@@ -60,6 +60,7 @@ export class EvidenceComponent implements OnInit {
   usersCollection: any[];
   @ViewChild('myaccordion') myPanels: MatAccordion;
   configPdf = {} as configPdf;
+  timerPDF: any;
 
   constructor(
 
@@ -214,18 +215,9 @@ export class EvidenceComponent implements OnInit {
     this.indexExpanded = index == this.indexExpanded ? -1 : index;
     if (!event.read) {
       this.evidenceService.readNotification(event.id).then(res => {
-
       }).catch(err => console.log(err))
-
     }
-
   }
-
-  // getUnit(id){
-  //   this.eventsService.getEventById(id).then( (res : any) => {
-  //     return res.total.unit
-  //   })
-  // }
 
 
 
@@ -244,7 +236,11 @@ export class EvidenceComponent implements OnInit {
 
   async export(evidence, e) {
 
+
+    $('#loading').modal({backdrop: 'static', keyboard: false});
+
     let doc = new jsPDF();
+    var page = 1;
     let content = '<p>' + evidence.description + '</p>';
     console.log(e)
     let specialElementhandlers = {
@@ -257,7 +253,8 @@ export class EvidenceComponent implements OnInit {
     // doc.setFont('courier')
     doc.setFontType('bold')
     doc.text(70, 20, this.configPdf.text_header)
-    doc.text(55, 280, this.configPdf.text_footer)
+    doc.text(55, 293, this.configPdf.text_footer)
+    
 
     doc.setFontType('normal')
     doc.setFontSize(14)
@@ -267,6 +264,8 @@ export class EvidenceComponent implements OnInit {
       width: 190,
       'elementHandlers': specialElementhandlers
     });
+    doc.text(170,293, 'página ' + page);
+    page ++;
 
 
     /*
@@ -314,44 +313,61 @@ export class EvidenceComponent implements OnInit {
     }
 
 
+    var xx = 70;
     var cont = 1;
     var tam = evidence.multimedia.length;
 
     evidence.multimedia.forEach(imagen => {
-      var image;
-      var img = new Image();
-      img.setAttribute('crossOrigin', 'anonymous');
-      img.src = imagen.src;
-      img.onload = function () {
+     if(imagen.type == 'image') 
+        {   var image;
+            var img = new Image();
+            img.setAttribute('crossOrigin', 'anonymous');
+            img.src = imagen.src;
+            img.onload = function () {
 
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
+              var canvas = document.createElement("canvas");
+              canvas.width = img.width;
+              canvas.height = img.height;
 
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL("image/png");
-        if (cont > 3) {
-          doc.addPage();
-          cont = 1
-          console.log('se añadio pagina')
+              var ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0);
+              var dataURL = canvas.toDataURL("image/png");
+
+              if (xx + (img.height * 0.20) + 5 > 293) {
+                doc.addPage();
+                cont = 1
+                xx = 5;
+                doc.text(170,293, 'página ' + page);
+                page ++;
+                // console.log('se añadio pagina')
+              }
+
+              image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
+              doc.addImage(image, "JPG", 50, xx, (img.width * 0.20), (img.height * .20));
+
+              cont = cont + 1;
+              xx = xx + (img.height * 0.20) + 5;
+              // console.log(xx)
+            };
         }
-        image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 
-        doc.addImage(image, "JPG", 50, (cont * 70), 100, 50);
-        cont = cont + 1;
-      };
     });
 
-    setTimeout(() => {
+    this.timerPDF =setTimeout(() => {
       doc.save('Test.pdf');
+      $('#loading').modal('hide');
     }, tam * 1500 + 2000);
     //   setTimeout(() => {
     //   doc.save('Test.pdf');
     // }, 3000);
 
   }
+  
 
+  cancelExport(){
+    clearTimeout(this.timerPDF);
+  }
 
   async getBase64FromImageUrl(URL) {
 
@@ -374,21 +390,32 @@ export class EvidenceComponent implements OnInit {
   }
 
   pdf() {
-    let doc = new jsPDF();
-    let specialElementhandlers = {
-      '#editor': function (element, renderer) {
-        return true
-      }
-    };
-    let image = 'base64'
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://cors-anywhere.herokuapp.com/http://bb1857de.ngrok.io/pdf",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "key=AAAAj8zqaUE:APA91bERYCowiiiRXxOgRLH3hTGjbz-0AJrfaUtGEWUflAD5HrtwHmvo4qRV18G-hLBmoNtDOyRBzBv8ouEJvredPC4JXmjgSh4d-l9lEQ9XS-UabYW2wZna92YAWKNhZShZAopFwF8M",
+        // "": "",
+        "cache-control": "no-cache",
+        // "Postman-Token": "f1781394-9242-4787-b62a-198a2d3340c3"
+      },
+      "processData": false,
+      // "data": ""
+    }
+    
+    $.ajax(settings).done(function (data) {
+      
+      var blob=new Blob([data]);
+      var link=document.createElement('a');
+      link.href=window.URL.createObjectURL(blob);
+      link.download="test.pdf";
+      link.click();
 
-    let content = this.content.nativeElement;
-    doc.fromHTML(content.innerHTML, 15, 15, {
-      width: 190,
-      'elementHandlers': specialElementhandlers
     });
-    doc.addImage(image, 'JPEG', 15, 40, 180, 160)
-    doc.save('test.pdf');
+    
   }
 
   openAll() {

@@ -4,6 +4,7 @@ import { EventsService } from "../../services/events.service";
 import { EvidenceService } from "../../services/evidence.service";
 import { project } from "../../models/project";
 import { ProjectsService } from "../../services/projects.service";
+import { Router } from "@angular/router";
 
 declare var $: any;
 @Component({
@@ -27,7 +28,8 @@ export class TopbarComponent implements OnInit {
 
   constructor(public authService: AuthService, public eventsService:EventsService, 
     public projectsService : ProjectsService,
-    public evidenceService : EvidenceService) { }
+    public evidenceService : EvidenceService,
+    public router : Router) { }
 
   ngOnInit() {
     this.authService.getAuth().subscribe( auth => {
@@ -87,5 +89,11 @@ export class TopbarComponent implements OnInit {
       $nav.addClass('app-side-opened');
     }
   }
+
+  // redirect(id:string){
+  //   this.router.onSameUrlNavigation;
+  //   this.router.navigate(['/evidence/', id]);
+  //   console.log(id)
+  // }
 
 }
