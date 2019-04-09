@@ -42,6 +42,8 @@ export class CalendarEventsComponent implements OnInit {
     public userService: UsersService
   ) {
 
+    
+
     let calendar_project = localStorage.getItem('calendar_project');
     let calendar_activity = localStorage.getItem('calendar_activity');
 
@@ -49,16 +51,16 @@ export class CalendarEventsComponent implements OnInit {
     //   this.initProjectSelect(calendar_project);
     //  this.calendar_project = calendar_project;
     // }
-    if(calendar_project){
-      this.initProjectSelect(calendar_project);
-      this.calendar_project = calendar_project;  
-    }
+    // if(calendar_project){
+    //   this.initProjectSelect(calendar_project);
+    //   this.calendar_project = calendar_project;  
+    // }
 
-    if (calendar_activity) {
-      this.loadingEvents(calendar_activity);
-      this.calendar_activity = calendar_activity;
+    // if (calendar_activity) {
+    //   this.loadingEvents(calendar_activity);
+    //   this.calendar_activity = calendar_activity;
       
-    }
+    // }
 
     this.events = [];
     this.eventShow = {
@@ -92,31 +94,33 @@ export class CalendarEventsComponent implements OnInit {
       this.projectsCollection = projects;
     })
 
+    this.eventsService.getEvents().subscribe(async events => {
+      this.calendarOptions = {
+        droppable: false,
+        editable: false,
+        eventLimit: true,
+        eventDurationEditable: true,
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay,listMonth'
+        },
+        buttonText: {
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día',
+          list: 'Lista',
+        },
+        events: events,
+        locale: 'es',
+      };
+    })
 
-    this.calendarOptions = {
-      droppable: false,
-      editable: false,
-      eventLimit: false,
-      eventDurationEditable: true,
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay,listMonth'
-      },
-      buttonText: {
-        today: 'Hoy',
-        month: 'Mes',
-        week: 'Semana',
-        day: 'Día',
-        list: 'Lista',
-      },
-      events: [],
-      locale: 'es',
-    };
 
-    // this.eventsService.getEvents().subscribe(async events => {
-    //   this.eventsCollection = events;
-    // })
+    
+
+    
   }
 
   changeProject(project_id) {
@@ -171,6 +175,10 @@ export class CalendarEventsComponent implements OnInit {
     this.eventShow.start = event.start._i;
     this.eventShow.end = event.end._i;
     $('#details').modal('show');
+  }
+
+  clickButton($event){
+    console.log($event)
   }
 
 

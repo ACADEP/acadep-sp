@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { NotifierService } from 'angular-notifier';
 import { NgForm } from '@angular/forms';
 import { AngularFireStorage } from "@angular/fire/storage";
@@ -11,6 +11,8 @@ import * as XLSX from 'xlsx';
 import { ProjectsService } from "../../services/projects.service";
 import { ActivitiesService } from "../../services/activities.service";
 import { EventsService } from "../../services/events.service";
+// import { ProjectsService } from "../../services/projects.service";
+import { projExcel, eventExcel, actExcel, importProject } from "../../models/excel";
 
 export interface configPdf {
   img_header1: any,
@@ -19,36 +21,8 @@ export interface configPdf {
   text_footer: string
 }
 
-//interfaces excel
+//interfaz excel
 type AOA = any[][];
-
-interface projExcel {
-  name: string,
-  activities: actExcel[]
-  fecha_inicio: string
-  fecha_final: string
-  // subprojects: string[]
-}
-interface actExcel {
-  name: string,
-  // subproject: string,
-  events: eventExcel[]
-  project_id?: string
-  fecha_inicio: string
-  fecha_final: string
-}
-interface eventExcel {
-  fecha_inicio: string
-  fecha_final: string
-  activity_name?: string
-  name: string,
-  description: string,
-  activity_id?: string
-  unit: string
-  number: number
-  user_mail: string
-  // activiy_id : string
-}
 
 @Component({
   selector: 'app-configuration',
@@ -57,17 +31,18 @@ interface eventExcel {
 })
 export class ConfigurationComponent implements OnInit {
 
-  public import: any;
-  // public step1 : any;
-
-  nameAct: string;
   public configGlobal = {} as Config;
-  eventType = {} as event_types;
+  public eventType = {} as event_types;
   public configPdf = {} as configPdf;
-  loading: boolean = false;
-  loading2: boolean = false;
+  public importProject = {} as importProject;
+
+  public import: any;
+  public projects: any;
+  public nameAct: string;
+  public loading: boolean = false;
+  public loading2: boolean = false;
   // uploadPercent: Observable<number>;
-  urlimage: Observable<string>;
+  // urlimage: Observable<string>;
 
   private readonly notifier: NotifierService;
 
@@ -75,7 +50,6 @@ export class ConfigurationComponent implements OnInit {
   data: AOA = [];
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'SheetJS.xlsx';
-
   percent = '0%';
 
   constructor(public db: AngularFirestore,
@@ -91,21 +65,21 @@ export class ConfigurationComponent implements OnInit {
     this.eventType.before = false;
     this.eventType.during = false;
     this.eventType.after = false;
+
+    //test
+    this.import = 'project';
   }
 
   ngOnInit() {
-
+    //get configuration global
     this.db.collection('configuration').doc('global').ref.get().then(doc => {
       this.configGlobal = doc.data() as Config;
-      //  this.configGlobal.events_types = doc.data().activitys_types;
-      // console.log(this.configGlobal.event_types)
     }).catch(err => {
       console.log('error inesperado: ' + err)
     })
-
+    //get configuration pdf
     this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
       this.configPdf = doc.data() as configPdf;
-      // console.log(this.configPdf)
     }).catch(err => {
       console.log('error inesperado: ' + err)
     })
@@ -177,13 +151,6 @@ export class ConfigurationComponent implements OnInit {
     // task.snapshotChanges().pipe(finalize(() => this.configPdf.img_header1 = ref.getDownloadURL())).subscribe();
   }
 
-  Next(form) {
-    if (form.valid) {
-      this.import = form.value.option;
-    } else {
-      this.notifier.notify('error', 'Seleccione un tipo de importación')
-    }
-  }
 
   /**
    * Excel
@@ -225,31 +192,32 @@ export class ConfigurationComponent implements OnInit {
   jsonToFirebase(json: any, total: number) {
     // console.log(json)
     // console.log(total)
-    this.percent = '0.1%'
-    // Descomentar cuando termine test
-    var cont = 0;
-    json.map((project: projExcel) => {
-      this.projectsService.importProject(project).then((proj: any) => {
-        project.activities.map((activity: actExcel) => {
-          activity.project_id = proj.id;
-          this.activitiesService.ImportActivity(activity).then((act: any) => {
-            activity.events.map((event: eventExcel) => {
-              event.activity_name = activity.name;
-              event.activity_id = act.id;
-              this.eventsService.ImportEvent(event).then(final => {
-                cont++;
-                let percentage = Math.round((100 * cont) / total) + '%';
-                this.percent = percentage;
-                console.log(Math.round((100 * cont) / total) + '%')
-              })
-            })
-          })
-        })
-      }).catch((err) => { console.log(err) });
-    })
+     this.percent = '0.1%'
+      // Descomentar cuando termine test
+     var cont = 0;
+     json.map((project: projExcel) => {
+       this.projectsService.importProject(project).then((proj: any) => {
+         project.activities.map((activity: actExcel) => {
+           activity.project_id = proj.id;
+           this.activitiesService.ImportActivity(activity).then((act: any) => {
+             activity.events.map((event: eventExcel) => {
+               event.activity_name = activity.name;
+               event.activity_id = act.id;
+               this.eventsService.ImportEvent(event).then(final => {
+                 cont++;
+                 let percentage = Math.round((100 * cont) / total) + '%';
+                 this.percent = percentage;
+                 console.log(Math.round((100 * cont) / total) + '%')
+               })
+             })
+           })
+         })
+       }).catch((err) => { console.log(err) });
+     })
   }
 
   async constructObject(array, name) {
+    // debugger
     var container = [];
     // var doc = {} as projExcel;
     // doc.name = name;
@@ -259,8 +227,14 @@ export class ConfigurationComponent implements OnInit {
     var contAct = -1;
     var contEvent = 0;
 
-    const arr = await array.map(element => {
-      if (element[0] == 'subproyecto' || element[0] == 'Subproyecto') {
+     array.map(element => {
+       element[0] = element[0].trim().toLowerCase();
+
+      //  console.log(element);
+
+
+      if (element[0] == 'subproyecto' && this.import == 'project') {
+        
         const sub: projExcel = {
           name: element[1],
           activities: [],
@@ -272,7 +246,7 @@ export class ConfigurationComponent implements OnInit {
         contAct = -1;
       }
 
-      if (element[0] == 'actividad' || element[0] == 'Actividad') {
+      if (element[0] == 'actividad') {
         contAct++;
         const act: actExcel = {
           name: element[1],
@@ -280,12 +254,10 @@ export class ConfigurationComponent implements OnInit {
           fecha_inicio: this.convertDate(element[2]),
           fecha_final: this.convertDate(element[3]),
         }
-
         container[contSub].activities.push(act)
       }
 
-      if (element[0] == 'evento' || element[0] == 'Evento') {
-
+      if (element[0] == 'evento') {
         contEvent++;
         const event: eventExcel = {
           name: element[1],
@@ -307,9 +279,32 @@ export class ConfigurationComponent implements OnInit {
   }
 
   convertDate(excelDate) {
-
     return new Date((excelDate - (25567 + 1)) * 86400 * 1000).toJSON()
+  }
 
+
+  Next(form) {
+    // debugger;
+    if (form.valid) {
+      this.import = form.value.option;
+      if (form.value.option == 'activity') {
+        this.getproyects();
+      }
+    } else {
+      this.notifier.notify('error', 'Seleccione un tipo de importación')
+    }
+  }
+
+  getproyects() {
+    this.projectsService.getProjects().subscribe(projects => {
+      this.projects = projects;
+      // console.log(projects);
+    })
+  }
+
+  changeProject(event) {
+    const project_id = event.target.value;
+    this.importProject.project = project_id;
   }
 
 

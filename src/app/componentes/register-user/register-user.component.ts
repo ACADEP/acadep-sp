@@ -105,12 +105,13 @@ export class RegisterUserComponent implements OnInit {
 
             this.userService.saveUser(this.userDoc, this.role).then( () => {
               this.notifier.notify('success', 'Usuario Guardado!');
+              form.reset();
               this.emptyForm();
-              this.authService.getAuth().subscribe( auth => {
+              // this.authService.getAuth().subscribe( auth => {
                 
-                  console.log(auth)
+              //     console.log(auth)
                 
-              });
+              // });
             })
            
           }).catch((err) => {

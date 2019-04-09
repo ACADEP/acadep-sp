@@ -96,6 +96,10 @@ export class UsersService {
     return this.db.collection('users', ref => ref.where('id', '==', id)).get();
   }
 
+  getUser(id:string){
+    return this.db.doc(`users/${id}`).valueChanges();
+  }
+
  
 
   updateUser(user: User, role: boolean) {

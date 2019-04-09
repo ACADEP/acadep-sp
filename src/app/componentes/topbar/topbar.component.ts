@@ -5,6 +5,7 @@ import { EvidenceService } from "../../services/evidence.service";
 import { project } from "../../models/project";
 import { ProjectsService } from "../../services/projects.service";
 import { Router } from "@angular/router";
+import { UsersService } from "../../services/users.service";
 
 declare var $: any;
 @Component({
@@ -28,13 +29,17 @@ export class TopbarComponent implements OnInit {
 
   constructor(public authService: AuthService, public eventsService:EventsService, 
     public projectsService : ProjectsService,
+    public userService : UsersService,
     public evidenceService : EvidenceService,
     public router : Router) { }
 
   ngOnInit() {
     this.authService.getAuth().subscribe( auth => {
       this.authUser.email = auth.email;
-      this.authUser.name = auth.displayName;
+      // this.authUser.name = auth.displayName;
+      this.userService.getUser(auth.uid).subscribe( (user:any) =>{
+        this.authUser.name = user.name;
+      })
     });
 
     this.evidenceService.getUnreadEvidence().subscribe(evidence => {

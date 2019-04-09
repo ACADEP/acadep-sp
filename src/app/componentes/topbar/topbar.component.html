@@ -29,7 +29,7 @@
             <img src="../assets/img/logo_xs.png" alt="logo-xs">
           </span>
           <span class="logo-lg hidden-xs">
-            <img src="../assets/img/logo_lg.png" alt="logo-lg">
+            <img src="../assets/img/logo_lg.jpeg" alt="logo-lg">
           </span>
         </a>
         <!--end logo-->
@@ -277,7 +277,7 @@
   <!-- END: .navbar -->
 </header>
 
-<app-dashboard></app-dashboard>
+<app-dashboard [name]="authUser.name"></app-dashboard>
 
 <!-- begin .app-footer -->
 <footer class="app-footer p-t-10 text-white">

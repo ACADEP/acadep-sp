@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 
 
@@ -9,6 +9,7 @@ import { NotifierService } from 'angular-notifier';
 })
 export class DashboardComponent implements OnInit {
   private readonly notifier: NotifierService;
+  @Input() name: string;
 
   constructor(notifierService: NotifierService) {  this.notifier = notifierService; }
 
