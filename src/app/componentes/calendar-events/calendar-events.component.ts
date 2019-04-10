@@ -94,28 +94,28 @@ export class CalendarEventsComponent implements OnInit {
       this.projectsCollection = projects;
     })
 
-    this.eventsService.getEvents().subscribe(async events => {
-      this.calendarOptions = {
-        droppable: false,
-        editable: false,
-        eventLimit: true,
-        eventDurationEditable: true,
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,agendaDay,listMonth'
-        },
-        buttonText: {
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-          list: 'Lista',
-        },
-        events: events,
-        locale: 'es',
-      };
-    })
+    this.calendarOptions = {
+      droppable: false,
+      editable: false,
+      eventLimit: true,
+      eventDurationEditable: true,
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listMonth'
+      },
+      buttonText: {
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        list: 'Lista',
+      },
+      events: [],
+      locale: 'es',
+    };
+    // this.eventsService.getEvents().subscribe(async events => {
+    // })
 
 
     
@@ -163,6 +163,11 @@ export class CalendarEventsComponent implements OnInit {
     else {
       this.ucCalendar.renderEvents([])
     }
+  }
+
+
+  renderEvents(events){
+    this.ucCalendar.renderEvents(events)
   }
 
   clearEvents() {

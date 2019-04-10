@@ -7,36 +7,6 @@
   <!-- begin .container-fluid -->
   <div class="container-fluid p-t-15">
     <div class="row">
-        <div class="col-md-12">
-            <div class="box">
-              <!-- <h2 class="text-center">hola</h2> -->
-              <form action="">
-                <form style="margin-top:10px; margin-left:15px;  margin-right:15px">
-                  <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label >Proyecto<span class="required">*</span></label>
-                            <select class="form-control" [(ngModel)]="projSelect" name="type1" required (change)="changeProject($event.target.value)">
-                              <option value="">Seleccione un proyecto</option>
-                              <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
-                            </select>
-                          </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label >Actividad<span class="required">*</span></label>
-                        <select  class="form-control" [(ngModel)]="eventDoc.activity_id" name="activity1" required (change)="loadingEvents($event.target.value)">
-                          <option value="">Seleccione</option>
-                        
-                          <option *ngFor='let activity of acts' [value]="activity.id">{{activity.title}}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </form>    
-              </form>
-            </div>
-          </div>
 
       <div class="col-md-8">
         <!-- BEGIN: clave.js -->
@@ -58,14 +28,9 @@
                 <mat-expansion-panel *ngFor="let event of eventsCollection; index as i">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      <h4><span *ngIf="event.title.length > 23">{{(event.title.substring(0,23))}}...</span> <span *ngIf="event.title.length <= 23">{{event.title}}</span> </h4>
+                      <h4><span *ngIf="event.title.length > 23">{{event.title}}</span> <span *ngIf="event.title.length <= 23">{{event.title}}</span> </h4>
                     </mat-panel-title>
-                    <mat-panel-description>
-                      <span></span>
-                      <!-- {{(100*event.advanced)/event.total.number}}% -->
-                      <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon>
-                      <!-- <mat-icon> create</mat-icon> -->
-                    </mat-panel-description>
+                    
                   </mat-expansion-panel-header>
 
                   <div class="row">
@@ -113,6 +78,9 @@
                     </div>
                 
                   <mat-action-row>
+                      <!-- <mat-icon class="delete" (click)="$event.stopPropagation(); deleteEvent(event)"> delete</mat-icon> -->
+
+                      <button class="btn_delete" mat-button (click)="deleteEvent(event)">Borrar<mat-icon style="color:rgb(209, 212, 220)">delete</mat-icon></button>
                       <button class="btn_edit" mat-button (click)="editEvent(event)">Editar<mat-icon style="color:rgb(209, 212, 220)">create</mat-icon></button>
                     </mat-action-row>
                 </mat-expansion-panel>
@@ -230,7 +198,7 @@
                     <label id="labeltype">Tipo <span class="required">*</span></label>
                     <select id="type" class="form-control" [(ngModel)]="eventDoc.type" name="type" required>
                       <option value="">Seleccione una opción </option>
-                      <option *ngFor='let item of types' [ngValue]="item">{{item}}</option>
+                      <option *ngFor='let item of types' [ngValue]="item.name">{{item.name}}</option>
                     </select>
                   </div>
 
@@ -312,8 +280,10 @@
                   <hr class="b-s-dashed">
                   
 
+                  <input type="hidden" name="activity"  [(ngModel)]="eventDoc.activity_id">
+                  <!-- <input type="hidden" name=""> -->
 
-                  <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
+                  <!-- <label id="labelactivity">Actividad a la que pertenece <span class="required">*</span></label>
                   <div class="row">
                     
                     <div class="col-md-6">
@@ -340,7 +310,7 @@
 
 
 
-                  <hr class="b-s-dashed">
+                  <hr class="b-s-dashed"> -->
 
           
       

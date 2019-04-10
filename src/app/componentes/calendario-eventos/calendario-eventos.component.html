@@ -26,6 +26,38 @@
     <!-- begin .container-fluid -->
     <div class="container-fluid p-t-15">
       <div class="row">
+
+        <!-- <div class="col-md-12"> -->
+        <div class="box">
+          <!-- <h2 class="text-center">hola</h2> -->
+          <form action="">
+            <form style="margin-top:10px; margin-left:15px">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label id="labeltype">Proyecto<span class="required">*</span></label>
+                    <select class="form-control" name="project_selected" [(ngModel)]="project_selected"
+                      (change)="changeProject($event.target.value)">
+                      <option value="">Seleccione un proyecto</option>
+                      <option *ngFor='let project of projectsCollection' [value]="project.id">{{project.title}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label id="labeltype">Actividad<span class="required">*</span></label>
+                    <select id="type" class="form-control" [(ngModel)]="activity_selected" name="activity_selected" required
+                      (change)="loadingEvents($event.target.value)">
+                      <option value="">Seleccione</option>
+                      <option *ngFor='let activity of activitiesCollection' [value]="activity.id">{{activity.title}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </form>
+        </div>
+      <!-- </div> -->
    
           <div class="box">
              
@@ -46,7 +78,9 @@
                   </div>
                   <div id="a2" class="tab-pane fade">
                     <!-- events -->
-                    <app-events></app-events>
+                    <app-events 
+                    [eventsCollection]="eventsCollection" 
+                    ></app-events>
                   </div>
                   
                 </div>

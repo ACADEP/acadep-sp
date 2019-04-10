@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EventsService } from "../../services/events.service";
 import { NotifierService } from 'angular-notifier';
@@ -16,6 +16,8 @@ import { AfireService } from "../../services/afire.service";
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { project } from 'src/app/models/project';
+
+import { ConfigService } from "../../services/config.service";
 
 declare var $: any;
 
@@ -43,14 +45,13 @@ export class EventsComponent implements OnInit {
   @ViewChild('myaccordion') myPanels: MatAccordion;
 
   private readonly notifier: NotifierService;
-  types = [
-    'supervision'
-  ];
+  public types = [];
 
   public subprojects: string[] = [];
   public acts: activity[] = [];
   projSelect = ''
-  eventsCollection: Event[];
+ @Input() eventsCollection: Event[];
+//  @Input() activity_selected : string;
   usersCollection: User[];
   activitiesCollection: activity[];
   projectsCollection: project[];
@@ -67,7 +68,7 @@ export class EventsComponent implements OnInit {
   constructor(public users: UsersService, public eventsService: EventsService,
     notifierService: NotifierService, public activitiesService: ActivitiesService,
     public dialog: MatDialog, public aFireService: AfireService,
-    public projectsService: ProjectsService) {
+    public projectsService: ProjectsService, public config : ConfigService) {
 
     this.eventDoc.total = {} as total;
     this.notifier = notifierService;
@@ -86,6 +87,12 @@ export class EventsComponent implements OnInit {
     this.users.getUsers().subscribe(users => {
       this.usersCollection = users;
     });
+    
+    this.config.db.doc(`configuration/global`).ref.get().then( (options: any) => {
+      this.types = options.data().event_types;
+    })
+    // this.eventDoc.activity_id = this.activity_selected;
+
 
     // this.activitiesService.getActivities().subscribe(items => {
     //   this.activitiesCollection = items;

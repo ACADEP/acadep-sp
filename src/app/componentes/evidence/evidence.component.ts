@@ -286,7 +286,7 @@ export class EvidenceComponent implements OnInit {
       var dataURL = canvas.toDataURL("image/png");
       let image = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 
-      doc.addImage(image, "JPG", 10, 10, 50, 10);
+      doc.addImage(image, "JPG", 10, 10, (img.width * 0.10), (img.height * .10));
 
     }
 
