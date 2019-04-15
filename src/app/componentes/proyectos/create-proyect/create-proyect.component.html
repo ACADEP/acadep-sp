@@ -176,7 +176,7 @@
                     <div class="panel-body">
                       <input class="form-control" minDate="today" type="text" mwlFlatpickr
                         [(ngModel)]="projectDoc.start" [altInput]="true" name="start" [convertModelValue]="false"
-                        placeholder="dd/mm/yyyy" [enableTime]="true" dateFormat="Y-m-dTH:i" required>
+                        placeholder="dd/mm/yyyy" [enableTime]="false" dateFormat="Y-m-dTH:i" required>
                     </div>
                   </div>
 
@@ -187,7 +187,7 @@
                     <div class="panel-body">
                       <input class="form-control" type="text" minDate="today" mwlFlatpickr [(ngModel)]="projectDoc.end"
                         [altInput]="true" name="end" placeholder="dd/mm/yyyy" [convertModelValue]="false"
-                        [enableTime]="true" dateFormat="Y-m-dTH:i" required>
+                        [enableTime]="false" dateFormat="Y-m-dTH:i" required>
                     </div>
                   </div>
 

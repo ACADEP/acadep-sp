@@ -116,12 +116,10 @@ export class CalendarEventsComponent implements OnInit {
     };
     // this.eventsService.getEvents().subscribe(async events => {
     // })
-
-
-    
-
     
   }
+
+ 
 
   changeProject(project_id) {
     if (project_id) {
@@ -156,6 +154,7 @@ export class CalendarEventsComponent implements OnInit {
       localStorage.setItem('calendar_activity', activity_id); 
       this.eventsService.getEventsByActivity(activity_id).subscribe((events:any) => {
         this.events = events;
+        // this.events = this.formatEvents(events);
         console.log()
         this.ucCalendar.renderEvents(this.events)
       })

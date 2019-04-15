@@ -4,6 +4,9 @@ import { ActivitiesService } from "../../services/activities.service";
 import { EventsService } from "../../services/events.service";
 import { CalendarEventsComponent } from "../calendar-events/calendar-events.component";
 import { EventsComponent } from "../events/events.component";
+// import moment = require('moment');
+
+import * as moment from 'moment';
 
 
 
@@ -74,7 +77,9 @@ export class CalendarioEventosComponent implements OnInit {
       localStorage.setItem('calendar_activity', activity_id); 
       this.events.eventDoc.activity_id = activity_id;
       this.eventsService.getEventsByActivity(activity_id).subscribe((events:any) => {
-        this.eventsCollection = events;
+        debugger;
+
+        this.eventsCollection = this.formatEvents(events);
         this.calendar.renderEvents(events);
       })
     }
@@ -92,6 +97,34 @@ export class CalendarioEventosComponent implements OnInit {
     else {
       this.activitiesCollection = []
     }
+  }
+
+  formatEvents(events : []) : []{
+    const now = new Date();
+
+    function unreleased(fecha):boolean{
+      let event_date = new Date((fecha).slice(0, 10));
+      if (now > event_date) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+   
+    
+  
+    events.map( (event:any) => {
+      
+      if (unreleased(event.end) && event.color == '#bdc3c7' ) {
+        event.color = '#c0392b';
+      }
+      else if(unreleased(event.start) && event.color == '#bdc3c7'){
+        event.color = '#f1c40f';
+      }
+
+    })
+    return events;
   }
 
 }

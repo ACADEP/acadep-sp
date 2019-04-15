@@ -212,13 +212,12 @@ const customNotifierOptions: NotifierOptions = {
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(
       {
-    
-        apiKey: "AIzaSyD_REBaJDJBe1JMJsFwGJfYi5eIDAHuKnM",
-        authDomain: "encuel.firebaseapp.com",
-        databaseURL: "https://encuel.firebaseio.com",
-        projectId: "encuel",
-        storageBucket: "encuel.appspot.com",
-        messagingSenderId: "271717891804"
+        apiKey: "AIzaSyAPM4ulBAoISFougks6L6lGhf9WRJXBhEE",
+        authDomain: "seguimiento-de-proyectos-4fa3c.firebaseapp.com",
+        databaseURL: "https://seguimiento-de-proyectos-4fa3c.firebaseio.com",
+        projectId: "seguimiento-de-proyectos-4fa3c",
+        storageBucket: "seguimiento-de-proyectos-4fa3c.appspot.com",
+        messagingSenderId: "958208857248"
       }
     ),
     AngularFirestoreModule,

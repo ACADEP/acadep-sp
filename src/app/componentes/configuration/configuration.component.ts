@@ -34,10 +34,15 @@ export class ConfigurationComponent implements OnInit {
   public configGlobal = {} as Config;
   public eventType = {} as event_types;
   public configPdf = {} as configPdf;
+
   public importProject = {} as importProject;
 
   public import: any;
+  public project_selected : string = "";
+
+
   public projects: any;
+  public activities: any;
   public nameAct: string;
   public loading: boolean = false;
   public loading2: boolean = false;
@@ -66,8 +71,11 @@ export class ConfigurationComponent implements OnInit {
     this.eventType.during = false;
     this.eventType.after = false;
 
+    this.importProject.activity='';
+    this.importProject.project='';
+
     //test
-    this.import = 'project';
+    // this.import = 'project';
   }
 
   ngOnInit() {
@@ -168,7 +176,22 @@ export class ConfigurationComponent implements OnInit {
           const wsname: string = wb.SheetNames[0];
           const ws: XLSX.WorkSheet = wb.Sheets[wsname];
           const array = <AOA>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
-          this.constructObject(array, wsname);
+
+          switch (this.import) {
+            case 'project':
+              this.constructProjects(array, wsname);
+              break;
+            case 'activity':
+              this.constructActivities(array);
+              break;
+            case 'event':
+              this.constructEvents(array);
+              break;
+
+            default:
+              this.notifier.notify('error', 'Algo salio mal, recarge la página e intente de nuevo')
+              break;
+          }
         };
         reader.readAsBinaryString(target.files[0]);
       } else {
@@ -189,11 +212,10 @@ export class ConfigurationComponent implements OnInit {
     XLSX.writeFile(wb, this.fileName);
   }
 
-  jsonToFirebase(json: any, total: number) {
+  projectsToFirebase(json: any, total: number) {
     // console.log(json)
     // console.log(total)
      this.percent = '0.1%'
-      // Descomentar cuando termine test
      var cont = 0;
      json.map((project: projExcel) => {
        this.projectsService.importProject(project).then((proj: any) => {
@@ -216,25 +238,132 @@ export class ConfigurationComponent implements OnInit {
      })
   }
 
-  async constructObject(array, name) {
+
+  activitiesToFirebase(json, total: number){
+
+    this.percent = '0.1%'
+    var cont = 0;
+    // console.log(json)
+    // console.log(total)
+    // console.log(this.project_selected)
+
+    json.map((activity: actExcel) => {
+      activity.project_id = this.project_selected;
+      this.activitiesService.ImportActivity(activity).then((act: any) => {
+        activity.events.map((event: eventExcel) => {
+          event.activity_name = activity.name;
+          event.activity_id = act.id;
+          this.eventsService.ImportEvent(event).then(final => {
+            cont++;
+            let percentage = Math.round((100 * cont) / total) + '%';
+            this.percent = percentage;
+            console.log(Math.round((100 * cont) / total) + '%')
+          })
+        })
+      })
+    })
+  }
+
+  eventsToFirebase(json, total: number){
+    // debugger;
+    this.percent = '0.1%'
+    var cont = 0;
+
+    this.activitiesService.getActivity(this.importProject.activity).then((act:any) => {
+      // console.log(act)
+      const activity = act;
+      json.map((event: eventExcel) => {
+        event.activity_name = activity.title;
+        event.activity_id = activity.id;
+        this.eventsService.ImportEvent(event).then(final => {
+          cont++;
+          let percentage = Math.round((100 * cont) / total) + '%';
+          this.percent = percentage;
+          console.log(Math.round((100 * cont) / total) + '%')
+        })
+      })
+    }).catch((err) => {
+      console.log(err)
+      this.notifier.notify('error', 'Verifique su conexión a internet')
+    })
+
+    
+  }
+
+  constructEvents(array){
+    var container = [];
+    var contEvent = 0;
+    array.map(element => {
+      if (element[0] != undefined) {
+
+        element[0] = element[0].trim().toLowerCase();
+        //  console.log(element);
+         if (element[0] == 'evento') {
+          contEvent++;
+          const event: eventExcel = {
+            name: element[1],
+            description: '',
+            unit: element[5],
+            number: element[6],
+            user_mail: element[4],
+            fecha_inicio: this.convertDate(element[2]),
+            fecha_final: this.convertDate(element[3]),
+          }
+          container.push(event)
+        }
+      }
+    })
+    this.eventsToFirebase(container, contEvent);
+  }
+
+  constructActivities(array) {
+    var container = [];
+    var contAct = -1;
+    var contEvent = 0;
+    array.map(element => {
+      if (element[0] != undefined) {
+
+        element[0] = element[0].trim().toLowerCase();
+        //  console.log(element);
+        if (element[0] == 'actividad') {
+          const act: actExcel = {
+            name: element[1],
+            events: [],
+            fecha_inicio: this.convertDate(element[2]),
+            fecha_final: this.convertDate(element[3]),
+          }
+          container.push(act);
+          contAct++
+          // contEvent = -1;
+        } else if (element[0] == 'evento') {
+          contEvent++;
+          const event: eventExcel = {
+            name: element[1],
+            description: '',
+            unit: element[5],
+            number: element[6],
+            user_mail: element[4],
+            fecha_inicio: this.convertDate(element[2]),
+            fecha_final: this.convertDate(element[3]),
+          }
+          container[contAct].events.push(event)
+        }
+      }
+    })
+    this.activitiesToFirebase(container, contEvent);
+  }
+
+  constructProjects(array, name) {
     // debugger
     var container = [];
-    // var doc = {} as projExcel;
-    // doc.name = name;
-    // doc.activities = [];
-    // doc.subprojects = [];
     var contSub = -1;
     var contAct = -1;
     var contEvent = 0;
 
-     array.map(element => {
-       element[0] = element[0].trim().toLowerCase();
-
+    array.map(element => {
+      element[0] = element[0].trim().toLowerCase();
       //  console.log(element);
-
-
-      if (element[0] == 'subproyecto' && this.import == 'project') {
-        
+      if (element[0] == 'subproyecto') {
         const sub: projExcel = {
           name: element[1],
           activities: [],
@@ -244,9 +373,7 @@ export class ConfigurationComponent implements OnInit {
         container.push(sub);
         contSub++
         contAct = -1;
-      }
-
-      if (element[0] == 'actividad') {
+      } else if (element[0] == 'actividad') {
         contAct++;
         const act: actExcel = {
           name: element[1],
@@ -255,9 +382,7 @@ export class ConfigurationComponent implements OnInit {
           fecha_final: this.convertDate(element[3]),
         }
         container[contSub].activities.push(act)
-      }
-
-      if (element[0] == 'evento') {
+      } else if (element[0] == 'evento') {
         contEvent++;
         const event: eventExcel = {
           name: element[1],
@@ -268,26 +393,21 @@ export class ConfigurationComponent implements OnInit {
           fecha_inicio: this.convertDate(element[2]),
           fecha_final: this.convertDate(element[3]),
         }
-
         container[contSub].activities[contAct].events.push(event);
-
       }
-
     })
-
-    this.jsonToFirebase(container, contEvent);
+    this.projectsToFirebase(container, contEvent);
   }
 
   convertDate(excelDate) {
     return new Date((excelDate - (25567 + 1)) * 86400 * 1000).toJSON()
   }
 
-
   Next(form) {
     // debugger;
     if (form.valid) {
       this.import = form.value.option;
-      if (form.value.option == 'activity') {
+      if (form.value.option == 'activity' || form.value.option == 'event') {
         this.getproyects();
       }
     } else {
@@ -298,13 +418,13 @@ export class ConfigurationComponent implements OnInit {
   getproyects() {
     this.projectsService.getProjects().subscribe(projects => {
       this.projects = projects;
-      // console.log(projects);
     })
   }
 
-  changeProject(event) {
-    const project_id = event.target.value;
-    this.importProject.project = project_id;
+  changeProject() {
+   this.activitiesService.getActivitiesByProject(this.importProject.project).subscribe(activities => {
+     this.activities = activities;
+   })
   }
 
 
