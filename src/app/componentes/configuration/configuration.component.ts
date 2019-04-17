@@ -367,8 +367,8 @@ export class ConfigurationComponent implements OnInit {
         const sub: projExcel = {
           name: element[1],
           activities: [],
-          fecha_inicio: this.convertDate(element[2]),
-          fecha_final: this.convertDate(element[3]),
+          fecha_inicio: this.convertDate(element[3]),
+          fecha_final: this.convertDate(element[4]),
         }
         container.push(sub);
         contSub++
@@ -378,20 +378,20 @@ export class ConfigurationComponent implements OnInit {
         const act: actExcel = {
           name: element[1],
           events: [],
-          fecha_inicio: this.convertDate(element[2]),
-          fecha_final: this.convertDate(element[3]),
+          fecha_inicio: this.convertDate(element[3]),
+          fecha_final: this.convertDate(element[4]),
         }
         container[contSub].activities.push(act)
       } else if (element[0] == 'evento') {
         contEvent++;
         const event: eventExcel = {
           name: element[1],
-          description: '',
-          unit: element[5],
-          number: element[6],
+          description: element[2],
+          unit: element[6],
+          number: element[7],
           user_mail: element[4],
-          fecha_inicio: this.convertDate(element[2]),
-          fecha_final: this.convertDate(element[3]),
+          fecha_inicio: this.convertDate(element[3]),
+          fecha_final: this.convertDate(element[4]),
         }
         container[contSub].activities[contAct].events.push(event);
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren } from '@angular/core';
 // import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from '@ngx-gallery/core';
 import { ActivitiesService } from '../../services/activities.service';
 import { EvidenceService } from "../../services/evidence.service";
@@ -11,6 +11,8 @@ import * as jsPDF from 'jspdf'
 import { TopbarComponent } from "../topbar/topbar.component";
 import { configPdf } from '../configuration/configuration.component';
 import { AngularFirestore } from '@angular/fire/firestore';
+
+import { MatCheckbox } from "@angular/material";
 declare var $: any;
 interface ubication {
   lat: number,
@@ -34,7 +36,10 @@ interface image {
 })
 export class EvidenceComponent implements OnInit {
 
+  public checked : boolean = false;
   projects: any;
+
+  @ViewChildren('checkbox') allcheck : any;
 
   lockProjects: boolean = false
   lockEvents: boolean = false;  //bloquea tabla de evidencia ante cualquier cambio en el observable
@@ -173,7 +178,11 @@ export class EvidenceComponent implements OnInit {
     this.lockEvents = false;
     this.eventSelect = event.title;
     this.evidenceService.getEvidenceByEvent(event.id).subscribe(evidence => {
+      evidence.map(ev => {
+        ev.selected = false;
+      })
       this.evidenceCollection = evidence;
+      console.log(this.evidenceCollection)
       this.loading = false;
 
     })
@@ -494,6 +503,26 @@ export class EvidenceComponent implements OnInit {
   //   this.activitiesCollection = null
   //    this.actSelect = ''
   // }
+
+  selectAll(option:boolean) {
+   
+    this.checked = option;
+
+    this.allcheck.map( check => {
+      check.checked = option;
+    })
+  }
+
+  // check(evidence){
+  //   if (evidence.selected) {
+  //     evidence.selected = false;
+  //   } else {
+  //     evidence.selected = true;
+  //   }
+    
+  //   console.log(this.evidenceCollection)
+  // }
+    
 
 
 }

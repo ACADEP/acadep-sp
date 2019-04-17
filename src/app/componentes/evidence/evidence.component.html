@@ -6,7 +6,7 @@
         Inicio / Evidencia
       </h6>
 
-    <!-- <button (click)="pdf()">hola</button> -->
+      <!-- <button (click)="pdf()">hola</button> -->
 
     </div>
 
@@ -87,7 +87,7 @@ ntent bg-clouds">
 
 
                 <mat-icon class="pointer" *ngIf="lockEvidence"
-                  (click)="evidenceCollection = []; eventSelect = '' ; lockEvidence = false; lockEvents=true;" >
+                  (click)="evidenceCollection = []; eventSelect = '' ; lockEvidence = false; lockEvents=true;">
                   keyboard_backspace</mat-icon>
 
                 <nav aria-label="breadcrumb" *ngIf="proySelect != ''">
@@ -102,161 +102,184 @@ ntent bg-clouds">
 
               </header>
               <mat-divider *ngIf="!lockProjects"></mat-divider>
-              <div class="box">
-                <mat-form-field style="margin-left:20px; margin-right: 20px" [ngStyle]="{'display':lockProjects ? 'block' : 'none' }">
-                  <input matInput placeholder="Buscar subproyectos" (keyup)="filterProjects($event)">
-                </mat-form-field>
 
-                <mat-spinner *ngIf="loading"></mat-spinner>
-                <div class="box-tools" *ngIf="lockEvidence" style="margin-right:10px">
-                    
-                  <i style="color:rgb(129, 120, 120); " id="btncolapse" class="pointer fa fa-plus-circle fa-2x"
-                    (click)="openAll()"></i>
-                  <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x"
-                    (click)="closeAll()"></i>
+              <div class="box-body">
+                <div class="row" *ngIf="lockEvidence">
+                  <div class="col-xs-6 col-sm-3">
+                    <button *ngIf="!checked; else desmark" class="btn btn-outline btn-primary mar-btn pull-left" (click)="selectAll(true)"><i
+                        class="fa fa-fw fa-check"></i> Marcar todos</button>
+
+                        <ng-template #desmark>
+                            <button class="btn btn-outline btn-primary mar-btn pull-left" (click)="selectAll(false)"><i
+                              class="fa fa-fw fa-check"></i> Desmarcar todos</button>
+                        </ng-template>
+
+                  </div>
+                  <div class="col-xs-6 col-sm-9 ">
+                    <div class="box-tools pull-right"  style="margin-right:10px">
+                      <i style="color:rgb(129, 120, 120); " class="pointer fa fa-plus-circle fa-2x"
+                        (click)="openAll()"></i>
+                      <i style="color:rgb(129, 120, 120); margin-left:11px" class="pointer fa fa-minus-circle fa-2x"
+                        (click)="closeAll()"></i>
+                    </div>
+
+                  </div>
                 </div>
-                <!-- <div>
+
+                <div class="box">
+                  <mat-form-field style="margin-left:20px; margin-right: 20px"
+                    [ngStyle]="{'display':lockProjects ? 'block' : 'none' }">
+                    <input matInput placeholder="Buscar subproyectos" (keyup)="filterProjects($event)">
+                  </mat-form-field>
+
+                  <mat-spinner *ngIf="loading"></mat-spinner>
+
+
+
+                  <!-- <div>
                   <mat-checkbox (click)="$event.stopPropagation();" color="primary"></mat-checkbox> Seleccionar todos
                 </div> -->
 
-              </div>
-              <div [ngStyle]="{'display':lockProjects ? 'block' : 'none' }" style="height:800px; overflow-y: scroll;">
+                </div>
+                <div [ngStyle]="{'display':lockProjects ? 'block' : 'none' }" style="height:800px; overflow-y: scroll;">
 
-                <mat-list>
-                  <mat-list-item *ngFor="let project of projects; index as i" (click)="selectProject(project)">
+                  <mat-list>
+                    <mat-list-item *ngFor="let project of projects; index as i" (click)="selectProject(project)">
                       <span class="list-group-progress" [style.width]="project.advanced + '%'"></span>
-                    <mat-icon mat-list-icon>category</mat-icon>
-                    <h4 mat-line>{{project.title | titlecase}}</h4>
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                    <p mat-line>{{project.advanced}}% completado</p>
+                      <mat-icon mat-list-icon>category</mat-icon>
+                      <h4 mat-line>{{project.title | titlecase}}</h4>
+                      <mat-icon>keyboard_arrow_right</mat-icon>
+                      <p mat-line>{{project.advanced}}% completado</p>
 
-                    <mat-divider></mat-divider>
-                  </mat-list-item>
-                </mat-list>
+                      <mat-divider></mat-divider>
+                    </mat-list-item>
+                  </mat-list>
 
-              </div>
+                </div>
 
-              <div *ngIf="lockActivities" style="height:800px; overflow-y: scroll;">
-                <mat-list>
-                  <mat-list-item *ngFor="let activity of activitiesCollection; index as i"
-                    (click)="selectActivity(activity)">
-                    <span class="list-group-progress" [style.width]="activity.advanced + '%'"></span>
+                <div *ngIf="lockActivities" style="height:800px; overflow-y: scroll;">
+                  <mat-list>
+                    <mat-list-item *ngFor="let activity of activitiesCollection; index as i"
+                      (click)="selectActivity(activity)">
+                      <span class="list-group-progress" [style.width]="activity.advanced + '%'"></span>
 
-                    <mat-icon mat-list-icon>folder</mat-icon>
-                    <h4 mat-line>{{activity.title}}</h4>
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                    <p mat-line>{{activity.advanced}}% completado</p>
+                      <mat-icon mat-list-icon>folder</mat-icon>
+                      <h4 mat-line>{{activity.title}}</h4>
+                      <mat-icon>keyboard_arrow_right</mat-icon>
+                      <p mat-line>{{activity.advanced}}% completado</p>
 
-                    <mat-divider></mat-divider>
+                      <mat-divider></mat-divider>
 
-                  </mat-list-item>
-                </mat-list>
-              </div>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
 
-              <div *ngIf="lockEvents" style="height:800px; overflow-y: scroll;">
-                <mat-list>
-                  <mat-list-item *ngFor="let event of eventsCollection; index as i" (click)="selectEvent(event)">
+                <div *ngIf="lockEvents" style="height:800px; overflow-y: scroll;">
+                  <mat-list>
+                    <mat-list-item *ngFor="let event of eventsCollection; index as i" (click)="selectEvent(event)">
                       <span class="list-group-progress" [style.width]="event.advanced + '%'"></span>
 
-                    <mat-icon mat-list-icon>insert_drive_file</mat-icon>
-                    <h4 mat-line>{{event.title}}</h4>
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                    <p mat-line>{{event.advanced}}% completado</p>
+                      <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+                      <h4 mat-line>{{event.title}}</h4>
+                      <mat-icon>keyboard_arrow_right</mat-icon>
+                      <p mat-line>{{event.advanced}}% completado</p>
 
-                    <mat-divider></mat-divider>
+                      <mat-divider></mat-divider>
 
-                  </mat-list-item>
-                </mat-list>
-              </div>
-
-
-
-<div style="height:800px; overflow-y: scroll;" *ngIf="lockEvidence">
+                    </mat-list-item>
+                  </mat-list>
+                </div>
 
 
-              <mat-accordion   class="example-headers-align" #myaccordion="matAccordion"
-                multi="true">
 
-                <mat-expansion-panel [ngClass]="{'read': !evidence.read}" [expanded]="indexExpanded == i"
-                  *ngFor="let evidence of evidenceCollection; index as i" >
-                  <mat-expansion-panel-header (click)="readEvidence(evidence, i)">
-                    <mat-panel-title>
-                      <mat-checkbox (click)="$event.stopPropagation();" color="primary"></mat-checkbox>&nbsp;
-                      {{evidence.ref_event.name.substring(0,75)}}
-                    </mat-panel-title>
-                    <mat-panel-description>
-
-                      <span *ngIf="evidence.total">
-                        {{evidence.advanced}} / {{evidence.total.number}}&nbsp;{{evidence.total.unit}}
-                      </span>
+                <div style="height:800px; overflow-y: scroll;" id="evidences" *ngIf="lockEvidence" >
 
 
-                      <span>Etapa: {{getEtapa(evidence.header)}}</span>
-                      <span>Asignado a: {{evidence.user.name}}</span>
-                      <span>{{evidence.created_at | date:'dd/MM/y'}} {{evidence.created_at | date:'shortTime'}}</span>
+                  <mat-accordion class="example-headers-align" #myaccordion="matAccordion" multi="true">
 
-                      <mat-icon style="color:#f44336" class="delete"
-                        (click)="$event.stopPropagation(); export(evidence, $event)">picture_as_pdf</mat-icon>
+                    <mat-expansion-panel [ngClass]="{'read': !evidence.read}" [expanded]="indexExpanded == i"
+                      *ngFor="let evidence of evidenceCollection; index as i">
+                      <mat-expansion-panel-header (click)="readEvidence(evidence, i)">
+                        <mat-panel-title>
+                          <mat-checkbox (click)="$event.stopPropagation();" color="primary" #checkbox></mat-checkbox>&nbsp;
+                          {{evidence.ref_event.name.substring(0,75)}}
+                        </mat-panel-title>
+                        <mat-panel-description>
 
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  <div class="row">
-                    <div class="col-md-9">
-                      <div class="col-md-12">
-                        <h4>Descripción</h4>
-                        <p style="padding:20px">{{evidence.description}}</p>
-                      </div>
-                      <div class="col-md-12">
-                        <h4>Multimedia</h4>
-                        <div>
-                          <div class="row">
-                            <div class="col-md-2 col-sm-4 col-xs-6"
-                              *ngFor="let item of evidence.multimedia; index as a">
+                          <span *ngIf="evidence.total">
+                            {{evidence.advanced}} / {{evidence.total.number}}&nbsp;{{evidence.total.unit}}
+                          </span>
 
-                              <img  class="galery" id="img{{i}}{{a}}" [src]="item.type == 'video' ? 'assets/img/video_default.png' : item?.src " style="border: #ccc 1px solid"
-                                (click)="showImage(evidence, a)">
 
-                                
+                          <span>Etapa: {{getEtapa(evidence.header)}}</span>
+                          <span>Asignado a: {{evidence.user.name}}</span>
+                          <span>{{evidence.created_at | date:'dd/MM/y'}}
+                            {{evidence.created_at | date:'shortTime'}}</span>
 
+                          <mat-icon style="color:#f44336" class="delete"
+                            (click)="$event.stopPropagation(); export(evidence, $event)">picture_as_pdf</mat-icon>
+
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div class="row">
+                        <div class="col-md-9">
+                          <div class="col-md-12">
+                            <h4>Descripción</h4>
+                            <p style="padding:20px">{{evidence.description}}</p>
+                          </div>
+                          <div class="col-md-12">
+                            <h4>Multimedia</h4>
+                            <div>
+                              <div class="row">
+                                <div class="col-md-2 col-sm-4 col-xs-6"
+                                  *ngFor="let item of evidence.multimedia; index as a">
+
+                                  <img class="galery" id="img{{i}}{{a}}"
+                                    [src]="item.type == 'video' ? 'assets/img/video_default.png' : item?.src "
+                                    style="border: #ccc 1px solid" (click)="showImage(evidence, a)">
+
+
+
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
-                      <h4>Documentos</h4>
-                      <div *ngIf="evidence.files.length; else no_files">
-                        <div *ngFor="let item of evidence.files">
-                          <a target="_blank" [href]="item.src" [download]="item.name"><i [ngClass]="getClass(item.type)"
-                              [style.color]="getColor(item.type)"></i>
-                            {{item.name}} </a>
+                        <div class="col-md-3" style="border:#ddd 1px solid; padding: 10px">
+                          <h4>Documentos</h4>
+                          <div *ngIf="evidence.files.length; else no_files">
+                            <div *ngFor="let item of evidence.files">
+                              <a target="_blank" [href]="item.src" [download]="item.name"><i
+                                  [ngClass]="getClass(item.type)" [style.color]="getColor(item.type)"></i>
+                                {{item.name}} </a>
+                            </div>
+                            <br>
+                          </div>
+                          <ng-template #no_files>
+                            <p><i>Ningún archivo adjunto</i></p>
+                          </ng-template>
                         </div>
-                        <br>
                       </div>
-                      <ng-template #no_files>
-                        <p><i>Ningún archivo adjunto</i></p>
-                      </ng-template>
-                    </div>
-                  </div>
-                </mat-expansion-panel>
+                    </mat-expansion-panel>
 
-                <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection?.length && loading == false">Aún
-                  no se ha subido
-                  evidencia a este evento <mat-icon>mood_bad</mat-icon>
-                </h4>
+                    <h4 style="margin:30px" class="text-center" *ngIf="!evidenceCollection?.length && loading == false">
+                      Aún
+                      no se ha subido
+                      evidencia a este evento <mat-icon>mood_bad</mat-icon>
+                    </h4>
 
-              </mat-accordion>
+                  </mat-accordion>
 
-            </div>
+                </div>
 
 
+              </div>
             </div>
           </div>
+          <!-- END: clave.js -->
         </div>
-        <!-- END: clave.js -->
-      </div>
 
-      <!-- <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div class="row">
             <div class="col-xs-12">
               <div class="box">
@@ -270,88 +293,88 @@ ntent bg-clouds">
             </div>
           </div>
         </div> -->
-    </div>
-  </div>
-  <!-- END: .container-fluid -->
-
-</div>
-<!-- END: .main-content -->
-
-
-<!-- Modal para ver imagenes -->
-<div class="modal fade" id="showimage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <!-- <h5 class="modal-title" id="exampleModalLongTitle">Multimedia</h5> -->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
-      <div class="modal-body">
-        <img *ngIf="image.type=='image' || image.type =='gallery'; else modalVideo" class="center" [src]="image?.src" alt="">
+    </div>
+    <!-- END: .container-fluid -->
 
-        <ng-template #modalVideo>
+  </div>
+  <!-- END: .main-content -->
+
+
+  <!-- Modal para ver imagenes -->
+  <div class="modal fade" id="showimage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalLongTitle">Multimedia</h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img *ngIf="image.type=='image' || image.type =='gallery'; else modalVideo" class="center" [src]="image?.src"
+            alt="">
+
+          <ng-template #modalVideo>
             <!-- <video  class="center"  width="auto" controls>
                 <source [src]="" type="video/mp4">
                 <source [src]="image.src" type="video/ogg">
                  Your browser does not support HTML5 video.
               </video> -->
 
-              <video class="center" [src]="image?.src" controls>
-                  Your browser does not support HTML5 video.
-              </video>
-        </ng-template>
-        
-       
-        <hr>
-        
+            <video class="center" [src]="image?.src" controls>
+              Your browser does not support HTML5 video.
+            </video>
+          </ng-template>
 
-        <div class="text-center" *ngIf="image.type =='gallery'; else map">
-          <h2>Esta imagen fue subida desde la galería</h2>
-        </div>
-        <ng-template #map>
+
+          <hr>
+
+
+          <div class="text-center" *ngIf="image.type =='gallery'; else map">
+            <h2>Esta imagen fue subida desde la galería</h2>
+          </div>
+          <ng-template #map>
             Ubicación: <br>
-          <agm-map [zoom]="17" [latitude]="image.ubication.lat" [longitude]="image.ubication.lng">
-            <agm-marker [latitude]="image.ubication.lat" [longitude]="image.ubication.lng" [markerDraggable]="false">
-            </agm-marker>
-          </agm-map>
-        </ng-template>
-        
+            <agm-map [zoom]="17" [latitude]="image.ubication.lat" [longitude]="image.ubication.lng">
+              <agm-marker [latitude]="image.ubication.lat" [longitude]="image.ubication.lng" [markerDraggable]="false">
+              </agm-marker>
+            </agm-map>
+          </ng-template>
 
-        <!-- latitud:{{image.ubication.lat}} <br>
+
+          <!-- latitud:{{image.ubication.lat}} <br>
         longitud: {{image.ubication.lng}} -->
-      </div>
+        </div>
 
+      </div>
     </div>
   </div>
-</div>
 
 
 
-<!-- Modal loading-->
-<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <!-- <div class="modal-header">
+  <!-- Modal loading-->
+  <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div> -->
-      <div class="modal-body">
-        <h3 class="text-center" id="text_loading">
-          Creando PDF
-        </h3>
+        <div class="modal-body">
+          <h3 class="text-center" id="text_loading">
+            Creando PDF
+          </h3>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cancelExport()" data-dismiss="modal">Cancel</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelExport()" data-dismiss="modal">Cancel</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-
