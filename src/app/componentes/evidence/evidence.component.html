@@ -114,6 +114,8 @@ ntent bg-clouds">
                               class="fa fa-fw fa-check"></i> Desmarcar todos</button>
                         </ng-template>
 
+                        <button class="btn btn-rect btn-danger mar-btn" style="margin-left:10px" (click)="exportFirst()">Exportar PDF</button>
+
                   </div>
                   <div class="col-xs-6 col-sm-9 ">
                     <div class="box-tools pull-right"  style="margin-right:10px">
@@ -201,7 +203,7 @@ ntent bg-clouds">
                       *ngFor="let evidence of evidenceCollection; index as i">
                       <mat-expansion-panel-header (click)="readEvidence(evidence, i)">
                         <mat-panel-title>
-                          <mat-checkbox (click)="$event.stopPropagation();" color="primary" #checkbox></mat-checkbox>&nbsp;
+                          <mat-checkbox (click)="$event.stopPropagation();" [name]="evidence" [id]="evidence.id" color="primary" #checkbox></mat-checkbox>&nbsp;
                           {{evidence.ref_event.name.substring(0,75)}}
                         </mat-panel-title>
                         <mat-panel-description>
@@ -217,7 +219,7 @@ ntent bg-clouds">
                             {{evidence.created_at | date:'shortTime'}}</span>
 
                           <mat-icon style="color:#f44336" class="delete"
-                            (click)="$event.stopPropagation(); export(evidence, $event)">picture_as_pdf</mat-icon>
+                            (click)="$event.stopPropagation(); export(evidence)">picture_as_pdf</mat-icon>
 
                         </mat-panel-description>
                       </mat-expansion-panel-header>

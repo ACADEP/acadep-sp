@@ -243,7 +243,7 @@ export class EvidenceComponent implements OnInit {
     }
   }
 
-  async export(evidence, e) {
+  async export(evidence) {
 
 
     $('#loading').modal({backdrop: 'static', keyboard: false});
@@ -251,7 +251,7 @@ export class EvidenceComponent implements OnInit {
     let doc = new jsPDF();
     var page = 1;
     let content = '<p>' + evidence.description + '</p>';
-    console.log(e)
+    // console.log(e)
     let specialElementhandlers = {
       '#editor': function (element, renderer) {
         return true
@@ -510,19 +510,19 @@ export class EvidenceComponent implements OnInit {
 
     this.allcheck.map( check => {
       check.checked = option;
+      console.log(check);
+      
     })
   }
 
-  // check(evidence){
-  //   if (evidence.selected) {
-  //     evidence.selected = false;
-  //   } else {
-  //     evidence.selected = true;
-  //   }
+  exportFirst(){
     
-  //   console.log(this.evidenceCollection)
-  // }
-    
+    var array_check = this.allcheck.filter(function (check) {
+      return check.checked == true
+       });
+       console.log(array_check[0].name)
+       this.export(array_check[0].name);
+  }
 
 
 }
