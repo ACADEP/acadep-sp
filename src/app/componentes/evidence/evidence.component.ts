@@ -12,6 +12,9 @@ import { TopbarComponent } from "../topbar/topbar.component";
 import { configPdf } from '../configuration/configuration.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+
+import { PdfService } from "../../services/pdf.service";
+
 import { MatCheckbox } from "@angular/material";
 declare var $: any;
 interface ubication {
@@ -72,6 +75,7 @@ export class EvidenceComponent implements OnInit {
     // public gallery: Gallery, 
     private _route: ActivatedRoute,
     public projectService: ProjectsService,
+    public pdfservice : PdfService,
     public evidenceService: EvidenceService,
     public eventsService: EventsService,
     public usersService: UsersService,
@@ -126,8 +130,9 @@ export class EvidenceComponent implements OnInit {
 
   ngOnInit() {
 
-   
-
+  //  this.pdfservice.getPDF().then( res => console.log(res))
+  //                          .catch(err => console.log(err));
+                            
 
     this.db.collection('configuration').doc('pdf').ref.get().then(doc => {
       this.configPdf = doc.data() as configPdf;
@@ -378,6 +383,15 @@ export class EvidenceComponent implements OnInit {
     clearTimeout(this.timerPDF);
   }
 
+
+  getPDF(evidence){
+console.log(evidence);
+
+
+
+
+  }
+
   async getBase64FromImageUrl(URL) {
 
     new Promise(function (resolve) {
@@ -437,13 +451,10 @@ export class EvidenceComponent implements OnInit {
 
   showImage(evidence, index) {
    this.image.type == 'imagen';
-
     this.image = evidence.multimedia[index];
-
     $('#showimage').modal('show');
     console.log(evidence.multimedia[index]);
     // console.log(this.image.src);
-
   }
 
   getColor(type) {
@@ -515,13 +526,18 @@ export class EvidenceComponent implements OnInit {
     })
   }
 
-  exportFirst(){
+  async exportPDF(){
     
-    var array_check = this.allcheck.filter(function (check) {
+    let array_check = this.allcheck.filter(function (check) {
       return check.checked == true
        });
-       console.log(array_check[0].name)
-       this.export(array_check[0].name);
+
+    const events_check = await array_check.map( event => {
+         return event.name;
+       })
+
+       console.log(events_check)
+      //  this.export(array_check[0].name);
   }
 
 

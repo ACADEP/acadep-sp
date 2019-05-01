@@ -28,6 +28,9 @@ import { EventsComponent } from './componentes/events/events.component';
 import { ActivitiesComponent } from './componentes/activities/activities.component';
 import { CalendarEventsComponent } from "./componentes/calendar-events/calendar-events.component";
 
+// import { HttpClientModule } from '@angular/common/http';
+
+
 //gmaps
 import { AgmCoreModule } from "@agm/core";
 import { GmapComponent } from './componentes/gmap/gmap.component';

@@ -114,7 +114,7 @@ ntent bg-clouds">
                               class="fa fa-fw fa-check"></i> Desmarcar todos</button>
                         </ng-template>
 
-                        <button class="btn btn-rect btn-danger mar-btn" style="margin-left:10px" (click)="exportFirst()">Exportar PDF</button>
+                        <button class="btn btn-rect btn-danger mar-btn" style="margin-left:10px" (click)="exportPDF()">Exportar PDF</button>
 
                   </div>
                   <div class="col-xs-6 col-sm-9 ">
@@ -219,7 +219,7 @@ ntent bg-clouds">
                             {{evidence.created_at | date:'shortTime'}}</span>
 
                           <mat-icon style="color:#f44336" class="delete"
-                            (click)="$event.stopPropagation(); export(evidence)">picture_as_pdf</mat-icon>
+                            (click)="$event.stopPropagation(); getPDF(evidence)">picture_as_pdf</mat-icon>
 
                         </mat-panel-description>
                       </mat-expansion-panel-header>

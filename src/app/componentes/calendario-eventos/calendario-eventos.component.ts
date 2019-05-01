@@ -77,7 +77,7 @@ export class CalendarioEventosComponent implements OnInit {
       localStorage.setItem('calendar_activity', activity_id); 
       this.events.eventDoc.activity_id = activity_id;
       this.eventsService.getEventsByActivity(activity_id).subscribe((events:any) => {
-        debugger;
+        // debugger;
 
         this.eventsCollection = this.formatEvents(events);
         this.calendar.renderEvents(events);
